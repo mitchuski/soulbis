@@ -16,7 +16,7 @@ export const ECOSYSTEM_NODES: EcosystemNodeData[] = [
     isActive: true,
   },
   {
-    glyph: '🧙',
+    glyph: '🔮',
     role: 'agentprivacy',
     name: 'The Spell',
     desc: 'The 0xagentprivacy gestalt. Eight years in the making — a dual-agent privacy protocol, Privacy Value Model V5, Five Grimoires (114+ inscriptions, 29K+ lines), a 182-page research suite, and a living documentation corpus of 50+ files. Privacy as the seventh capital. Built in public.',
@@ -52,7 +52,7 @@ export const ECOSYSTEM_NODES: EcosystemNodeData[] = [
     isExternal: true,
   },
   {
-    glyph: '🔮',
+    glyph: '🧙',
     role: 'Soulbae',
     name: 'The First Mage',
     desc: 'Knowledge graph agent deployed on Telegram. The Mage in conversation — sovereign, bilateral, first-person.',
