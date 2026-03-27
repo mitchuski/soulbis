@@ -97,6 +97,12 @@ export const BUILT_ROWS: BuiltRow[] = [
         meta: 'Blog · sync.soulbis.com →',
         href: ECOSYSTEM_LINKS.soulSync,
       },
+      {
+        name: 'agentprivacy / story',
+        desc: "The spellbook's narrative form — all the work rendered as story. The Five Grimoires, the dual-agent architecture, the eight-year journey. Explainable by the Mage.",
+        meta: 'Narrative · agentprivacy.ai/story →',
+        href: 'https://agentprivacy.ai/story',
+      },
     ],
   },
 ]
