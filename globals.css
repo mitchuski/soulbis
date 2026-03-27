@@ -1,0 +1,364 @@
+/* app/globals.css */
+/* Token system — the dual-agent color semantics live here. */
+/* Coral = Swordsman. Cyan = Mage. Navy = the gap. See CLAUDE.md. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy:         #080c20;
+  --navy-mid:     #0d1230;
+  --navy-light:   #141a3d;
+
+  /* Swordsman — enforcement, tools, boundary */
+  --coral:        #e8523a;
+  --coral-dim:    rgba(232, 82, 58, 0.15);
+  --coral-mid:    rgba(232, 82, 58, 0.4);
+
+  /* Mage — gestalt, agents, knowledge */
+  --cyan:         #4dd9e8;
+  --cyan-dim:     rgba(77, 217, 232, 0.12);
+
+  /* Neutral */
+  --white:        #f0eee8;
+  --white-dim:    rgba(240, 238, 232, 0.55);
+  --white-ghost:  rgba(240, 238, 232, 0.12);
+  --border:       rgba(240, 238, 232, 0.08);
+  --border-hover: rgba(240, 238, 232, 0.18);
+
+  /* Typography */
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
+  --font-body:    var(--font-dm-sans), 'DM Sans', sans-serif;
+  --font-code:    var(--font-mono), 'JetBrains Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── Custom cursor ───────────────────────────────────────────────────────── */
+
+.cursor {
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 10px rgba(77, 217, 232, 0.22)) drop-shadow(0 0 10px rgba(232, 82, 58, 0.18));
+}
+
+.cursor-orb {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(232, 82, 58, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.2s;
+  transform: translate(-50%, -50%);
+}
+
+/* ─── Nav ─────────────────────────────────────────────────────────────────── */
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 60px;
+  background: linear-gradient(to bottom, rgba(8, 12, 32, 0.9) 0%, transparent 100%);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo .glyph {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--white-dim);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--white);
+}
+
+.nav-cta {
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--coral) !important;
+  border: 1px solid var(--coral-mid);
+  padding: 10px 20px;
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s !important;
+}
+
+.nav-cta:hover {
+  background: var(--coral-dim) !important;
+  color: var(--white) !important;
+}
+
+/* ─── Ecosystem nodes ──────────────────────────────────────────────────────── */
+
+.node-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--white);
+  letter-spacing: 0.01em;
+}
+
+.node-name--red  { color: var(--coral); }
+.node-name--cyan { color: var(--cyan);  }
+
+.node-role {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+}
+
+.node-role--red  { color: var(--coral); }
+.node-role--cyan { color: var(--cyan);  }
+
+/* ─── Status dots ──────────────────────────────────────────────────────────── */
+
+.status-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.active   { background: var(--cyan);  }
+.status-dot.building { background: var(--coral); }
+.status-dot.planned  { background: var(--white-ghost); animation: none; }
+
+.tool-subcategory {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 8px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─── Scroll animation ─────────────────────────────────────────────────────── */
+
+@keyframes scrollAnim {
+  0%   { left: -100%; }
+  50%  { left: 0%;    }
+  100% { left: 100%;  }
+}
+
+/* ─── Page load ────────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ─── Manifold spots (animated “flow” accents) ────────────────────────────── */
+
+.manifold {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.manifold-spot {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  filter: blur(50px);
+  opacity: 0.16;
+  transform: translate3d(0, 0, 0);
+  animation: manifoldDrift 16s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 30% 35%, var(--cyan-dim), transparent 62%),
+    radial-gradient(circle at 65% 55%, var(--coral-dim), transparent 60%);
+}
+
+.manifold-spot--a { top: -140px; left: -180px; animation-duration: 18s; }
+.manifold-spot--b { top: 18%; right: -220px; width: 620px; height: 620px; animation-duration: 22s; opacity: 0.14; }
+.manifold-spot--c { bottom: -240px; left: 16%; width: 720px; height: 720px; animation-duration: 26s; opacity: 0.12; }
+.manifold-spot--d { bottom: 12%; right: 10%; width: 420px; height: 420px; animation-duration: 20s; opacity: 0.10; }
+
+@keyframes manifoldDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(40px, -24px, 0) scale(1.06); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Keep content above background layer */
+body > * { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .manifold-spot { animation: none; }
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────── */
+
+footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-canvas {
+  width: 100%;
+  height: 260px;
+  display: block;
+}
+
+.footer-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 60px 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.footer-attribution {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  color: var(--white-ghost);
+  text-transform: uppercase;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white-ghost);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--white-dim);
+}
+
+.footer-copy {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: rgba(240, 238, 232, 0.08);
+}
+
+/* Touch device cursor fix */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  nav { padding: 24px 28px; }
+  .nav-links { display: none; }
+  .footer-content { padding: 0 28px 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .footer-right { align-items: flex-start; }
+}

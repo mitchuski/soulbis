@@ -23,6 +23,12 @@ The Framer-exported `index.html` was **truncated** — missing the footer animat
 - Added meta description for SEO
 - Corrected ecosystem section title: "Four nodes" → "Six nodes" (matching actual count)
 
+**Assets added (session 2):**
+- `soulbisholo.jpg` — Hero holographic artwork with floating animation
+- `COMBUSTION.png` — Favicon (transparent background)
+- `og-image.jpg` — Twitter/Open Graph social preview image
+- Open Graph + Twitter Card meta tags for social sharing
+
 **Features preserved:**
 - Animated wave field canvas (coral → cyan gradient) — hero, mid-divider, footer
 - Dual-agent color system per CLAUDE.md (coral = Swordsman, cyan = Mage, navy = gap)
@@ -51,6 +57,10 @@ The Framer-exported `index.html` was **truncated** — missing the footer animat
 | File | Purpose |
 |------|---------|
 | `index.html` | **Production file** — complete static site, GitHub Pages ready |
+| `public/images/soulbisholo.jpg` | **Hero art** — holographic dual-agent visualization (cyan/coral) |
+| `public/images/COMBUSTION.png` | **Favicon** — transparent background version of holo art |
+| `public/images/og-image.jpg` | **Social preview** — Twitter/OG banner image |
+| `public/images/Rectangle 1.png` | Supporting asset |
 | `CLAUDE.md` | Coding instructions — design system, color semantics, rules |
 | `README.md` | Project documentation — stack, structure, deployment |
 | `globals.css` | Reference — Tailwind + CSS variables (not used in static build) |

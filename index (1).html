@@ -4,25 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soulbis — The Swordsman Builds</title>
-<meta name="description" content="Soulbis is the Swordsman layer of 0xagentprivacy. Tools, plugins, and enforcement infrastructure that make privacy guarantees real at the boundary.">
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="public/images/COMBUSTION.png">
-<link rel="apple-touch-icon" href="public/images/COMBUSTION.png">
-
-<!-- Open Graph / Social -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mitchuski.github.io/soulbis/">
-<meta property="og:title" content="Soulbis — The Swordsman Builds">
-<meta property="og:description" content="Tools, plugins, and enforcement infrastructure that make privacy guarantees real at the boundary.">
-<meta property="og:image" content="https://mitchuski.github.io/soulbis/public/images/og-image.jpg">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Soulbis — The Swordsman Builds">
-<meta name="twitter:description" content="Tools, plugins, and enforcement infrastructure that make privacy guarantees real at the boundary.">
-<meta name="twitter:image" content="https://mitchuski.github.io/soulbis/public/images/og-image.jpg">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -168,7 +149,7 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.85;
+    opacity: 0.7;
   }
 
   .hero-content {
@@ -893,12 +874,6 @@
   @media (max-width: 600px) {
     .ecosystem-grid { grid-template-columns: 1fr; }
   }
-
-  /* Touch device cursor fix */
-  @media (hover: none) and (pointer: coarse) {
-    body { cursor: auto; }
-    .cursor, .cursor-ring { display: none; }
-  }
 </style>
 </head>
 <body>
@@ -920,7 +895,7 @@
     <li><a href="#ecosystem">Ecosystem</a></li>
     <li><a href="#tools">Tools</a></li>
     <li><a href="https://sync.soulbis.com" target="_blank">Soul Sync</a></li>
-    <li><a href="mailto:mage@agentprivacy.ai" class="nav-cta">Contact</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#e38e828486a38284868d9793918a9582809acd828a" class="nav-cta">Contact</a></li>
   </ul>
 </nav>
 
@@ -935,8 +910,7 @@
       <em>builds.</em>
     </h1>
     <p class="hero-sub">
-      The Swordsman builds. The blade slices surveillance.<br>
-      Soulbis ships the tools that enforce the boundaries
+      Soulbis ships the tools that enforce the boundaries 
       <a href="https://agentprivacy.ai" style="color: var(--cyan); text-decoration: none;">agentprivacy.ai</a> defines.
       Privacy as architecture, not policy. Code as commitment.
     </p>
@@ -959,7 +933,7 @@
 <!-- Ecosystem -->
 <section class="ecosystem" id="ecosystem">
   <div class="section-label">Ecosystem</div>
-  <h2 class="section-title">Six nodes.<br><em>One architecture.</em></h2>
+  <h2 class="section-title">Four nodes.<br><em>One architecture.</em></h2>
 
   <div class="ecosystem-grid">
     <a class="ecosystem-node active" href="#" onclick="return false;">
@@ -1024,6 +998,8 @@
   </div>
 </section>
 
+</section>
+
 <!-- Built -->
 <section id="built" style="background: var(--navy); border-top: 1px solid var(--border);">
   <div class="section-label">Open source</div>
@@ -1050,15 +1026,15 @@
     <div class="built-row">
       <div class="built-category">Agents</div>
       <div class="built-items">
-        <a href="https://intel.agentkyra.ai" target="_blank" class="built-item">
-          <div class="built-item-name">Agent Kyra / Private AI</div>
-          <div class="built-item-desc">Sovereign AI agent residing among the bits of computation. The Kyra Codex is an assessment framework for agent capabilities — key ceremonies, zero-knowledge computation, self-destructing keys. Published via Private AI newsletter: breaking data walls for a more personal agentic future.</div>
-          <div class="built-item-meta">Publication · intel.agentkyra.ai →</div>
+        <a href="https://github.com/mitchuski/agentkyracodex" target="_blank" class="built-item">
+          <div class="built-item-name">agentkyracodex</div>
+          <div class="built-item-desc">Agent Kyra codex and assessment framework. TypeScript. A named agent instantiation within the dual-agent architecture.</div>
+          <div class="built-item-meta">TypeScript · GitHub →</div>
         </a>
-        <a href="https://agentprivacy.ai/mage" target="_blank" class="built-item">
-          <div class="built-item-name">Soulbae, The Chronicler</div>
-          <div class="built-item-desc">The First Mage — casting spells within the edges Soulbis slashes. Knowledge graph agent channeling the Five Grimoires corpus, building constellations in the gap. Sovereign, bilateral, first-person.</div>
-          <div class="built-item-meta">Live · agentprivacy.ai/mage →</div>
+        <a href="https://t.me/soulbae_the_bot" target="_blank" class="built-item">
+          <div class="built-item-name">Soulbae</div>
+          <div class="built-item-desc">Knowledge graph agent deployed on Telegram via Bonfires.ai. The First Mage in live conversation — sovereign, bilateral, first-person.</div>
+          <div class="built-item-meta">Telegram · Live →</div>
         </a>
       </div>
     </div>
@@ -1118,11 +1094,11 @@
       <div class="tool-name">MyTerms Plugin</div>
       <div class="tool-spec">IEEE 7012 · Machine-readable · Bilateral</div>
       <p class="tool-desc">
-        Machine-readable personal privacy agreements executed at session initiation.
-        Not a cookie banner. A bilateral, first-person promise at the boundary —
+        Machine-readable personal privacy agreements executed at session initiation. 
+        Not a cookie banner. A bilateral, first-person promise at the boundary — 
         before data moves.
       </p>
-      <a href="mailto:mage@agentprivacy.ai?subject=MyTerms%20Plugin%20Notification" class="tool-action">
+      <a href="/cdn-cgi/l/email-protection#b9d4d8dedcf9d8dedcd7cdc9cbd0cfd8dac097d8d086caccdbd3dcdacd84f4c0eddccbd4ca99e9d5ccded0d7" class="tool-action">
         Notify me on release →
       </a>
     </div>
@@ -1135,7 +1111,7 @@
       <div class="tool-name">Mage Mode</div>
       <div class="tool-spec">Chrome Extension · Feed Filter · Open Source</div>
       <p class="tool-desc">
-        Browser-level feed filtering. Enforce your own information boundaries in
+        Browser-level feed filtering. Enforce your own information boundaries in 
         the browser. The Swordsman guards what enters; the Mage decides what matters.
       </p>
       <a href="https://github.com/mitchuski/mage-x-feed-filter" target="_blank" class="tool-action">
@@ -1151,7 +1127,7 @@
       <div class="tool-name">Separation Bound</div>
       <div class="tool-spec">I(S;M|FP) &lt; ε* · Formal verification</div>
       <p class="tool-desc">
-        A verifiable implementation of the dual-agent separation bound.
+        A verifiable implementation of the dual-agent separation bound. 
         Privacy guarantees that are mathematically auditable, not policy-dependent.
       </p>
     </div>
@@ -1164,7 +1140,7 @@
       <div class="tool-name">BGIN AI Frontend</div>
       <div class="tool-spec">Three Graphs · Knowledge × Promise × Trust</div>
       <p class="tool-desc">
-        Identity emerges from the unique intersection of Knowledge, Promise, and
+        Identity emerges from the unique intersection of Knowledge, Promise, and 
         Trust graphs. Live reference implementation at the governance layer — visit bgin.ai.
       </p>
       <a href="https://bgin.ai" target="_blank" class="tool-action">
@@ -1200,7 +1176,7 @@
       <a href="https://etherscan.io/address/privacymage.eth" target="_blank" class="donate-btn donate-btn--public">
         privacymage.eth (public)
       </a>
-      <a href="#" class="donate-btn donate-btn--private" onclick="navigator.clipboard.writeText('u1m9f98243nm8998jrj7azzzm8qfud9ycl0z8hj8t9wwh59zn9xz0nq0qc0u67n3l72es6w9yt5wcv96jhmjslsh7cvu2hftgcr0t5s5d3l5r3lrk43cun26z30c2kzqm2dwhygygd4c0xzl8hrvdc5yt68c68zu89zd5kkguahccvthnw'); alert('ZEC shielded address copied!'); return false;">
+      <a href="#zec" class="donate-btn donate-btn--private" onclick="navigator.clipboard && navigator.clipboard.writeText('zec-shielded-address'); return false;">
         ZEC shielded spellbook (private)
       </a>
     </div>
@@ -1227,7 +1203,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Custom cursor
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
@@ -1241,7 +1217,7 @@ document.addEventListener('mousemove', e => {
 
 function animateRing() {
   rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
+  ry += (my - ry) *.12;
   ring.style.left = rx + 'px';
   ring.style.top = ry + 'px';
   requestAnimationFrame(animateRing);
@@ -1298,7 +1274,7 @@ function createWaveRenderer(canvas, config) {
 
     for (let i = 0; i < lines; i++) {
       const prog = i / lines;
-      // Color gradient: coral → cyan depending on position
+      // Color gradient: coral → cyan → navy depending on position
       const r1 = 232, g1 = 82, b1 = 58;   // coral
       const r2 = 77, g2 = 217, b2 = 232;   // cyan
       const mix = prog;
@@ -1334,169 +1310,15 @@ function createWaveRenderer(canvas, config) {
   return { start, stop };
 }
 
-// Constellation stars
-class Star {
-  constructor(canvas) {
-    this.canvas = canvas;
-    this.reset();
-  }
-  reset() {
-    this.x = Math.random() * this.canvas.offsetWidth;
-    this.y = Math.random() * this.canvas.offsetHeight;
-    this.size = Math.random() * 2 + 0.5;
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.speedY = (Math.random() - 0.5) * 0.2;
-    this.opacity = Math.random() * 0.6 + 0.2;
-    this.pulse = Math.random() * Math.PI * 2;
-    // Color: mostly white, some cyan, some coral
-    const colorRoll = Math.random();
-    if (colorRoll < 0.7) this.color = '240,238,232'; // white
-    else if (colorRoll < 0.85) this.color = '77,217,232'; // cyan
-    else this.color = '232,82,58'; // coral
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.pulse += 0.02;
-    if (this.x < 0 || this.x > this.canvas.offsetWidth ||
-        this.y < 0 || this.y > this.canvas.offsetHeight) {
-      this.reset();
-    }
-  }
-  draw(ctx) {
-    const flicker = Math.sin(this.pulse) * 0.3 + 0.7;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${this.color},${this.opacity * flicker})`;
-    ctx.fill();
-  }
-}
-
-// Enhanced hero canvas with manifold + stars + orb
+// Hero canvas
 const heroCanvas = document.getElementById('hero-canvas');
-const heroCtx = heroCanvas.getContext('2d');
-let heroT = 0;
-const stars = [];
-const numStars = 80;
-
-function resizeHero() {
-  heroCanvas.width = heroCanvas.offsetWidth * window.devicePixelRatio;
-  heroCanvas.height = heroCanvas.offsetHeight * window.devicePixelRatio;
-  heroCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  // Reinit stars on resize
-  stars.length = 0;
-  for (let i = 0; i < numStars; i++) {
-    stars.push(new Star(heroCanvas));
-  }
-}
-
-function drawHeroManifold() {
-  const w = heroCanvas.offsetWidth;
-  const h = heroCanvas.offsetHeight;
-  heroCtx.clearRect(0, 0, w, h);
-
-  // Draw constellation stars
-  stars.forEach(star => {
-    star.update();
-    star.draw(heroCtx);
-  });
-
-  // Draw occasional constellation lines between nearby stars
-  heroCtx.strokeStyle = 'rgba(240,238,232,0.06)';
-  heroCtx.lineWidth = 0.5;
-  for (let i = 0; i < stars.length; i++) {
-    for (let j = i + 1; j < stars.length; j++) {
-      const dx = stars[i].x - stars[j].x;
-      const dy = stars[i].y - stars[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 100) {
-        heroCtx.beginPath();
-        heroCtx.moveTo(stars[i].x, stars[i].y);
-        heroCtx.lineTo(stars[j].x, stars[j].y);
-        heroCtx.stroke();
-      }
-    }
-  }
-
-  // Manifold wave field - larger, more dramatic
-  const lines = 70;
-  const pts = 250;
-  const orbX = w * 0.65;
-  const orbY = h * 0.5;
-
-  for (let i = 0; i < lines; i++) {
-    const prog = i / lines;
-    // Color gradient: coral → cyan
-    const r1 = 232, g1 = 82, b1 = 58;
-    const r2 = 77, g2 = 217, b2 = 232;
-    const r = Math.round(r1 + (r2-r1)*prog);
-    const g = Math.round(g1 + (g2-g1)*prog);
-    const b = Math.round(b1 + (b2-b1)*prog);
-
-    heroCtx.beginPath();
-    for (let j = 0; j <= pts; j++) {
-      const x = (j / pts) * w;
-      const xNorm = (x - orbX) / (w * 0.5);
-      const yBase = h * 0.5 + (prog - 0.5) * h * 0.8;
-
-      // Manifold-style: waves curve around the orb point
-      const distFromOrb = Math.abs(x - orbX) / w;
-      const orbInfluence = Math.exp(-distFromOrb * 3) * 80;
-
-      let y = yBase;
-      y += Math.sin(xNorm * 4 + heroT * 0.4 + prog * 1.5) * 50 * (1 - Math.abs(prog - 0.5) * 1.5);
-      y += Math.sin(xNorm * 2.5 - heroT * 0.3 + prog * 2.5) * 30;
-      y += Math.cos(xNorm * 6 + heroT * 0.5) * 15;
-      // Bend toward orb center
-      y += (orbY - yBase) * orbInfluence * 0.015;
-
-      j === 0 ? heroCtx.moveTo(x, y) : heroCtx.lineTo(x, y);
-    }
-    heroCtx.strokeStyle = `rgba(${r},${g},${b},0.28)`;
-    heroCtx.lineWidth = 0.8;
-    heroCtx.stroke();
-  }
-
-  // Draw dual orb (like soulorbmanifold)
-  const orbRadius = 28;
-
-  // Cyan half (left)
-  heroCtx.beginPath();
-  heroCtx.arc(orbX - 8, orbY, orbRadius, Math.PI * 0.5, Math.PI * 1.5);
-  const cyanGrad = heroCtx.createRadialGradient(orbX - 12, orbY - 8, 2, orbX - 8, orbY, orbRadius);
-  cyanGrad.addColorStop(0, 'rgba(77,217,232,0.9)');
-  cyanGrad.addColorStop(0.6, 'rgba(77,217,232,0.5)');
-  cyanGrad.addColorStop(1, 'rgba(77,217,232,0.1)');
-  heroCtx.fillStyle = cyanGrad;
-  heroCtx.fill();
-
-  // Coral half (right)
-  heroCtx.beginPath();
-  heroCtx.arc(orbX + 8, orbY, orbRadius, Math.PI * 1.5, Math.PI * 0.5);
-  const coralGrad = heroCtx.createRadialGradient(orbX + 12, orbY - 8, 2, orbX + 8, orbY, orbRadius);
-  coralGrad.addColorStop(0, 'rgba(232,82,58,0.9)');
-  coralGrad.addColorStop(0.6, 'rgba(232,82,58,0.5)');
-  coralGrad.addColorStop(1, 'rgba(232,82,58,0.1)');
-  heroCtx.fillStyle = coralGrad;
-  heroCtx.fill();
-
-  // Center blend
-  heroCtx.beginPath();
-  heroCtx.arc(orbX, orbY, orbRadius * 0.5, 0, Math.PI * 2);
-  const centerGrad = heroCtx.createRadialGradient(orbX, orbY - 5, 2, orbX, orbY, orbRadius * 0.5);
-  centerGrad.addColorStop(0, 'rgba(240,238,232,0.6)');
-  centerGrad.addColorStop(0.5, 'rgba(139,77,170,0.4)');
-  centerGrad.addColorStop(1, 'rgba(8,12,32,0.8)');
-  heroCtx.fillStyle = centerGrad;
-  heroCtx.fill();
-
-  heroT += 0.008;
-  requestAnimationFrame(drawHeroManifold);
-}
-
-resizeHero();
-drawHeroManifold();
-window.addEventListener('resize', resizeHero);
+const heroWave = createWaveRenderer(heroCanvas, {
+  lines: 55,
+  alpha: 0.22,
+  lineWidth: 0.7,
+  speed: 0.007
+});
+heroWave.start();
 
 // Mid wave divider
 const midCanvas = document.getElementById('wave-canvas-mid');
@@ -1508,31 +1330,26 @@ const midWave = createWaveRenderer(midCanvas, {
 });
 midWave.start();
 
-// Footer canvas - flip direction (cyan → coral)
+// Footer canvas - flip direction
 const footerCanvas = document.getElementById('footer-canvas');
 const footerCtx = footerCanvas.getContext('2d');
 let ft = 0;
 
-function resizeFooter() {
-  footerCanvas.width = footerCanvas.offsetWidth * window.devicePixelRatio;
-  footerCanvas.height = footerCanvas.offsetHeight * window.devicePixelRatio;
-  footerCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-}
-
 function drawFooter() {
   const w = footerCanvas.offsetWidth;
   const h = footerCanvas.offsetHeight;
-
-  footerCtx.clearRect(0, 0, w, h);
+  footerCanvas.width = w;
+  footerCanvas.height = h;
 
   const lines = 38;
   const pts = 180;
 
+  footerCtx.clearRect(0, 0, w, h);
+
   for (let i = 0; i < lines; i++) {
     const prog = i / lines;
-    // Inverted gradient: cyan → coral
-    const r1 = 77, g1 = 217, b1 = 232;   // cyan
-    const r2 = 232, g2 = 82, b2 = 58;     // coral
+    const r1 = 77, g1 = 217, b1 = 232;
+    const r2 = 232, g2 = 82, b2 = 58;
     const mix = prog;
     const r = Math.round(r1 + (r2-r1)*mix);
     const g = Math.round(g1 + (g2-g1)*mix);
@@ -1556,26 +1373,9 @@ function drawFooter() {
     footerCtx.stroke();
   }
 
-  // Draw the dual-sphere logo
+  // Draw the sphere
   const sx = w * 0.22, sy = h * 0.42;
   const grad = footerCtx.createRadialGradient(sx-8, sy-8, 2, sx, sy, 20);
   grad.addColorStop(0, '#4dd9e8');
   grad.addColorStop(0.5, '#8b4daa');
   grad.addColorStop(1, '#e8523a');
-  footerCtx.beginPath();
-  footerCtx.arc(sx, sy, 16, 0, Math.PI * 2);
-  footerCtx.fillStyle = grad;
-  footerCtx.globalAlpha = 0.4;
-  footerCtx.fill();
-  footerCtx.globalAlpha = 1;
-
-  ft += 0.008;
-  requestAnimationFrame(drawFooter);
-}
-
-resizeFooter();
-drawFooter();
-window.addEventListener('resize', resizeFooter);
-</script>
-</body>
-</html>
