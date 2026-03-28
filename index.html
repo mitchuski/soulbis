@@ -134,6 +134,7 @@
 
   .nav-links a:hover { color: var(--white); }
 
+  
   .nav-cta {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -658,6 +659,15 @@
     margin-bottom: 8px;
   }
 
+  .footer-inscription {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--white-dim);
+    margin-bottom: 6px;
+  }
+
   .footer-attribution {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -700,6 +710,104 @@
     font-weight: 300;
     letter-spacing: 0.12em;
     color: rgba(240,238,232,0.08);
+  }
+
+  .footer-orb-container {
+    position: absolute;
+    left: 22%;
+    top: 42%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 44px;
+    height: 44px;
+  }
+
+  .footer-combustion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    opacity: 0.3;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.5s ease, z-index 0s 0.5s, transform 0.5s ease;
+  }
+
+  .footer-orb-container.copied .footer-combustion {
+    opacity: 1;
+    z-index: 3;
+    transform: translate(-50%, -50%) scale(1.1);
+    transition: opacity 0.12s ease, z-index 0s, transform 0.12s ease;
+  }
+
+  .footer-soul-orb-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .footer-soul-orb-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .footer-soul-orb-btn:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+
+  .footer-soul-orb-btn:focus-visible {
+    outline: none;
+  }
+
+  .footer-soul-orb-btn:focus-visible::before {
+    border-color: rgba(77, 217, 232, 0.6);
+  }
+
+  .footer-soul-orb-btn.copied {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 20px rgba(77, 217, 232, 0.65);
+  }
+
+  .footer-soul-orb-btn.copied::before {
+    border-color: rgba(77, 217, 232, 0.8);
+    animation: orbit-pulse 0.6s ease-out;
+  }
+
+  @keyframes orbit-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .footer-orb-svg {
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  .footer-soul-orb-btn.copied .footer-orb-svg {
+    filter: drop-shadow(0 0 8px rgba(77, 217, 232, 0.8));
   }
 
   /* Donate */
@@ -1199,7 +1307,7 @@
 <!-- Philosophy strip -->
 <section class="philosophy">
   <div class="philosophy-inner">
-    <div class="philosophy-inscription">(⚔️ ⊥ ⿻ ⊥ 🧙) 😊</div>
+    <div class="philosophy-inscription">(⚔️⊥⿻⊥🧙)🙂</div>
     <p class="philosophy-text">
       "The Swordsman guards the gap.<br>
       <em>The gap is the proof."</em>
@@ -1211,7 +1319,7 @@
 <!-- Donate -->
 <section class="donate">
   <div class="donate-inner">
-    <div class="donate-icon">◫</div>
+    <div class="donate-icon">⿻</div>
     <h2 class="donate-title">donate</h2>
     <p class="donate-quote">
       <em>The right people arrive, the right thing happens, the right moment opens,<br>
@@ -1232,10 +1340,26 @@
 <!-- Footer -->
 <footer>
   <canvas id="footer-canvas"></canvas>
+  <div class="footer-orb-container" id="footer-orb-container">
+    <img class="footer-combustion" src="public/images/COMBUSTION.png" alt="" aria-hidden="true">
+    <button type="button" class="footer-soul-orb-btn" id="footer-soul-orb-btn" aria-label="Copy master inscription" title="Copy master inscription">
+      <svg class="footer-orb-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <defs>
+          <radialGradient id="orb-gradient" cx="40%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#4dd9e8"/>
+            <stop offset="50%" stop-color="#8b4daa"/>
+            <stop offset="100%" stop-color="#e8523a"/>
+          </radialGradient>
+        </defs>
+        <circle cx="16" cy="16" r="14" fill="url(#orb-gradient)" opacity="0.6"/>
+      </svg>
+    </button>
+  </div>
   <div class="footer-content">
     <div class="footer-left">
       <div class="footer-logo">Soulbis</div>
-      <div class="footer-attribution">privacymage / 0xagentprivacy · © 2025</div>
+      <div class="footer-inscription">(⚔️⊥⿻⊥🧙)🙂</div>
+      <div class="footer-attribution">privacymage / 0xagentprivacy · © 2026</div>
     </div>
     <div class="footer-right">
       <ul class="footer-links">
@@ -1578,19 +1702,6 @@ function drawFooter() {
     footerCtx.stroke();
   }
 
-  // Draw the dual-sphere logo
-  const sx = w * 0.22, sy = h * 0.42;
-  const grad = footerCtx.createRadialGradient(sx-8, sy-8, 2, sx, sy, 20);
-  grad.addColorStop(0, '#4dd9e8');
-  grad.addColorStop(0.5, '#8b4daa');
-  grad.addColorStop(1, '#e8523a');
-  footerCtx.beginPath();
-  footerCtx.arc(sx, sy, 16, 0, Math.PI * 2);
-  footerCtx.fillStyle = grad;
-  footerCtx.globalAlpha = 0.4;
-  footerCtx.fill();
-  footerCtx.globalAlpha = 1;
-
   ft += 0.008;
   requestAnimationFrame(drawFooter);
 }
@@ -1598,6 +1709,24 @@ function drawFooter() {
 resizeFooter();
 drawFooter();
 window.addEventListener('resize', resizeFooter);
+
+// Master inscription — footer Soul Orb copy (easter egg)
+(function () {
+  var inscription = '(⚔️⊥⿻⊥🧙)🙂';
+  var btn = document.getElementById('footer-soul-orb-btn');
+  var container = document.getElementById('footer-orb-container');
+  if (!btn || !navigator.clipboard || !navigator.clipboard.writeText) return;
+  btn.addEventListener('click', function () {
+    navigator.clipboard.writeText(inscription).then(function () {
+      btn.classList.add('copied');
+      if (container) container.classList.add('copied');
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        if (container) container.classList.remove('copied');
+      }, 1500);
+    }).catch(function () {});
+  });
+})();
 </script>
 </body>
 </html>

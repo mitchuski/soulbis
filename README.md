@@ -12,12 +12,12 @@ Soulbis is the enforcement layer of the [0xagentprivacy](https://agentprivacy.ai
 
 | Layer | Choice | Reason |
 |---|---|---|
-| Framework | Next.js 14 (App Router) | Consistent with agentprivacy-spellbook |
-| Language | TypeScript | Type safety across agent interfaces |
-| Styling | Tailwind CSS + CSS variables | Token system maps to the dual-agent color semantics |
-| Animation | Canvas API (native) | Wave field renderer, no dependencies |
-| Fonts | Cormorant Garamond · DM Sans · JetBrains Mono | Display · Body · Technical labels |
-| Deploy | Vercel | Zero-config, edge-ready |
+| Surface | Static `index.html` at repo root | Single shipped document; styles and scripts are inline or adjacent assets |
+| Styling | CSS variables in `<style>` | Token system maps to the dual-agent color semantics (see CLAUDE.md) |
+| Animation | Canvas API (native) | Wave field renderer in page scripts |
+| Fonts | Google Fonts (Cormorant · DM Sans · JetBrains Mono) | Display · Body · Technical labels |
+| Local preview | `serve` | `npm run dev` serves the repo root only — no app server |
+| Deploy | Vercel (`framework: null`) | Static output; see `vercel.json` |
 
 ---
 
@@ -32,7 +32,7 @@ The visual language is not decorative — it encodes the architecture:
 | White / Neutral | `#f0eee8` | Between both | Soul Sync, Research Letters |
 | Navy | `#080c20` | The gap itself | Background |
 
-This system must be preserved. Every new component should declare which side of the architecture it represents and use the corresponding color token.
+This system must be preserved. Every new section or node should declare which side of the architecture it represents and use the corresponding color token / modifier class.
 
 ---
 
@@ -40,41 +40,12 @@ This system must be preserved. Every new component should declare which side of 
 
 ```
 soulbis/
-├── app/
-│   ├── layout.tsx          # Root layout — fonts, metadata, cursor
-│   ├── page.tsx            # Single-page composition
-│   └── globals.css         # CSS custom properties / token system
-│
-├── components/
-│   ├── layout/
-│   │   ├── Nav.tsx         # Fixed nav — logo, links, CTA
-│   │   └── Footer.tsx      # Wave canvas footer + attribution
-│   │
-│   ├── canvas/
-│   │   ├── WaveField.tsx   # Animated wave renderer (hero + divider + footer)
-│   │   └── useWaveField.ts # Canvas animation hook
-│   │
-│   ├── ecosystem/
-│   │   ├── EcosystemGrid.tsx     # 3×2 node grid
-│   │   ├── EcosystemNode.tsx     # Single node card
-│   │   └── ecosystem.data.ts     # Node definitions (name, role, color, href)
-│   │
-│   ├── tools/
-│   │   ├── ToolsGrid.tsx         # 2×2 tool card grid
-│   │   ├── ToolCard.tsx          # Single tool card with status dot
-│   │   └── tools.data.ts         # Tool definitions
-│   │
-│   ├── Built.tsx           # Open source inventory (category × items grid)
-│   ├── Philosophy.tsx      # Centre-aligned inscription + proverb strip
-│   ├── Hero.tsx            # Hero section — title, sub, CTAs
-│   └── Donate.tsx          # Donation section — ETH + ZEC buttons
-│
-├── lib/
-│   ├── types.ts            # Shared TypeScript interfaces
-│   └── constants.ts        # Site-wide constants (inscription, proverb, etc.)
-│
-└── public/
-    └── fonts/              # Self-hosted Cormorant Garamond if needed
+├── index.html          # Canonical site — all sections, <style>, and inline scripts
+├── public/             # Images and static assets (paths referenced from index.html)
+├── scripts/
+│   └── verify-static.cjs   # Used by npm run build (CI sanity check)
+├── vercel.json         # Static deploy — framework preset disabled
+└── package.json        # devDependencies: serve only
 ```
 
 ---
@@ -89,14 +60,14 @@ cd soulbis
 # Install
 npm install
 
-# Dev
+# Dev (static site — repo root)
 npm run dev
 
-# Build
+# Sanity check (index.html present)
 npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:8000](http://localhost:8000).
 
 ---
 
@@ -117,7 +88,7 @@ Soulbis and agentprivacy-spellbook are **sibling repositories**, not nested. The
 - The same color token semantics (coral = Swordsman, cyan = Mage)
 - The same font stack
 
-They do not share code. Each is a standalone Next.js app. The connection is semantic, not technical.
+They do not share code. Soulbis ships as static HTML; the connection is semantic, not technical.
 
 ---
 

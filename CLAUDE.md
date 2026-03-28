@@ -51,27 +51,17 @@ The animated canvas wave is not a background effect. It is the visual representa
 
 ---
 
-## Component conventions
+## Markup conventions (in `index.html`)
 
-### EcosystemNode
+### Ecosystem nodes
 
-Each node must declare its `colorVariant`:
+Each node uses a **color variant** encoded as modifier classes (not arbitrary hex on role/name):
 
-```typescript
-type ColorVariant = 'red' | 'cyan' | 'neutral'
+- `node-role--red` / `node-name--red` — Swordsman-side  
+- `node-role--cyan` / `node-name--cyan` — Mage-side  
+- `node-role--neutral` / `node-name--neutral` — between both  
 
-interface EcosystemNodeProps {
-  glyph: string
-  role: string
-  name: string
-  desc: string
-  href: string
-  colorVariant: ColorVariant
-  isActive?: boolean
-}
-```
-
-The `colorVariant` drives both the `node-role` and `node-name` text color. Never hardcode colors inline — use the variant classes: `node-role--red`, `node-role--cyan`, `node-name--red`, `node-name--cyan`.
+Never hardcode coral/cyan on the wrong architectural side.
 
 **Current node assignments:**
 
@@ -84,21 +74,17 @@ The `colorVariant` drives both the `node-role` and `node-name` text color. Never
 | BGIN AI | `red` |
 | Soulbae | `cyan` |
 
-### ToolCard
+### Tool cards
 
-Status variants:
+Status is expressed in markup/CSS:
 
-```typescript
-type ToolStatus = 'available' | 'building' | 'planned'
-```
-
-- `available` → cyan dot, pulse animation
-- `building` → coral dot, pulse animation  
-- `planned` → ghost/dim dot, no animation, card gets `opacity: 0.35`
+- **available** — cyan dot, pulse animation  
+- **building** — coral dot, pulse animation  
+- **planned** — ghost/dim dot, no animation, card at reduced opacity (`opacity: 0.35`)
 
 ### Built inventory
 
-The `built.data.ts` file owns all built-item content. Categories are: `Protocol`, `Personas`, `Agents`, `Tools`, `Writing`. Do not add categories without considering where the item sits in the Swordsman/Mage framing.
+The **Built** section in **`index.html`** owns all built-item content. Categories are: `Protocol`, `Personas`, `Agents`, `Tools`, `Writing`. Do not add categories without considering where the item sits in the Swordsman/Mage framing.
 
 ---
 
@@ -147,11 +133,11 @@ When writing tool descriptions:
 
 When a new Soulbis tool is ready to list:
 
-1. Add a new entry to `components/tools/tools.data.ts`
-2. Assign `status: 'available' | 'building' | 'planned'`
+1. Add a new tool card block in the **Tools** section of **`index.html`**
+2. Set status classes/markup to match `available` / `building` / `planned` (see above)
 3. Decide if it is Swordsman-side (boundary enforcement) or supporting infrastructure
 4. Write a description following the content rules above
-5. Add the corresponding entry to the `Built` inventory under the correct category
+5. Add the corresponding entry in the **Built** section under the correct category
 6. If it has a GitHub repo, link it in the built entry
 
 ---
@@ -160,8 +146,8 @@ When a new Soulbis tool is ready to list:
 
 When a new node enters the ecosystem:
 
-1. Add to `components/ecosystem/ecosystem.data.ts`
-2. Assign `colorVariant` based on which side of the architecture it represents
+1. Add the node markup in the **Ecosystem** section of **`index.html`**
+2. Assign `node-role--*` / `node-name--*` classes per the table above
 3. Choose an appropriate glyph (single emoji, visible at 18px)
 4. Update the section heading if the count changes ("Four nodes / One architecture" → adjust)
 5. The grid is `repeat(3, 1fr)` — 6 nodes = 2 rows of 3, which is the intended layout
@@ -170,21 +156,23 @@ When a new node enters the ecosystem:
 
 ## Relationship to agentprivacy-spellbook
 
-Do not import from or create dependencies on `agentprivacy-spellbook`. They are sibling repos. If shared types are needed, define them independently in `lib/types.ts` and keep them in sync manually — the separation is intentional.
+Do not import from or create dependencies on `agentprivacy-spellbook`. They are sibling repos. Keep any shared wording or semantics aligned manually — the separation is intentional.
 
 ---
 
 ## Deployment
 
+**Canonical site:** the static page at the repo root, **`index.html`**. All visible copy, structure, `<style>`, and footer/nav scripts live there. There is **no** Next.js or React build in this repo — do not reintroduce `next dev`, `next build`, or serving `out/` unless you deliberately migrate away from static HTML.
+
+Vercel is configured with **`framework: null`** (`vercel.json`) so deploys do **not** auto-detect Next.js. `npm run build` only verifies that **`index.html`** exists.
+
 ```bash
-# Production build check
+# Local preview — serves repo root only (same document as GitHub Pages / static hosts)
+npm run dev
+# → http://localhost:8000
+
+# CI / sanity check
 npm run build
-
-# Type check
-npm run type-check
-
-# Deploy (Vercel auto-deploys on push to main)
-git push origin main
 ```
 
 Vercel project name: `soulbis`  
