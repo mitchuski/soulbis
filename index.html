@@ -170,11 +170,12 @@
     width: 100%;
     height: 100%;
     opacity: 0.85;
+    z-index: 1;
   }
 
   .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 5;
     max-width: 700px;
     animation: fadeUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   }
@@ -286,7 +287,7 @@
     position: absolute;
     bottom: 40px;
     left: 60px;
-    z-index: 2;
+    z-index: 5;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -318,6 +319,97 @@
     0% { left: -100%; }
     50% { left: 0%; }
     100% { left: 100%; }
+  }
+
+  /* Hero soul orb — same stack as footer: inner wave → combustion → glass; manifold focal point */
+  .hero-orb-container {
+    position: absolute;
+    left: 65%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4; /* below .hero-content so title column stays interactive */
+    width: 72px;
+    height: 72px;
+    pointer-events: none;
+  }
+
+  .hero-orb-container .hero-soul-orb-btn {
+    pointer-events: auto;
+  }
+
+  .hero-orb-wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero-combustion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 82px;
+    height: 82px;
+    object-fit: contain;
+    opacity: 0.28;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .hero-orb-container.copied .hero-combustion {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.06);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+
+  .hero-soul-orb-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px;
+    height: 54px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hero-soul-orb-btn:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+
+  .hero-soul-orb-btn:focus-visible {
+    outline: 1px solid var(--cyan);
+    outline-offset: 4px;
+  }
+
+  .hero-orb-container.copied .hero-soul-orb-btn {
+    z-index: 5;
+  }
+
+  .hero-soul-orb-btn.copied {
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 24px rgba(77, 217, 232, 0.55);
+  }
+
+  .hero-orb-svg {
+    width: 48px;
+    height: 48px;
+    pointer-events: none;
   }
 
   /* Section base */
@@ -722,6 +814,19 @@
     height: 44px;
   }
 
+  /* Inner wave field: same phase as footer canvas, clipped — cyan “rear”, glass, coral “forward” */
+  .footer-orb-wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
   .footer-combustion {
     position: absolute;
     top: 50%;
@@ -738,7 +843,7 @@
 
   .footer-orb-container.copied .footer-combustion {
     opacity: 1;
-    z-index: 3;
+    z-index: 4;
     transform: translate(-50%, -50%) scale(1.1);
     transition: opacity 0.12s ease, z-index 0s, transform 0.12s ease;
   }
@@ -758,7 +863,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
+    z-index: 3;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
@@ -781,6 +886,10 @@
 
   .footer-soul-orb-btn:focus-visible::before {
     border-color: rgba(77, 217, 232, 0.6);
+  }
+
+  .footer-orb-container.copied .footer-soul-orb-btn {
+    z-index: 5;
   }
 
   .footer-soul-orb-btn.copied {
@@ -992,6 +1101,16 @@
     section { padding: 80px 28px; }
     .hero { padding: 0 28px; }
     .hero-scroll { left: 28px; }
+    .hero-orb-container {
+      left: 82%;
+      top: 36%;
+      width: 60px;
+      height: 60px;
+    }
+    .hero-orb-wave { width: 54px; height: 54px; }
+    .hero-combustion { width: 68px; height: 68px; }
+    .hero-soul-orb-btn { width: 46px; height: 46px; }
+    .hero-orb-svg { width: 40px; height: 40px; }
     .ecosystem-grid { grid-template-columns: 1fr 1fr; }
     .tools-grid { grid-template-columns: 1fr; }
     .footer-content { padding: 0 28px 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -1031,6 +1150,22 @@
 <!-- Hero -->
 <section class="hero" id="hero">
   <canvas id="hero-canvas"></canvas>
+  <div class="hero-orb-container" id="hero-orb-container">
+    <canvas class="hero-orb-wave" id="hero-orb-wave" width="128" height="128" aria-hidden="true"></canvas>
+    <img class="hero-combustion" src="public/images/COMBUSTION.png" alt="" aria-hidden="true">
+    <button type="button" class="hero-soul-orb-btn" id="hero-soul-orb-btn" aria-label="Copy master inscription" title="Copy master inscription">
+      <svg class="hero-orb-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <defs>
+          <radialGradient id="hero-orb-gradient" cx="40%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#4dd9e8"/>
+            <stop offset="50%" stop-color="#8b4daa"/>
+            <stop offset="100%" stop-color="#e8523a"/>
+          </radialGradient>
+        </defs>
+        <circle cx="16" cy="16" r="14" fill="url(#hero-orb-gradient)" opacity="0.38"/>
+      </svg>
+    </button>
+  </div>
   <div class="hero-content">
     <div class="hero-eyebrow">⚔️ &nbsp;Swordsman Protocol</div>
     <h1 class="hero-title">
@@ -1341,6 +1476,7 @@
 <footer>
   <canvas id="footer-canvas"></canvas>
   <div class="footer-orb-container" id="footer-orb-container">
+    <canvas class="footer-orb-wave" id="footer-orb-wave" width="84" height="84" aria-hidden="true"></canvas>
     <img class="footer-combustion" src="public/images/COMBUSTION.png" alt="" aria-hidden="true">
     <button type="button" class="footer-soul-orb-btn" id="footer-soul-orb-btn" aria-label="Copy master inscription" title="Copy master inscription">
       <svg class="footer-orb-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
@@ -1351,7 +1487,7 @@
             <stop offset="100%" stop-color="#e8523a"/>
           </radialGradient>
         </defs>
-        <circle cx="16" cy="16" r="14" fill="url(#orb-gradient)" opacity="0.6"/>
+        <circle cx="16" cy="16" r="14" fill="url(#orb-gradient)" opacity="0.38"/>
       </svg>
     </button>
   </div>
@@ -1518,43 +1654,167 @@ class Star {
   }
 }
 
-// Enhanced hero canvas with manifold + stars + orb
+// Hero canvas: manifold (two phased lattices) + stars — soul orb is DOM (matches footer stack)
 const heroCanvas = document.getElementById('hero-canvas');
 const heroCtx = heroCanvas.getContext('2d');
+const heroOrbCanvas = document.getElementById('hero-orb-wave');
+const heroOrbCtx = heroOrbCanvas ? heroOrbCanvas.getContext('2d') : null;
+const heroOrbContainer = document.getElementById('hero-orb-container');
 let heroT = 0;
 const stars = [];
 const numStars = 80;
 
+function heroLineRgb(prog) {
+  const r1 = 232, g1 = 82, b1 = 58;
+  const r2 = 77, g2 = 217, b2 = 232;
+  const mix = prog;
+  return {
+    r: Math.round(r1 + (r2 - r1) * mix),
+    g: Math.round(g1 + (g2 - g1) * mix),
+    b: Math.round(b1 + (b2 - b1) * mix)
+  };
+}
+
+function heroManifoldY(x, t, prog, w, h, orbX, orbY, lattice) {
+  const lat = lattice | 0;
+  const latPhase = lat * 0.55;
+  const xNorm = (x - orbX) / (w * 0.5);
+  const yBase = h * 0.5 + (prog - 0.5) * h * 0.8;
+  const distFromOrb = Math.abs(x - orbX) / w;
+  const orbInfluence = Math.exp(-distFromOrb * 3) * 80;
+  let y = yBase;
+  y += Math.sin(xNorm * 4 + t * 0.4 + prog * 1.5 + latPhase) * 50 * (1 - Math.abs(prog - 0.5) * 1.5);
+  y += Math.sin(xNorm * 2.5 - t * 0.3 + prog * 2.5 - latPhase * 0.7) * 30;
+  y += Math.cos(xNorm * 6 + t * 0.5 + latPhase) * 15;
+  y += (orbY - yBase) * orbInfluence * 0.015;
+  return y;
+}
+
+function resizeHeroOrb() {
+  if (!heroOrbCanvas || !heroOrbCtx) return;
+  const cssW = heroOrbCanvas.offsetWidth;
+  const cssH = heroOrbCanvas.offsetHeight;
+  const dpr = window.devicePixelRatio || 1;
+  heroOrbCanvas.width = Math.max(1, Math.floor(cssW * dpr));
+  heroOrbCanvas.height = Math.max(1, Math.floor(cssH * dpr));
+  heroOrbCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
 function resizeHero() {
-  heroCanvas.width = heroCanvas.offsetWidth * window.devicePixelRatio;
-  heroCanvas.height = heroCanvas.offsetHeight * window.devicePixelRatio;
-  heroCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  // Reinit stars on resize
+  const dpr = window.devicePixelRatio || 1;
+  heroCanvas.width = heroCanvas.offsetWidth * dpr;
+  heroCanvas.height = heroCanvas.offsetHeight * dpr;
+  heroCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   stars.length = 0;
   for (let i = 0; i < numStars; i++) {
     stars.push(new Star(heroCanvas));
   }
+  resizeHeroOrb();
+}
+
+function drawHeroOrb(orbX, orbY, fw, fh) {
+  if (!heroOrbCanvas || !heroOrbCtx || fw < 2 || fh < 2) return;
+  const cw = heroOrbCanvas.offsetWidth;
+  const ch = heroOrbCanvas.offsetHeight;
+  if (cw < 2 || ch < 2) return;
+
+  const sample = (fw * 0.24) / cw;
+  const yScale = (ch * 0.92) / (fh * 0.55);
+
+  heroOrbCtx.clearRect(0, 0, cw, ch);
+  heroOrbCtx.save();
+  heroOrbCtx.beginPath();
+  heroOrbCtx.arc(cw / 2, ch / 2, cw / 2 - 0.5, 0, Math.PI * 2);
+  heroOrbCtx.clip();
+
+  const lines = 28;
+  const half = Math.floor(lines / 2);
+  const pts = 72;
+
+  function strokePass(minProg, maxProg, alpha, lw, fixedRgb) {
+    for (let L = 0; L < 2; L++) {
+      for (let i = 0; i < half; i++) {
+        const idx = L * half + i;
+        const prog = idx / Math.max(1, lines - 1);
+        if (prog < minProg || prog > maxProg) continue;
+        const { r, g, b } = fixedRgb || heroLineRgb(prog);
+        heroOrbCtx.beginPath();
+        for (let j = 0; j <= pts; j++) {
+          const x = (j / pts) * cw;
+          const xFoot = orbX + (x - cw / 2) * sample;
+          const yFoot = heroManifoldY(xFoot, heroT, prog, fw, fh, orbX, orbY, L);
+          const y = ch / 2 + (yFoot - orbY) * yScale;
+          j === 0 ? heroOrbCtx.moveTo(x, y) : heroOrbCtx.lineTo(x, y);
+        }
+        heroOrbCtx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+        heroOrbCtx.lineWidth = lw;
+        heroOrbCtx.stroke();
+      }
+    }
+  }
+
+  /* Base rear field — cyan-leaning, softer than the “loud” pass */
+  strokePass(0, 0.46, 0.13, 0.52);
+  /* Mage-side cyan tint — present but not graphic-novel sharp */
+  strokePass(0, 0.4, 0.2, 0.62, { r: 77, g: 217, b: 232 });
+
+  const gx = cw / 2;
+  const gy = ch / 2;
+  const gr = heroOrbCtx.createRadialGradient(
+    gx - ch * 0.15,
+    gy - ch * 0.18,
+    0,
+    gx,
+    gy,
+    ch * 0.58
+  );
+  gr.addColorStop(0, 'rgba(240,238,232,0.09)');
+  gr.addColorStop(0.35, 'rgba(8,12,32,0.24)');
+  gr.addColorStop(0.72, 'rgba(8,12,32,0.06)');
+  gr.addColorStop(1, 'rgba(232,82,58,0.09)');
+  heroOrbCtx.fillStyle = gr;
+  heroOrbCtx.fillRect(0, 0, cw, ch);
+
+  /* Forward spectrum (coral-leaning) */
+  strokePass(0.52, 1, 0.3, 0.76);
+  /* Swordsman coral overlay — lighter touch */
+  strokePass(0.65, 1, 0.26, 0.72, { r: 232, g: 82, b: 58 });
+
+  heroOrbCtx.restore();
+}
+
+function heroOrbCenterCss() {
+  const w = heroCanvas.offsetWidth;
+  const h = heroCanvas.offsetHeight;
+  if (!heroOrbContainer || w < 2 || h < 2) {
+    return { orbX: w * 0.65, orbY: h * 0.5 };
+  }
+  const cRect = heroCanvas.getBoundingClientRect();
+  const oRect = heroOrbContainer.getBoundingClientRect();
+  return {
+    orbX: oRect.left + oRect.width / 2 - cRect.left,
+    orbY: oRect.top + oRect.height / 2 - cRect.top
+  };
 }
 
 function drawHeroManifold() {
   const w = heroCanvas.offsetWidth;
   const h = heroCanvas.offsetHeight;
+  const { orbX, orbY } = heroOrbCenterCss();
   heroCtx.clearRect(0, 0, w, h);
 
-  // Draw constellation stars
   stars.forEach(star => {
     star.update();
     star.draw(heroCtx);
   });
 
-  // Draw occasional constellation lines between nearby stars
   heroCtx.strokeStyle = 'rgba(240,238,232,0.06)';
   heroCtx.lineWidth = 0.5;
   for (let i = 0; i < stars.length; i++) {
     for (let j = i + 1; j < stars.length; j++) {
       const dx = stars[i].x - stars[j].x;
       const dy = stars[i].y - stars[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
+      const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < 100) {
         heroCtx.beginPath();
         heroCtx.moveTo(stars[i].x, stars[i].y);
@@ -1564,78 +1824,29 @@ function drawHeroManifold() {
     }
   }
 
-  // Manifold wave field - larger, more dramatic
   const lines = 70;
   const pts = 250;
-  const orbX = w * 0.65;
-  const orbY = h * 0.5;
+  const half = Math.floor(lines / 2);
 
-  for (let i = 0; i < lines; i++) {
-    const prog = i / lines;
-    // Color gradient: coral → cyan
-    const r1 = 232, g1 = 82, b1 = 58;
-    const r2 = 77, g2 = 217, b2 = 232;
-    const r = Math.round(r1 + (r2-r1)*prog);
-    const g = Math.round(g1 + (g2-g1)*prog);
-    const b = Math.round(b1 + (b2-b1)*prog);
+  for (let L = 0; L < 2; L++) {
+    for (let i = 0; i < half; i++) {
+      const idx = L * half + i;
+      const prog = idx / lines;
+      const { r, g, b } = heroLineRgb(prog);
 
-    heroCtx.beginPath();
-    for (let j = 0; j <= pts; j++) {
-      const x = (j / pts) * w;
-      const xNorm = (x - orbX) / (w * 0.5);
-      const yBase = h * 0.5 + (prog - 0.5) * h * 0.8;
-
-      // Manifold-style: waves curve around the orb point
-      const distFromOrb = Math.abs(x - orbX) / w;
-      const orbInfluence = Math.exp(-distFromOrb * 3) * 80;
-
-      let y = yBase;
-      y += Math.sin(xNorm * 4 + heroT * 0.4 + prog * 1.5) * 50 * (1 - Math.abs(prog - 0.5) * 1.5);
-      y += Math.sin(xNorm * 2.5 - heroT * 0.3 + prog * 2.5) * 30;
-      y += Math.cos(xNorm * 6 + heroT * 0.5) * 15;
-      // Bend toward orb center
-      y += (orbY - yBase) * orbInfluence * 0.015;
-
-      j === 0 ? heroCtx.moveTo(x, y) : heroCtx.lineTo(x, y);
+      heroCtx.beginPath();
+      for (let j = 0; j <= pts; j++) {
+        const x = (j / pts) * w;
+        const y = heroManifoldY(x, heroT, prog, w, h, orbX, orbY, L);
+        j === 0 ? heroCtx.moveTo(x, y) : heroCtx.lineTo(x, y);
+      }
+      heroCtx.strokeStyle = `rgba(${r},${g},${b},0.26)`;
+      heroCtx.lineWidth = 0.75;
+      heroCtx.stroke();
     }
-    heroCtx.strokeStyle = `rgba(${r},${g},${b},0.28)`;
-    heroCtx.lineWidth = 0.8;
-    heroCtx.stroke();
   }
 
-  // Draw dual orb (like soulorbmanifold)
-  const orbRadius = 28;
-
-  // Cyan half (left)
-  heroCtx.beginPath();
-  heroCtx.arc(orbX - 8, orbY, orbRadius, Math.PI * 0.5, Math.PI * 1.5);
-  const cyanGrad = heroCtx.createRadialGradient(orbX - 12, orbY - 8, 2, orbX - 8, orbY, orbRadius);
-  cyanGrad.addColorStop(0, 'rgba(77,217,232,0.9)');
-  cyanGrad.addColorStop(0.6, 'rgba(77,217,232,0.5)');
-  cyanGrad.addColorStop(1, 'rgba(77,217,232,0.1)');
-  heroCtx.fillStyle = cyanGrad;
-  heroCtx.fill();
-
-  // Coral half (right)
-  heroCtx.beginPath();
-  heroCtx.arc(orbX + 8, orbY, orbRadius, Math.PI * 1.5, Math.PI * 0.5);
-  const coralGrad = heroCtx.createRadialGradient(orbX + 12, orbY - 8, 2, orbX + 8, orbY, orbRadius);
-  coralGrad.addColorStop(0, 'rgba(232,82,58,0.9)');
-  coralGrad.addColorStop(0.6, 'rgba(232,82,58,0.5)');
-  coralGrad.addColorStop(1, 'rgba(232,82,58,0.1)');
-  heroCtx.fillStyle = coralGrad;
-  heroCtx.fill();
-
-  // Center blend
-  heroCtx.beginPath();
-  heroCtx.arc(orbX, orbY, orbRadius * 0.5, 0, Math.PI * 2);
-  const centerGrad = heroCtx.createRadialGradient(orbX, orbY - 5, 2, orbX, orbY, orbRadius * 0.5);
-  centerGrad.addColorStop(0, 'rgba(240,238,232,0.6)');
-  centerGrad.addColorStop(0.5, 'rgba(139,77,170,0.4)');
-  centerGrad.addColorStop(1, 'rgba(8,12,32,0.8)');
-  heroCtx.fillStyle = centerGrad;
-  heroCtx.fill();
-
+  drawHeroOrb(orbX, orbY, w, h);
   heroT += 0.008;
   requestAnimationFrame(drawHeroManifold);
 }
@@ -1657,12 +1868,115 @@ midWave.start();
 // Footer canvas - flip direction (cyan → coral)
 const footerCanvas = document.getElementById('footer-canvas');
 const footerCtx = footerCanvas.getContext('2d');
+const footerOrbCanvas = document.getElementById('footer-orb-wave');
+const footerOrbCtx = footerOrbCanvas ? footerOrbCanvas.getContext('2d') : null;
 let ft = 0;
 
+function footerWaveY(x, t, p, w, h) {
+  const xNorm = (x - w / 2) / (w / 2);
+  let y = h * 0.4;
+  y += Math.sin(xNorm * 2.8 - t * 0.5) * 35 * (1 - Math.abs(p - 0.5) * 1.5);
+  y += Math.sin(xNorm * 4.5 + t * 0.4 + p * 2) * 18;
+  y += Math.cos(xNorm * 1.8 - t * 0.25 + p) * 22;
+  y += (p - 0.5) * h * 0.6;
+  return y;
+}
+
+function footerLineRgb(prog) {
+  const r1 = 77, g1 = 217, b1 = 232;
+  const r2 = 232, g2 = 82, b2 = 58;
+  const mix = prog;
+  return {
+    r: Math.round(r1 + (r2 - r1) * mix),
+    g: Math.round(g1 + (g2 - g1) * mix),
+    b: Math.round(b1 + (b2 - b1) * mix)
+  };
+}
+
 function resizeFooter() {
-  footerCanvas.width = footerCanvas.offsetWidth * window.devicePixelRatio;
-  footerCanvas.height = footerCanvas.offsetHeight * window.devicePixelRatio;
-  footerCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  const dpr = window.devicePixelRatio || 1;
+  footerCanvas.width = footerCanvas.offsetWidth * dpr;
+  footerCanvas.height = footerCanvas.offsetHeight * dpr;
+  footerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  resizeFooterOrb();
+}
+
+function resizeFooterOrb() {
+  if (!footerOrbCanvas || !footerOrbCtx) return;
+  const cssW = footerOrbCanvas.offsetWidth;
+  const cssH = footerOrbCanvas.offsetHeight;
+  const dpr = window.devicePixelRatio || 1;
+  footerOrbCanvas.width = Math.max(1, Math.floor(cssW * dpr));
+  footerOrbCanvas.height = Math.max(1, Math.floor(cssH * dpr));
+  footerOrbCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawFooterOrb() {
+  if (!footerOrbCanvas || !footerOrbCtx) return;
+  const fw = footerCanvas.offsetWidth;
+  const fh = footerCanvas.offsetHeight;
+  const cw = footerOrbCanvas.offsetWidth;
+  const ch = footerOrbCanvas.offsetHeight;
+  if (cw < 2 || ch < 2 || fw < 2 || fh < 2) return;
+
+  const ocX = fw * 0.22;
+  const ocY = fh * 0.42;
+  const sample = (fw * 0.2) / cw;
+  const yScale = (ch * 0.92) / (fh * 0.55);
+
+  footerOrbCtx.clearRect(0, 0, cw, ch);
+  footerOrbCtx.save();
+  footerOrbCtx.beginPath();
+  footerOrbCtx.arc(cw / 2, ch / 2, cw / 2 - 0.5, 0, Math.PI * 2);
+  footerOrbCtx.clip();
+
+  const lines = 28;
+  const pts = 72;
+
+  function strokePass(minProg, maxProg, alpha, lw) {
+    for (let i = 0; i < lines; i++) {
+      const prog = i / Math.max(1, lines - 1);
+      if (prog < minProg || prog > maxProg) continue;
+      const { r, g, b } = footerLineRgb(prog);
+      footerOrbCtx.beginPath();
+      for (let j = 0; j <= pts; j++) {
+        const x = (j / pts) * cw;
+        const xFoot = ocX + (x - cw / 2) * sample;
+        const yFoot = footerWaveY(xFoot, ft, prog, fw, fh);
+        const y = ch / 2 + (yFoot - ocY) * yScale;
+        j === 0 ? footerOrbCtx.moveTo(x, y) : footerOrbCtx.lineTo(x, y);
+      }
+      footerOrbCtx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+      footerOrbCtx.lineWidth = lw;
+      footerOrbCtx.stroke();
+    }
+  }
+
+  /* Rear of volume — cyan-leaning lines (read as deeper / “below” in the field) */
+  strokePass(0, 0.44, 0.12, 0.5);
+
+  /* Glass lens between depth layers */
+  const gx = cw / 2;
+  const gy = ch / 2;
+  const gr = footerOrbCtx.createRadialGradient(
+    gx - ch * 0.15,
+    gy - ch * 0.18,
+    0,
+    gx,
+    gy,
+    ch * 0.58
+  );
+  gr.addColorStop(0, 'rgba(240,238,232,0.12)');
+  gr.addColorStop(0.35, 'rgba(8,12,32,0.28)');
+  gr.addColorStop(0.72, 'rgba(8,12,32,0.06)');
+  gr.addColorStop(1, 'rgba(232,82,58,0.07)');
+  footerOrbCtx.fillStyle = gr;
+  footerOrbCtx.fillRect(0, 0, cw, ch);
+
+  /* Forward layer — coral / combustion-leaning lines crossing “above” the inner field */
+  strokePass(0.52, 1, 0.4, 0.82);
+
+  footerOrbCtx.restore();
 }
 
 function drawFooter() {
@@ -1676,25 +1990,13 @@ function drawFooter() {
 
   for (let i = 0; i < lines; i++) {
     const prog = i / lines;
-    // Inverted gradient: cyan → coral
-    const r1 = 77, g1 = 217, b1 = 232;   // cyan
-    const r2 = 232, g2 = 82, b2 = 58;     // coral
-    const mix = prog;
-    const r = Math.round(r1 + (r2-r1)*mix);
-    const g = Math.round(g1 + (g2-g1)*mix);
-    const b = Math.round(b1 + (b2-b1)*mix);
+    const { r, g, b } = footerLineRgb(prog);
 
     footerCtx.beginPath();
     for (let j = 0; j <= pts; j++) {
       const x = (j / pts) * w;
-      const xNorm = (x - w/2) / (w/2);
       const p = i / lines;
-      let y = h * 0.4;
-      y += Math.sin(xNorm * 2.8 - ft * 0.5) * 35 * (1 - Math.abs(p - 0.5) * 1.5);
-      y += Math.sin(xNorm * 4.5 + ft * 0.4 + p * 2) * 18;
-      y += Math.cos(xNorm * 1.8 - ft * 0.25 + p) * 22;
-      y += (p - 0.5) * h * 0.6;
-
+      const y = footerWaveY(x, ft, p, w, h);
       j === 0 ? footerCtx.moveTo(x, y) : footerCtx.lineTo(x, y);
     }
     footerCtx.strokeStyle = `rgba(${r},${g},${b},0.28)`;
@@ -1702,6 +2004,7 @@ function drawFooter() {
     footerCtx.stroke();
   }
 
+  drawFooterOrb();
   ft += 0.008;
   requestAnimationFrame(drawFooter);
 }
@@ -1710,22 +2013,24 @@ resizeFooter();
 drawFooter();
 window.addEventListener('resize', resizeFooter);
 
-// Master inscription — footer Soul Orb copy (easter egg)
+// Master inscription — hero + footer soul orbs
 (function () {
-  var inscription = '(⚔️⊥⿻⊥🧙)🙂';
-  var btn = document.getElementById('footer-soul-orb-btn');
-  var container = document.getElementById('footer-orb-container');
-  if (!btn || !navigator.clipboard || !navigator.clipboard.writeText) return;
-  btn.addEventListener('click', function () {
-    navigator.clipboard.writeText(inscription).then(function () {
-      btn.classList.add('copied');
-      if (container) container.classList.add('copied');
-      setTimeout(function () {
-        btn.classList.remove('copied');
-        if (container) container.classList.remove('copied');
-      }, 1500);
-    }).catch(function () {});
-  });
+  var inscription = '(⚔️ ⊥ ⿻ ⊥ 🧙) 😊';
+  function wire(btn, container) {
+    if (!btn || !navigator.clipboard || !navigator.clipboard.writeText) return;
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(inscription).then(function () {
+        btn.classList.add('copied');
+        if (container) container.classList.add('copied');
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          if (container) container.classList.remove('copied');
+        }, 1500);
+      }).catch(function () {});
+    });
+  }
+  wire(document.getElementById('footer-soul-orb-btn'), document.getElementById('footer-orb-container'));
+  wire(document.getElementById('hero-soul-orb-btn'), document.getElementById('hero-orb-container'));
 })();
 </script>
 </body>
