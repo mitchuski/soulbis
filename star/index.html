@@ -36,6 +36,7 @@
   .masthead .navlink:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,150,255,0.35); }
   .masthead .navlink--ghost{ background:none; border:1px solid var(--line); color:var(--ink); }
   .masthead .navlink--ghost:hover{ border-color:rgba(120,140,220,0.5); box-shadow:none; }
+  .masthead button.navlink{ font-family:inherit; cursor:pointer; }
 
   .console{ position:fixed; right:24px; top:24px; z-index:6; width:280px;
     background:var(--glass); border:1px solid var(--line); border-radius:14px;
@@ -165,7 +166,7 @@
     font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim);
     background:var(--glass); border:1px solid var(--line); border-radius:999px; padding:7px 16px;
     backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease; }
-  .focusbadge.show{ opacity:0.78; }
+  .focusbadge.show{ opacity:0.78; pointer-events:auto; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -179,6 +180,8 @@
     <div class="navrow">
       <a class="navlink navlink--ghost" href="/">↖ soulbis.com</a>
       <a id="toLattice" class="navlink" href="/lattice">↗ The 64 · Vertex Codex</a>
+      <button id="focusBtn" class="navlink navlink--ghost" type="button" title="enter focus mode (presentation orbit)">🎬 focus</button>
+      <button id="snapBtn" class="navlink navlink--ghost" type="button" title="save PNG snapshot of the manifold">📸 snap</button>
     </div>
   </div>
 
@@ -296,7 +299,7 @@
 
   <div class="toast" id="toast">snapshot saved</div>
   <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus</div>
-  <div class="focusbadge" id="focusbadge">focus mode · press F or Esc to exit</div>
+  <div class="focusbadge" id="focusbadge">focus mode · tap to exit · F / Esc</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -338,7 +341,7 @@
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); renderer.setClearColor(0x000000,0);
   const scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x05060d,0.10);
-  const camera=new THREE.PerspectiveCamera(45,1,0.1,100); let camDist=4.6;
+  const camera=new THREE.PerspectiveCamera(45,1,0.1,100); let camDist=window.innerWidth<760?6.8:4.6;
   const world=new THREE.Group(),coreGroup=new THREE.Group(),latticeGroup=new THREE.Group();
   world.add(coreGroup,latticeGroup); scene.add(world);
 
@@ -605,6 +608,7 @@
   $('playPause').addEventListener('click',()=>setPlaying(!state.playing));
   $('stepBack').addEventListener('click',()=>stepBy(-1)); $('stepFwd').addEventListener('click',()=>stepBy(1));
   $('snap').addEventListener('click',snapshot);
+  { const sb=$('snapBtn'); if(sb) sb.addEventListener('click',snapshot); }
 
   function seg(id,key,attr,after){ document.querySelectorAll('#'+id+' button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); state[key]=b.dataset[attr]; after(); })); }
@@ -676,6 +680,9 @@
     else if(e.key==='Escape'&&focusMode){ exitFocus(); } });
   document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&focusMode){ focusMode=false; document.body.classList.remove('focus'); if(focusBadge) focusBadge.classList.remove('show'); } });
   document.addEventListener('mousemove',()=>{ if(focusMode) flashBadge(1800); });
+  document.addEventListener('touchstart',()=>{ if(focusMode) flashBadge(2600); },{passive:true});
+  const focusBtn=$('focusBtn'); if(focusBtn) focusBtn.addEventListener('click',()=>{ focusMode?exitFocus():enterFocus(); });
+  if(focusBadge) focusBadge.addEventListener('click',exitFocus);
 
   // ===== ✦ City-Key tour — visit ONLY the lit vertices, in key order (≠ succ order, ≠ stratum order).
   // Reuses the main transport: keyTour engages/exits; ▶/❚❚ play-pauses the path; ◀/▶ step key vertices;
