@@ -1,8 +1,48 @@
-# Chronicle — Soulbis Website Migration
-**Date:** 2026-03-27
-**Session:** Framer → GitHub Pages migration
+# Chronicle — Soulbis Website
 
 ---
+
+## 2026-05-27 — `/star` + `/lattice` integration (Swordsman's Key system)
+
+> Full write-up — including the suite-wide Soulbis Swordsman Protocol and the redesign sketch — in **[`CHRONICLE_SWORDSMAN_KEY_2026-05-27.md`](./CHRONICLE_SWORDSMAN_KEY_2026-05-27.md)**.
+
+Integrated the **star lattice** deliverable (`C:\Users\mitch\star lattice`) into the static site as two new routes. These are the interactive front of the Tetrahedra Forge and the consumer side of the **Swordsman's Key** interop (`swordsmans-key.interop.md`): a portable JSON (`palette` + 64 vertex `descriptions`) authored on the agentprivacy.ai side (`/guide/achievements`, `/ceremony`) and imported here.
+
+- **`/star`** — the Star-Tetrahedron Manifold (3D). Used the Vite production `dist/` (three.js bundled locally in `star/assets/index-CyCaOCmH.js` — no CDN dependency). Files at `star/index.html` + `star/assets/`.
+- **`/lattice`** — the 64 · Vertex Codex (`dist/codex.html` → `lattice/index.html`). Self-contained, no bundle, no three.js.
+- **Asset paths**: the manifold's Vite-relative `./assets/…` were rewritten to absolute `/star/assets/…` so `/star` resolves whether or not a trailing slash is present (Vercel + local `serve`).
+- **Live link**: both pages talk over `BroadcastChannel('agentprivacy-succ')` — same-origin, so on soulbis.com `/star`'s succ marker lights the matching cell in `/lattice` and an imported key recolours both. Each page also has **Import / Export** of `swordsmans-key.json`.
+- **Homepage wiring**: added **Star** + **Lattice** nav links; the **Tetrahedra Forge** tool card now opens the manifold and the codex live, with copy noting the Swordsman's Key bridge.
+- Cosmetic: manifold `<title>` `star.soulbis.com` → `soulbis.com/star`.
+
+**Verified locally** (`serve` on :8000): `/`, `/star/`, `/star`, `/star/assets/index-CyCaOCmH.js`, `/lattice/`, `/lattice` all HTTP 200; titles correct; nav links present.
+
+**Open design thread (not built):** redesigning Soulbis as a practical *Swordsman key system* with deeper overlap to `agentprivacy.ai/ceremony` (key forge — ed25519 keypair, agent card, key-burn) and `/guide/achievements` (loadout/tier display). The Swordsman's Key JSON is the cross-origin bridge (localStorage is per-origin, so a portable key — not a live link — is the right seam). To be scoped with the user.
+
+---
+
+## 2026-05-27 — Sync pass (project state catch-up)
+
+The site was a 2026-03-29 snapshot; the project had moved on substantially (City of Mages, new agentprivacy.ai routes, grimoire v10.2.0 / v1.7.1, eight Tomes). Content-only sync — no structural or design-system changes; all rules in `CLAUDE.md` preserved.
+
+**Changes to `index.html`:**
+- **Metadata** — `og:url` / `og:image` / `twitter:image` repointed from the `mitchuski.github.io/soulbis/` mirror to canonical `https://soulbis.com/`.
+- **Ecosystem** — heading "Six nodes" → "Seven nodes". Added **City of Mages** as a `neutral` (between-both) node: glyph 🏙️, role "City of Mages", name "The Convergence", links `agentprivacy.ai/guide`. Refreshed `agentprivacy` node (PVM V5.4, master grimoire = 5 spellbooks / 42 personas, eight Tomes) and `spellweb` node (corpus/conjecture language). spellweb.ai kept as the standalone node URL.
+- **Built inventory** — refreshed `agentprivacy-docs` and `agentprivacy-spellbook` descriptions (Next.js 16 / React 19, model, Tomes, live spellweb); added `cityofmages` public repo under Protocol.
+- **Philosophy strip** — "Privacy Value Model V5" → "V5.4".
+- **Tools** — unchanged this pass; MyTerms Blade deliberately kept "In development" (bundle exists locally, not yet publicly released).
+
+**Decisions (user-confirmed):** City of Mages = new node + built item; node colour = neutral; MyTerms stays in-dev; spellweb.ai retained.
+
+**Build:** `npm run build` (verify-static) OK; `npm run dev` serves at `http://localhost:8000`.
+
+**Deferred:** `soulbis.com/star` — the 3D manifold page. Not started this pass; awaiting the model code from the user.
+
+**Also updated:** `CLAUDE.md` node table (+ City of Mages neutral) and the grid-count note.
+
+---
+
+## 2026-03-27 — Framer → GitHub Pages migration
 
 ## What was accomplished
 

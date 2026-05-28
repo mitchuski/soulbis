@@ -41,11 +41,17 @@ This system must be preserved. Every new section or node should declare which si
 ```
 soulbis/
 ├── index.html          # Canonical site — all sections, <style>, and inline scripts
+├── star/               # /star — Star-Tetrahedron Manifold (3D, three.js bundled in star/assets/)
+├── lattice/            # /lattice — The 64 · Vertex Codex (self-contained, no bundle)
 ├── public/             # Images and static assets (paths referenced from index.html)
 ├── scripts/
 │   └── verify-static.cjs   # Used by npm run build (CI sanity check)
 ├── vercel.json         # Static deploy — framework preset disabled
 └── package.json        # devDependencies: serve only
+
+# /star and /lattice are the Swordsman's Key system: import/export a portable JSON
+# (palette + 64 vertex descriptions) authored on the agentprivacy.ai side. The two
+# pages live-link over BroadcastChannel('agentprivacy-succ') when same-origin.
 ```
 
 ---

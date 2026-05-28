@@ -73,6 +73,7 @@ Never hardcode coral/cyan on the wrong architectural side.
 | Soul Sync | `neutral` |
 | BGIN AI | `red` |
 | Soulbae | `cyan` |
+| City of Mages | `neutral` |
 
 ### Tool cards
 
@@ -150,7 +151,7 @@ When a new node enters the ecosystem:
 2. Assign `node-role--*` / `node-name--*` classes per the table above
 3. Choose an appropriate glyph (single emoji, visible at 18px)
 4. Update the section heading if the count changes ("Four nodes / One architecture" → adjust)
-5. The grid is `repeat(3, 1fr)` — 6 nodes = 2 rows of 3, which is the intended layout
+5. The grid is `repeat(3, 1fr)` — 7 nodes currently render as 2 rows of 3 plus a lone node; keep the count in the heading ("Seven nodes / One architecture") in sync
 
 ---
 

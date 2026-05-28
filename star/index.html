@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star-Tetrahedron Manifold · soulbis.com/star</title>
+<link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
+<link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
+  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16);
+    --glass:rgba(10,13,28,0.62); }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; overflow:hidden; background:#04050b; }
+  body{ font-family:'Spline Sans Mono',monospace; color:var(--ink);
+    background:
+      radial-gradient(120% 90% at 28% 18%, rgba(43,107,255,0.10), transparent 55%),
+      radial-gradient(110% 80% at 78% 86%, rgba(255,77,61,0.09), transparent 55%),
+      radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%); }
+  #scene{ position:fixed; inset:0; display:block; cursor:grab; }
+  #scene:active{ cursor:grabbing; }
+
+  .masthead{ position:fixed; top:26px; left:30px; z-index:5; pointer-events:none; max-width:min(46vw,470px); }
+  .masthead .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; padding-left:2px; }
+  .masthead h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic;
+    font-size:clamp(28px,4.4vw,52px); line-height:0.96; letter-spacing:-0.01em;
+    background:linear-gradient(100deg,#9fc0ff 0%,#e8edff 42%,#ffb9a6 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 40px rgba(120,150,255,0.25); }
+  .masthead .eq{ margin-top:14px; font-size:12.5px; color:#aeb8ee; letter-spacing:0.02em;
+    background:var(--glass); border:1px solid var(--line); border-radius:8px; padding:8px 11px; display:inline-block; backdrop-filter:blur(9px); }
+  .masthead .eq b{ color:#ffd6c7; font-weight:500; }
+  .masthead .sub{ margin-top:10px; font-size:11px; color:var(--dim); letter-spacing:0.03em; line-height:1.6; }
+  .masthead .navrow{ display:flex; gap:8px; flex-wrap:wrap; margin-top:13px; }
+  .masthead .navlink{ display:inline-block; pointer-events:auto; text-decoration:none; letter-spacing:0.06em; font-size:10.5px;
+    color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border-radius:8px; padding:7px 13px; transition:transform .15s, box-shadow .15s; }
+  .masthead .navlink:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,150,255,0.35); }
+  .masthead .navlink--ghost{ background:none; border:1px solid var(--line); color:var(--ink); }
+  .masthead .navlink--ghost:hover{ border-color:rgba(120,140,220,0.5); box-shadow:none; }
+
+  .console{ position:fixed; right:24px; top:24px; z-index:6; width:280px;
+    background:var(--glass); border:1px solid var(--line); border-radius:14px;
+    backdrop-filter:blur(14px) saturate(1.1); box-shadow:0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1); max-height:calc(50vh - 28px); }
+  .console.folded{ display:none; }
+  .console.trace{ top:auto; bottom:24px; }   /* the Path · Key panel sits bottom-right, opposite the look console */
+  .toggles--one{ grid-template-columns:1fr; }
+  .console header{ display:flex; align-items:center; justify-content:space-between; padding:13px 15px; cursor:pointer; user-select:none; border-bottom:1px solid var(--line); }
+  .console header span{ font-size:10.5px; letter-spacing:0.3em; text-transform:uppercase; color:var(--dim); }
+  .console header .fold{ color:var(--ink); font-size:14px; transition:transform .4s; }
+  .console.folded header .fold{ transform:rotate(180deg); }
+  .body{ padding:13px 15px 16px; overflow-y:auto; max-height:calc(50vh - 74px); }
+  .body::-webkit-scrollbar{ width:6px; } .body::-webkit-scrollbar-thumb{ background:rgba(120,140,220,0.25); border-radius:3px; }
+  .divider{ height:1px; background:var(--line); margin:14px -15px; }
+  .sect{ font-size:9.5px; letter-spacing:0.26em; text-transform:uppercase; color:rgba(124,134,184,0.7); margin-bottom:12px; }
+
+  .row{ margin-bottom:14px; } .row:last-child{ margin-bottom:0; }
+  .lbl{ display:flex; justify-content:space-between; font-size:11px; margin-bottom:7px; }
+  .lbl .k{ color:var(--dim); letter-spacing:0.06em; } .lbl .v{ color:#ffd6c7; font-variant-numeric:tabular-nums; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:3px; border-radius:3px;
+    background:linear-gradient(90deg,#2b6bff,#9a6bff 50%,#ff4d3d); outline:none; }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:14px; height:14px; border-radius:50%;
+    background:#eef2ff; border:2px solid #0a0d1c; cursor:pointer; box-shadow:0 0 12px rgba(160,180,255,0.8); }
+  input[type=range]::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:#eef2ff; border:2px solid #0a0d1c; cursor:pointer; box-shadow:0 0 12px rgba(160,180,255,0.8); }
+
+  .seg{ display:flex; gap:5px; }
+  .seg button{ flex:1; font-family:inherit; font-size:10px; letter-spacing:0.03em; padding:7px 0; border-radius:7px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--dim); transition:all .18s; }
+  .seg button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.4); }
+  .seg button.on{ color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border-color:transparent; font-weight:500; }
+
+  .playback{ display:flex; gap:6px; }
+  .playback button{ font-family:inherit; font-size:12px; padding:8px 0; border-radius:8px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--ink); transition:all .18s; }
+  .playback button:hover{ border-color:rgba(120,140,220,0.45); background:rgba(120,140,220,0.14); }
+  .playback #playPause{ flex:2; letter-spacing:0.08em; font-size:11px; } .playback .step{ flex:1; } .playback #snap{ flex:1; }
+
+  .toggles{ display:grid; grid-template-columns:1fr 1fr; gap:8px 10px; }
+  .toggles label{ font-size:10.5px; color:var(--dim); display:flex; align-items:center; gap:7px; cursor:pointer; letter-spacing:0.02em; }
+  .toggles input{ accent-color:#9fc0ff; width:13px; height:13px; cursor:pointer; }
+  /* emoji toggle pills — presentable on/off buttons (active = coral-tinted, full-colour glyph) */
+  .etoggles{ display:flex; gap:8px; flex-wrap:wrap; }
+  .etoggle{ flex:1; min-width:62px; display:flex; flex-direction:column; align-items:center; gap:5px; padding:9px 6px; border-radius:9px;
+    cursor:pointer; border:1px solid var(--line); background:rgba(120,140,220,0.05); transition:border-color .18s, background .18s; }
+  .etoggle input{ display:none; }
+  .etoggle .ico{ font-size:17px; line-height:1; filter:grayscale(0.75); opacity:0.4; transition:filter .18s, opacity .18s; }
+  .etoggle .lbl2{ font-size:9px; letter-spacing:0.03em; color:var(--dim); text-align:center; transition:color .18s; }
+  .etoggle:hover{ border-color:rgba(120,140,220,0.4); }
+  .etoggle:has(input:checked){ border-color:rgba(232,82,58,0.5); background:rgba(232,82,58,0.10); }
+  .etoggle:has(input:checked) .ico{ filter:none; opacity:1; }
+  .etoggle:has(input:checked) .lbl2{ color:var(--ink); }
+
+  .palette{ display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+  .swatch{ display:flex; align-items:center; gap:9px; font-size:10.5px; color:var(--dim); letter-spacing:0.03em; }
+  .swatch input[type=color]{ -webkit-appearance:none; appearance:none; width:30px; height:20px; border:1px solid var(--line); border-radius:5px; background:none; cursor:pointer; padding:0; }
+  .swatch input[type=color]::-webkit-color-swatch-wrapper{ padding:0; }
+  .swatch input[type=color]::-webkit-color-swatch{ border:none; border-radius:4px; }
+  .swatch input[type=color]::-moz-color-swatch{ border:none; border-radius:4px; }
+  .presets{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:11px; }
+  .presets button.on{ color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border-color:transparent; font-weight:500; }
+  .launcher{ position:fixed; right:24px; top:24px; z-index:7; width:46px; height:46px; border-radius:14px;
+    background:var(--glass); border:1px solid var(--line); backdrop-filter:blur(14px) saturate(1.1); color:var(--ink); font-size:21px;
+    cursor:pointer; box-shadow:0 16px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05); display:none; align-items:center; justify-content:center; transition:transform .2s; }
+  .launcher:hover{ transform:scale(1.08); border-color:rgba(120,140,220,0.4); }
+  .launcher.show{ display:flex; }
+  .launcher--trace{ top:auto; bottom:24px; }
+  .keybar{ display:flex; gap:6px; }
+  .keybtn{ flex:1; font-family:inherit; font-size:10.5px; letter-spacing:0.03em; padding:8px 0; border-radius:8px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--ink); transition:all .18s; }
+  .keybtn:hover{ border-color:rgba(120,140,220,0.45); }
+  .keybtn--full{ flex:none; width:100%; margin-top:8px; }
+  .keybtn.on{ color:#04050b; background:linear-gradient(120deg,#e8523a,#ffb9a6); border-color:transparent; font-weight:500; }
+  .keybtn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .keyname{ margin-top:8px; font-size:10px; color:var(--dim); letter-spacing:0.02em; }
+  .keyname b{ color:#ffd6c7; font-weight:500; }
+  .ins-desc{ margin-top:12px; padding-top:11px; border-top:1px solid var(--line); font-size:11.5px; line-height:1.6; color:#dbe6ff; display:none; }
+  .ins-desc.show{ display:block; }
+  .presets button{ flex:1; font-family:inherit; font-size:9.5px; letter-spacing:0.04em; padding:6px 0; border-radius:6px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--dim); transition:all .18s; }
+  .presets button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.4); }
+
+  .reset{ width:100%; margin-top:14px; font-family:inherit; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:9px 0; border-radius:8px; cursor:pointer; background:transparent; border:1px solid var(--line); color:var(--dim); transition:all .18s; }
+  .reset:hover{ color:var(--ink); border-color:rgba(255,77,61,0.45); }
+
+  .inspector{ position:fixed; left:30px; bottom:54px; z-index:5; width:246px;
+    background:var(--glass); border:1px solid var(--line); border-radius:12px; padding:13px 15px;
+    backdrop-filter:blur(12px); box-shadow:0 18px 44px rgba(0,0,0,0.45); }
+  .ins-head{ font-size:13px; letter-spacing:0.04em; color:#e8edff; margin-bottom:10px; }
+  .ins-head b{ color:#bfe0ff; font-weight:500; } .ins-head .bits{ color:#ffd6c7; font-weight:500; }
+  .ins-grid{ display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:11px; }
+  .ins-grid .k{ color:var(--dim); white-space:nowrap; } .ins-grid .v{ color:#cfe0ff; text-align:right; font-variant-numeric:tabular-nums; }
+  .ins-foot{ margin-top:11px; padding-top:10px; border-top:1px solid var(--line); font-size:9.5px; color:rgba(124,134,184,0.85); line-height:1.6; letter-spacing:0.01em; }
+  .ins-foot b{ color:#aeb8ee; font-weight:500; }
+  /* Compact tracer — while the succ cycle plays, the detail collapses to a calm progress ring (no bouncing). */
+  .tracer{ display:none; align-items:center; gap:13px; }
+  .inspector.tracing .ins-head, .inspector.tracing .ins-grid, .inspector.tracing .ins-desc, .inspector.tracing .ins-foot{ display:none; }
+  .inspector.tracing .tracer{ display:flex; }
+  .tracer-ring{ width:44px; height:44px; transform:rotate(-90deg); flex-shrink:0; }
+  .tracer-bg{ fill:none; stroke:var(--line); stroke-width:2.5; }
+  .tracer-arc{ fill:none; stroke:var(--sword); stroke-width:2.5; stroke-linecap:round; stroke-dasharray:97.39; stroke-dashoffset:97.39; filter:drop-shadow(0 0 4px var(--sword)); }
+  .tracer-orb{ opacity:0.9; filter:drop-shadow(0 0 6px rgba(139,77,170,0.55)); animation:orbBreathe 3.6s ease-in-out infinite; }
+  .tracer-dot{ fill:#f0eee8; filter:drop-shadow(0 0 5px var(--sword)); }
+  .tracer-laps{ fill:#f0eee8; font-family:'Spline Sans Mono',monospace; font-size:9px; font-weight:500; text-anchor:middle; dominant-baseline:central; filter:drop-shadow(0 0 3px rgba(8,12,32,0.9)); }
+  @keyframes orbBreathe{ 0%,100%{ opacity:0.7; } 50%{ opacity:1; } }
+  .tracer-label{ font-size:10.5px; line-height:1.5; letter-spacing:0.04em; color:var(--dim); }
+  .tracer-label b{ color:#ffd6c7; font-weight:500; font-variant-numeric:tabular-nums; }
+
+  .toast{ position:fixed; left:50%; top:24px; transform:translate(-50%,-20px); z-index:9; opacity:0;
+    background:var(--glass); border:1px solid var(--line); border-radius:20px; padding:8px 18px;
+    font-size:11px; letter-spacing:0.06em; color:#cfe0ff; backdrop-filter:blur(10px); transition:all .35s; pointer-events:none; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+  .hint{ position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:5;
+    font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(124,134,184,0.6); pointer-events:none; }
+
+  @media (max-width:760px){
+    .masthead{ left:18px; top:18px; max-width:62vw; } .masthead .eq,.masthead .sub{ display:none; }
+    .console{ right:14px; top:14px; width:252px; } .inspector{ left:14px; bottom:48px; width:204px; }
+    .console.trace{ bottom:14px; width:252px; } .launcher--trace{ bottom:14px; }
+  }
+
+  /* [f] focus mode — fullscreen presentation orbit: fade all chrome, keep the sculpture turning */
+  body.focus .masthead, body.focus .console, body.focus .launcher, body.focus .inspector, body.focus .hint{ opacity:0 !important; pointer-events:none !important; transition:opacity .6s ease; }
+  body.focus #scene{ cursor:default; }
+  .focusbadge{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:8;
+    font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim);
+    background:var(--glass); border:1px solid var(--line); border-radius:999px; padding:7px 16px;
+    backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease; }
+  .focusbadge.show{ opacity:0.78; }
+</style>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <div class="masthead">
+    <div class="eyebrow">agentprivacy.ai · holographic boundary · V5.4</div>
+    <h1>Star Tetrahedron<br>Manifold</h1>
+    <div class="eq">r(θ,φ) = <b>R</b> + <b>ε</b> sin(<b>m</b>φ) cos(<b>n</b>θ)</div>
+    <div class="sub">⚔️ neg · 🧙 bnot · neg∘bnot = succ<br>∂M: 96 edges encode 64 vertices · 96/64 = 1.5 = P<sup>1.5</sup><br>renders V(π,t) · Φ_agent shown · Φ_data ⊥ Φ_inference off-axis · full legend on /lattice</div>
+    <div class="navrow">
+      <a class="navlink navlink--ghost" href="/">↖ soulbis.com</a>
+      <a id="toLattice" class="navlink" href="/lattice">↗ The 64 · Vertex Codex</a>
+    </div>
+  </div>
+
+  <div class="console" id="console">
+    <header id="foldBtn"><span>Lattice Console</span><div class="fold">›</div></header>
+    <div class="body">
+      <div class="row"><div class="lbl"><span class="k">ε · separation depth</span><span class="v" id="vEps">0.350</span></div>
+        <input type="range" id="sEps" min="0" max="0.6" step="0.005" value="0.35"></div>
+      <div class="row"><div class="lbl"><span class="k">m · longitudinal mode</span><span class="v" id="vM">5</span></div>
+        <input type="range" id="sM" min="1" max="10" step="1" value="5"></div>
+      <div class="row"><div class="lbl"><span class="k">n · azimuthal (= bits)</span><span class="v" id="vN">6</span></div>
+        <input type="range" id="sN" min="1" max="10" step="1" value="6"></div>
+      <div class="row"><div class="lbl"><span class="k">core scale · det(Σ)</span><span class="v" id="vCore">0.60</span></div>
+        <input type="range" id="sCore" min="0.25" max="0.85" step="0.01" value="0.60"></div>
+      <div class="row"><div class="lbl"><span class="k">⚔️:🧙 Swordsman : Mage</span><span class="v" id="vRatio">1.000</span></div>
+        <input type="range" id="sRatio" min="1" max="2.2" step="0.001" value="1"></div>
+      <div class="row"><div class="lbl"><span class="k">orbit rotation</span><span class="v" id="vSpin">0.30</span></div>
+        <input type="range" id="sSpin" min="0" max="1" step="0.01" value="0.3"></div>
+
+      <div class="divider"></div>
+      <div class="sect">Layers</div>
+      <div class="row"><div class="lbl"><span class="k">manifold</span><span class="v"></span></div>
+        <div class="seg" id="mode">
+          <button data-m="both" class="on">Both</button><button data-m="surface">Surface</button><button data-m="wire">Wire</button>
+        </div></div>
+      <div class="row"><div class="lbl"><span class="k">lattice edges</span><span class="v"></span></div>
+        <div class="seg" id="edgeMode">
+          <button data-e="holo" class="on">∂M · 96</button><button data-e="full">Q₆ · 192</button><button data-e="off">off</button>
+        </div></div>
+      <div class="row etoggles">
+        <label class="etoggle" title="dual-agent core glow"><input type="checkbox" id="tGlow" checked><span class="ico">🔮</span><span class="lbl2">core glow</span></label>
+      </div>
+      <div class="row"><div class="lbl"><span class="k">highlight surface · opacity</span><span class="v" id="vCell">0.20</span></div>
+        <input type="range" id="sCell" min="0" max="0.6" step="0.01" value="0.20"></div>
+
+      <div class="divider"></div>
+      <div class="sect">Palette</div>
+      <div class="palette">
+        <label class="swatch"><input type="color" id="cCool" value="#141a3d"> cool</label>
+        <label class="swatch"><input type="color" id="cWarm" value="#f0eee8"> warm</label>
+        <label class="swatch"><input type="color" id="cSword" value="#e8523a"> ⚔️ sword</label>
+        <label class="swatch"><input type="color" id="cMage" value="#4dd9e8"> 🧙 mage</label>
+      </div>
+      <div class="presets" id="presets">
+        <button data-p="nature">🌿 Nature</button>
+        <button data-p="human">🧑 Human</button>
+        <button data-p="artificial" class="on">🤖 Artificial</button>
+        <button data-p="alien">👽 Alien</button>
+      </div>
+
+      <button class="reset" id="reset">Reset all</button>
+    </div>
+  </div>
+
+  <button id="launcher" class="launcher" title="open lattice console">🎛️</button>
+
+  <!-- Path & Key — the runecraft-style tracing of the geometry (separate from the look console) -->
+  <div class="console trace" id="trace">
+    <header id="foldBtn2"><span>Path · Key — trace</span><div class="fold">›</div></header>
+    <div class="body">
+      <div class="sect">Path · T∫(π) — the dance, not the stance</div>
+      <div class="row"><div class="lbl"><span class="k">marker speed</span><span class="v" id="vSpeed">0.12</span></div>
+        <input type="range" id="sSpeed" min="0.01" max="0.5" step="0.005" value="0.12"></div>
+      <div class="row playback">
+        <button id="playPause">❚❚ Pause</button>
+        <button class="step" id="stepBack" title="previous vertex">◀</button>
+        <button class="step" id="stepFwd" title="next vertex (succ)">▶</button>
+        <button id="snap" title="save PNG snapshot">📸</button>
+      </div>
+      <button id="tracerSave" class="keybtn keybtn--full" disabled title="import a City Key, trace the manifold, then stamp the laps + presence into it">💾 import a City Key first</button>
+      <div class="row etoggles">
+        <label class="etoggle" title="show the 64 sovereignty vertices"><input type="checkbox" id="tLattice" checked><span class="ico">💠</span><span class="lbl2">64 vertices</span></label>
+        <label class="etoggle" title="show the succ cycle (the comet wheel)"><input type="checkbox" id="tSucc" checked><span class="ico">🔄</span><span class="lbl2">succ cycle</span></label>
+        <label class="etoggle" title="show the swordsman info popup"><input type="checkbox" id="tInfo" checked><span class="ico">ℹ️</span><span class="lbl2">info popup</span></label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sect">City Key 🗝️</div>
+      <div class="row keybar">
+        <button id="impBtn" class="keybtn">⬆ Import</button>
+        <button id="expBtn" class="keybtn">⬇ Export</button>
+        <input type="file" id="impFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="keyname" id="keyName">no key loaded</div>
+      <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
+    </div>
+  </div>
+
+  <button id="launcher2" class="launcher launcher--trace" title="open path & key panel">🛤️</button>
+
+  <div class="inspector" id="inspector">
+    <div class="tracer" id="tracer" aria-hidden="true">
+      <svg viewBox="0 0 36 36" class="tracer-ring">
+        <defs><radialGradient id="orbGrad" cx="42%" cy="40%" r="62%">
+          <stop offset="0%" stop-color="#4dd9e8"/><stop offset="50%" stop-color="#8b4daa"/><stop offset="100%" stop-color="#e8523a"/>
+        </radialGradient></defs>
+        <circle class="tracer-orb" cx="18" cy="18" r="9" fill="url(#orbGrad)"/>
+        <circle class="tracer-bg" cx="18" cy="18" r="15.5"/>
+        <circle class="tracer-arc" id="tracerArc" cx="18" cy="18" r="15.5"/>
+        <g id="tracerDotG"><circle class="tracer-dot" cx="33.5" cy="18" r="2"/></g>
+        <text class="tracer-laps" id="tracerLaps" x="18" y="18" transform="rotate(90 18 18)">0</text>
+      </svg>
+      <div class="tracer-label">tracing the succ cycle<br><b id="tracerV">0</b> · <span id="tracerStratum">stratum 0</span></div>
+    </div>
+    <div class="ins-head">vertex <b id="iX">0</b> · <span class="bits" id="iBits">000000</span></div>
+    <div class="ins-grid">
+      <span class="k">📐 stratum</span><span class="v" id="iStratum">0 · 1 state</span>
+      <span class="k">⚔️ neg</span><span class="v" id="iNeg">0 · 000000</span>
+      <span class="k">🧙 bnot</span><span class="v" id="iBnot">63 · 111111</span>
+      <span class="k">😊 succ</span><span class="v" id="iSucc">1 · 000001</span>
+    </div>
+    <div class="ins-desc" id="insDesc"></div>
+    <div class="ins-foot"><b>🛤️ value lives on the path, not the vertex.</b> paused: coral = 6 dimension-toggles, cyan = antipode (bnot). boundary ∂M: 96/64 = 1.5 = P<sup>1.5</sup>.</div>
+  </div>
+
+  <div class="toast" id="toast">snapshot saved</div>
+  <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus</div>
+  <div class="focusbadge" id="focusbadge">focus mode · press F or Esc to exit</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  // ===== Canon (agentprivacy-docs PVM V5.4) =====
+  const R=1.2, BITS=6, N=1<<BITS, STRATA=[1,6,15,20,15,6,1], PHI=(1+Math.sqrt(5))/2;
+  const neg=x=>(N-x)%N, bnot=x=>(N-1)-x, succ=x=>(x+1)%N;
+  const popcount=x=>{let c=0;while(x){c+=x&1;x>>=1;}return c;};
+  const b6=x=>x.toString(2).padStart(BITS,'0');
+  const fmtTime=s=>{ s=Math.floor(s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
+  const PRESETS={
+    // the four intelligences — artificial = the canonical Swordsman/Mage default
+    nature:{cool:'#0f7a4d',warm:'#e8b13a',sword:'#7fffd4',mage:'#cde86a'},
+    human:{cool:'#c0395c',warm:'#ffc06a',sword:'#ffc9bd',mage:'#ff9a4d'},
+    artificial:{cool:'#141a3d',warm:'#f0eee8',sword:'#e8523a',mage:'#4dd9e8'},
+    alien:{cool:'#7a1fff',warm:'#00e6a0',sword:'#c9b3ff',mage:'#7dffd0'}
+  };
+  const DEFAULTS={ eps:0.35,m:5,n:6,core:0.60,spin:0.30,mode:'both',edgeMode:'holo',
+    showLattice:true,showSucc:true,showInfo:true,glow:true,smRatio:1.0,cellOpacity:0.20, playing:true,speed:0.12,markerF:0,
+    coolHex:'#141a3d',warmHex:'#f0eee8',swordHex:'#e8523a',mageHex:'#4dd9e8' };
+  const state=Object.assign({},DEFAULTS);
+  // City Key payload (v1 additive fields): achievement-lit vertices + bearer identity.
+  let LIT=new Set(), IDENT=null;
+  let focusMode=false, focusT=0; // [f] fullscreen presentation orbit
+  let tourTimer=null, tourIdx=0, tourMode=false; // ✦ City-Key vertex tour (key order); reuses the main play/pause transport
+  let laps=0, traceSeconds=0, tourSeconds=0, _lastTourSec=-1, TRACE_PROOF=null, keyLoaded=false; // tracing proof (City Key) — accrues only once a City Key is imported; succ runtime + tour-walk timer
+  const MOON=['🌑','🌒','🌓','🌔','🌖','🌗','🌕'];
+  const esc=s=>String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  function identityHtml(id){ if(!id||typeof id!=='object')return ''; const bits=[];
+    if(id.displayName)bits.push(esc(id.displayName));
+    if(id.trustTier)bits.push('⚔️ '+esc(id.trustTier));
+    if(typeof id.stratum==='number')bits.push(MOON[Math.max(0,Math.min(6,id.stratum|0))]+' s'+(id.stratum|0));
+    if(id.drakeOrb)bits.push('🐉 '+esc(id.drakeOrb));
+    return bits.length?(' <span style="color:var(--dim)">· '+bits.join(' · ')+'</span>'):''; }
+
+  // ===== renderer / scene / camera =====
+  const canvas=document.getElementById('scene');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x05060d,0.10);
+  const camera=new THREE.PerspectiveCamera(45,1,0.1,100); let camDist=4.6;
+  const world=new THREE.Group(),coreGroup=new THREE.Group(),latticeGroup=new THREE.Group();
+  world.add(coreGroup,latticeGroup); scene.add(world);
+
+  // ===== lighting =====
+  scene.add(new THREE.AmbientLight(0x223055,0.7));
+  const keyLight=new THREE.PointLight(0x6ea0ff,1.5,50); keyLight.position.set(4,5,5);
+  const fillLight=new THREE.PointLight(0xff6a4d,1.1,50); fillLight.position.set(-5,-3,-4);
+  const rimLight=new THREE.DirectionalLight(0xbcd2ff,0.5); rimLight.position.set(0,1,-6);
+  scene.add(keyLight,fillLight,rimLight);
+  const coreLight=new THREE.PointLight(0xaecbff,1.5,6,2.0); coreGroup.add(coreLight);
+  const SWORD_COL=new THREE.Color(state.swordHex), MAGE_COL=new THREE.Color(state.mageHex);
+
+  // ===== palette / gradient (custom cool->warm endpoints, HSL shortest arc) =====
+  const _c=new THREE.Color(), _coolHSL={h:0,s:0,l:0}, _warmHSL={h:0,s:0,l:0};
+  function setPalette(){ new THREE.Color(state.coolHex).getHSL(_coolHSL); new THREE.Color(state.warmHex).getHSL(_warmHSL); }
+  function gradient(t){ t=Math.max(0,Math.min(1,t));
+    let dh=_warmHSL.h-_coolHSL.h; if(dh>0.5)dh-=1; if(dh<-0.5)dh+=1;
+    const h=(_coolHSL.h+dh*t+1)%1;
+    const s=Math.min(1,_coolHSL.s+(_warmHSL.s-_coolHSL.s)*t+0.06*Math.sin(t*Math.PI));
+    const l=Math.min(1,_coolHSL.l+(_warmHSL.l-_coolHSL.l)*t+0.04*Math.sin(t*Math.PI));
+    _c.setHSL(h,s,l); return _c; }
+  setPalette();
+  function rgba(col,a){ return `rgba(${Math.round(col.r*255)},${Math.round(col.g*255)},${Math.round(col.b*255)},${a})`; }
+  function glowSprite(hex,inner){ const cv=document.createElement('canvas');cv.width=cv.height=128;const ctx=cv.getContext('2d');
+    const g=ctx.createRadialGradient(64,64,0,64,64,64); g.addColorStop(0,'rgba(255,255,255,0.95)');g.addColorStop(inner||0.25,hex);g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,128,128);
+    return new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,depthTest:false}); }
+
+  // ===== manifold =====
+  function manifoldGeometry(segU,segV){ const g=new THREE.BufferGeometry(),pos=[],col=[],idx=[];
+    const eps=state.eps,m=state.m,n=state.n,rMin=R-eps,rMax=R+eps;
+    for(let i=0;i<=segV;i++){const phi=(i/segV)*Math.PI,sp=Math.sin(phi),cp=Math.cos(phi);
+      for(let j=0;j<=segU;j++){const th=(j/segU)*Math.PI*2,r=R+eps*Math.sin(m*phi)*Math.cos(n*th);
+        pos.push(r*sp*Math.cos(th),r*sp*Math.sin(th),r*cp); const c=gradient(rMax>rMin?(r-rMin)/(rMax-rMin):0.5); col.push(c.r,c.g,c.b);}}
+    const st=segU+1; for(let i=0;i<segV;i++)for(let j=0;j<segU;j++){const a=i*st+j,b=a+1,d=a+st,e=d+1;idx.push(a,d,b,b,d,e);}
+    g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+    g.setIndex(idx); g.computeVertexNormals(); return g; }
+  let surfMesh,wireMesh;
+  function buildManifold(){
+    if(surfMesh){world.remove(surfMesh);surfMesh.geometry.dispose();surfMesh.material.dispose();}
+    if(wireMesh){world.remove(wireMesh);wireMesh.geometry.dispose();wireMesh.material.dispose();}
+    surfMesh=new THREE.Mesh(manifoldGeometry(232,140),new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.32,metalness:0.15,
+      transparent:true,opacity:0.5,side:THREE.DoubleSide,depthWrite:false,emissive:0x10182e,emissiveIntensity:0.6}));
+    surfMesh.renderOrder=2;
+    const gLo=manifoldGeometry(96,58),wire=new THREE.WireframeGeometry(gLo),wp=wire.getAttribute('position'),wc=new Float32Array(wp.count*3),rMin=R-state.eps,rMax=R+state.eps;
+    for(let i=0;i<wp.count;i++){const r=Math.hypot(wp.getX(i),wp.getY(i),wp.getZ(i)),c=gradient(rMax>rMin?(r-rMin)/(rMax-rMin):0.5);wc[i*3]=c.r;wc[i*3+1]=c.g;wc[i*3+2]=c.b;}
+    wire.setAttribute('color',new THREE.BufferAttribute(wc,3));
+    wireMesh=new THREE.LineSegments(wire,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.34,blending:THREE.AdditiveBlending,depthWrite:false}));
+    wireMesh.renderOrder=3; gLo.dispose(); world.add(surfMesh,wireMesh); applyMode();
+  }
+  function applyMode(){ if(!surfMesh)return;
+    surfMesh.visible=state.mode!=='wire'; wireMesh.visible=state.mode!=='surface';
+    surfMesh.material.opacity=state.mode==='surface'?0.78:0.5; wireMesh.material.opacity=state.mode==='wire'?0.6:0.34; }
+
+  // ===== lattice {0,1}^6 : 64 verts; edges = holographic ∂M (96) or full Q6 (192); succ cycle =====
+  const _gen=[[0,1,PHI],[0,1,-PHI],[1,PHI,0],[1,-PHI,0],[PHI,0,1],[PHI,0,-1]].map(v=>{const L=Math.hypot(v[0],v[1],v[2]);return [v[0]/L,v[1]/L,v[2]/L];});
+  const _raw=[]; let _maxR=0;
+  for(let x=0;x<N;x++){let px=0,py=0,pz=0;for(let b=0;b<BITS;b++){const s=((x>>b)&1)-0.5;px+=s*_gen[b][0];py+=s*_gen[b][1];pz+=s*_gen[b][2];}_raw.push([px,py,pz]);_maxR=Math.max(_maxR,Math.hypot(px,py,pz));}
+  const LSCALE=0.80/_maxR; const VERTS=_raw.map(p=>p.map(c=>c*LSCALE));
+  function edgeGeom(pairs){ const ep=[],ec=[],B=0.42; // lift toward white so edges read on dark bg
+    for(const[x,y]of pairs){ ep.push(VERTS[x][0],VERTS[x][1],VERTS[x][2],VERTS[y][0],VERTS[y][1],VERTS[y][2]);
+      const ca=gradient(popcount(x)/BITS),r0=ca.r*(1-B)+B,g0=ca.g*(1-B)+B,b0=ca.b*(1-B)+B,cb=gradient(popcount(y)/BITS);
+      ec.push(r0,g0,b0,cb.r*(1-B)+B,cb.g*(1-B)+B,cb.b*(1-B)+B); }
+    const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(ep,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(ec,3)); return g; }
+  // full Q6 : 192 Hamming-1 edges
+  const E_FULL=[]; for(let x=0;x<N;x++)for(let b=0;b<BITS;b++){const y=x^(1<<b);if(y>x)E_FULL.push([x,y]);}
+  // holographic boundary : 96 edges = succ cycle (64) + half-turn chords x..x+32 (32) -> 3-regular, toroidal class
+  const E_HOLO=[]; for(let x=0;x<N;x++)E_HOLO.push([x,(x+1)%N]); for(let x=0;x<32;x++)E_HOLO.push([x,x+32]);
+  let latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell;
+  function buildLattice(){
+    [latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell].forEach(o=>{if(o){latticeGroup.remove(o);if(o.geometry)o.geometry.dispose();}});
+    const vp=new Float32Array(N*3),vc=new Float32Array(N*3);
+    for(let x=0;x<N;x++){vp[x*3]=VERTS[x][0];vp[x*3+1]=VERTS[x][1];vp[x*3+2]=VERTS[x][2];const c=LIT.has(x)?SWORD_COL:gradient(popcount(x)/BITS);vc[x*3]=c.r;vc[x*3+1]=c.g;vc[x*3+2]=c.b;}
+    const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.BufferAttribute(vp,3)); pg.setAttribute('color',new THREE.BufferAttribute(vc,3));
+    latPoints=new THREE.Points(pg,new THREE.PointsMaterial({size:0.06,vertexColors:true,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));
+    latPoints.renderOrder=4;
+    latFull=new THREE.LineSegments(edgeGeom(E_FULL),new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.30,blending:THREE.AdditiveBlending,depthWrite:false})); latFull.renderOrder=3;
+    latHolo=new THREE.LineSegments(edgeGeom(E_HOLO),new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false})); latHolo.renderOrder=3;
+    const cp=[];for(let x=0;x<=N;x++){const v=VERTS[x%N];cp.push(v[0],v[1],v[2]);}
+    const cg=new THREE.BufferGeometry();cg.setAttribute('position',new THREE.Float32BufferAttribute(cp,3));
+    latSucc=new THREE.Line(cg,new THREE.LineBasicMaterial({color:0xbfe0ff,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latSucc.renderOrder=5;
+    latMarker=new THREE.Sprite(glowSprite('rgba(214,236,255,0.95)',0.3)); latMarker.scale.setScalar(0.18); latMarker.renderOrder=9;
+    latNbr=new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(6*2*3),3)),
+      new THREE.LineBasicMaterial({color:SWORD_COL.getHex(),transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false})); latNbr.renderOrder=7;
+    latAnti=new THREE.Line(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(2*3),3)),
+      new THREE.LineBasicMaterial({color:MAGE_COL.getHex(),transparent:true,opacity:0.85,blending:THREE.AdditiveBlending,depthWrite:false})); latAnti.renderOrder=7;
+    latCell=new THREE.Mesh(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(6*3*3),3)),
+      new THREE.MeshPhysicalMaterial({transparent:true,opacity:state.cellOpacity,side:THREE.DoubleSide,flatShading:true,roughness:0.2,metalness:0.0,emissiveIntensity:0.6,depthWrite:false})); latCell.renderOrder=6;
+    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latPoints,latMarker);
+    applyLattice(); refreshHighlight();
+  }
+  function applyLattice(){ if(!latPoints)return; const on=state.showLattice;
+    latPoints.visible=on;
+    latFull.visible=on&&state.edgeMode==='full';
+    latHolo.visible=on&&state.edgeMode==='holo';
+    latSucc.visible=on&&state.showSucc; latMarker.visible=on&&state.showSucc;
+    const paused=on&&state.showSucc&&!state.playing;
+    latNbr.visible=paused; latAnti.visible=paused; latCell.visible=paused;
+    document.getElementById('inspector').style.display=(on&&state.showSucc&&state.showInfo)?'':'none';
+    updateTracing();
+  }
+  function currentVertex(){ return Math.floor(state.markerF)%N; }
+  function refreshHighlight(){ if(!latNbr)return; const x=currentVertex();
+    const np=latNbr.geometry.getAttribute('position');
+    for(let b=0;b<BITS;b++){const y=x^(1<<b);np.setXYZ(b*2,VERTS[x][0],VERTS[x][1],VERTS[x][2]);np.setXYZ(b*2+1,VERTS[y][0],VERTS[y][1],VERTS[y][2]);}
+    np.needsUpdate=true;
+    const ap=latAnti.geometry.getAttribute('position'),a=bnot(x); ap.setXYZ(0,VERTS[x][0],VERTS[x][1],VERTS[x][2]); ap.setXYZ(1,VERTS[a][0],VERTS[a][1],VERTS[a][2]); ap.needsUpdate=true;
+    const cp=latCell.geometry.getAttribute('position'); let k=0;
+    for(let b=0;b<BITS;b++){const n1=x^(1<<b),n2=x^(1<<((b+1)%BITS));
+      cp.setXYZ(k++,VERTS[x][0],VERTS[x][1],VERTS[x][2]);cp.setXYZ(k++,VERTS[n1][0],VERTS[n1][1],VERTS[n1][2]);cp.setXYZ(k++,VERTS[n2][0],VERTS[n2][1],VERTS[n2][2]);}
+    cp.needsUpdate=true; latCell.geometry.computeVertexNormals();
+    const sc=gradient(popcount(x)/BITS); latCell.material.color.copy(sc); latCell.material.emissive.copy(sc); latCell.material.opacity=state.cellOpacity;
+  }
+
+  // ===== core (Swordsman / Mage) =====
+  const TET_A=[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]],TET_B=[[-1,-1,-1],[-1,1,1],[1,-1,1],[1,1,-1]];
+  const FACES=[[0,1,2],[0,3,1],[0,2,3],[1,3,2]],EDG=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
+  const mid=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2],len=v=>Math.hypot(v[0],v[1],v[2]);
+  function subdivide(tris,it){for(let k=0;k<it;k++){const o=[];for(const[A,B,C]of tris){const ab=mid(A,B),bc=mid(B,C),ca=mid(C,A);o.push([A,ab,ca],[ab,B,bc],[ca,bc,C],[ab,bc,ca]);}tris=o;}return tris;}
+  function tetraMesh(bv,sc){const tris=subdivide(FACES.map(f=>f.map(i=>bv[i])),2),pos=[],tip=len(bv[0]);
+    for(const tri of tris)for(const v of tri){const L=len(v)||1e-6,k=0.22;pos.push((v[0]*(1-k)+v[0]/L*tip*k)*sc,(v[1]*(1-k)+v[1]/L*tip*k)*sc,(v[2]*(1-k)+v[2]/L*tip*k)*sc);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.computeVertexNormals();return g;}
+  function tetraEdges(bv,sc){const pos=[];for(const[i,j]of EDG)pos.push(bv[i][0]*sc,bv[i][1]*sc,bv[i][2]*sc,bv[j][0]*sc,bv[j][1]*sc,bv[j][2]*sc);
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));return g;}
+  let coreObjs=[],heartMesh;
+  function buildCore(){ coreObjs.forEach(o=>{coreGroup.remove(o);if(o.geometry)o.geometry.dispose();});coreObjs=[];
+    const sword=new THREE.Color(state.swordHex),mage=new THREE.Color(state.mageHex);
+    const tip=len(TET_A[0]),sA=state.core/tip,sB=sA/state.smRatio;
+    [{v:TET_A,sc:sA,col:sword},{v:TET_B,sc:sB,col:mage}].forEach(s=>{
+      const faces=new THREE.Mesh(tetraMesh(s.v,s.sc),new THREE.MeshPhysicalMaterial({color:s.col.getHex(),roughness:0.12,metalness:0.0,
+        transparent:true,opacity:0.34,side:THREE.DoubleSide,emissive:s.col.getHex(),emissiveIntensity:0.55,clearcoat:1.0,clearcoatRoughness:0.15,flatShading:true,depthWrite:false}));
+      faces.renderOrder=10;coreGroup.add(faces);coreObjs.push(faces);
+      const edges=new THREE.LineSegments(tetraEdges(s.v,s.sc),new THREE.LineBasicMaterial({color:s.col.getHex(),transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false}));
+      edges.renderOrder=11;coreGroup.add(edges);coreObjs.push(edges);
+      const tm=glowSprite(rgba(s.col,0.9));
+      for(const v of s.v){const sp=new THREE.Sprite(tm);sp.position.set(v[0]*s.sc,v[1]*s.sc,v[2]*s.sc);sp.scale.setScalar(0.5);sp.renderOrder=12;coreGroup.add(sp);coreObjs.push(sp);}
+    });
+    heartMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(state.core*0.15,1),new THREE.MeshBasicMaterial({color:0xbfe0ff,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending}));
+    heartMesh.renderOrder=13;coreGroup.add(heartMesh);coreObjs.push(heartMesh);
+  }
+
+  // ===== starfield =====
+  (function(){const M=900,p=[],c=[];for(let i=0;i<M;i++){const r=14+Math.random()*22,u=Math.random()*2-1,a=Math.random()*Math.PI*2,sq=Math.sqrt(1-u*u);
+    p.push(r*sq*Math.cos(a),r*sq*Math.sin(a),r*u);const g=gradient(Math.random()),f=0.4+Math.random()*0.6;c.push(g.r*f,g.g*f,g.b*f);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(c,3));
+    scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:0.06,vertexColors:true,transparent:true,opacity:0.7,blending:THREE.AdditiveBlending,depthWrite:false})));})();
+
+  buildManifold(); buildLattice(); buildCore();
+
+  // ===== orbit + zoom + click-to-inspect =====
+  let az=0.6,pol=1.15,azV=0,polV=0,dragging=false,px=0,py=0,downX=0,downY=0,downT=0;
+  canvas.addEventListener('pointerdown',e=>{dragging=true;px=e.clientX;py=e.clientY;downX=e.clientX;downY=e.clientY;downT=performance.now();canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener('pointermove',e=>{if(!dragging)return;azV=-(e.clientX-px)*0.005;polV=-(e.clientY-py)*0.005;az+=azV;pol+=polV;pol=Math.max(0.25,Math.min(Math.PI-0.25,pol));px=e.clientX;py=e.clientY;});
+  canvas.addEventListener('pointerup',e=>{dragging=false;const d=Math.hypot(e.clientX-downX,e.clientY-downY),dt=performance.now()-downT;if(d<6&&dt<400)tryPick(e);});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();camDist=Math.max(2.6,Math.min(9,camDist+e.deltaY*0.0025));},{passive:false});
+  const raycaster=new THREE.Raycaster(); raycaster.params.Points.threshold=0.07; const _ndc=new THREE.Vector2();
+  function tryPick(e){ if(!latPoints||!state.showLattice)return; const rect=canvas.getBoundingClientRect();
+    _ndc.x=((e.clientX-rect.left)/rect.width)*2-1; _ndc.y=-((e.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(_ndc,camera); const hits=raycaster.intersectObject(latPoints,false); if(hits.length){exitTour();setMarker(hits[0].index);setPlaying(false);} }
+
+  function setMarker(i){ state.markerF=((i%N)+N)%N; refreshHighlight(); updateInspector(); }
+  function setPlaying(p){ state.playing=p; if(!p)state.markerF=Math.round(state.markerF)%N;
+    if(tourMode){ if(p) startTourTimer(); else clearTourTimer(); }
+    document.getElementById('playPause').textContent=p?'❚❚ Pause':'▶ Play'; applyLattice(); refreshHighlight(); updateTracing(); }
+  // While the succ cycle plays fast, collapse the detail panel to the calm progress ring (no bouncing).
+  // Full detail returns when paused, stepping, or on the deliberate key tour.
+  function updateTracing(){ const insp=gid('inspector'); if(insp) insp.classList.toggle('tracing', state.playing && !tourMode && state.showLattice && state.showSucc); }
+  function stepBy(d){ if(tourMode){ setPlaying(false); tourGoto(tourIdx+d); return; } setPlaying(false); setMarker(Math.round(state.markerF)+d); }
+
+  const ins={x:gid('iX'),bits:gid('iBits'),st:gid('iStratum'),neg:gid('iNeg'),bnot:gid('iBnot'),succ:gid('iSucc')};
+  function gid(id){return document.getElementById(id);}
+  let _lastX=-1;
+  function updateInspector(){ const x=currentVertex(); if(x===_lastX)return; _lastX=x; const s=popcount(x); broadcastVertex(x);
+    ins.x.textContent=x; ins.bits.textContent=b6(x); ins.st.textContent=`${s} · ${STRATA[s]} state${STRATA[s]>1?'s':''}`;
+    ins.neg.textContent=`${neg(x)} · ${b6(neg(x))}`; ins.bnot.textContent=`${bnot(x)} · ${b6(bnot(x))}`; ins.succ.textContent=`${succ(x)} · ${b6(succ(x))}`; updateDesc(); }
+
+  const toast=gid('toast'); let toastT;
+  function snapshot(){ renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
+    try{ const url=renderer.domElement.toDataURL('image/png'),a=document.createElement('a'); a.href=url;a.download=`star-manifold-vertex-${b6(currentVertex())}.png`;
+      document.body.appendChild(a);a.click();a.remove(); toast.textContent='snapshot saved · '+a.download; }
+    catch(err){ toast.textContent='snapshot blocked in preview — works when deployed'; }
+    renderer.setClearColor(0x000000,0); // restore transparent for live render (page backdrop shows through)
+    toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2200); }
+
+  function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+  window.addEventListener('resize',resize);resize();
+
+  // cross-page link + City Key (palette + per-vertex descriptions)
+  let _bc=null,_bcLast=-1,_bcMute=false, DESC={}, keyName='';
+  try{ _bc=new BroadcastChannel('agentprivacy-succ'); }catch(e){ _bc=null; }
+  function broadcastVertex(x){ if(_bc&&!_bcMute&&x!==_bcLast){ _bcLast=x; try{ _bc.postMessage({vertex:x,src:'manifold'}); }catch(e){} } }
+  function updateDesc(){ const el=gid('insDesc'); if(!el)return; const d=DESC[currentVertex()];
+    if(d){ el.textContent=d; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
+  function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object')return;
+    if(cfg.palette){ const p=cfg.palette; if(p.cool)state.coolHex=p.cool; if(p.warm)state.warmHex=p.warm; if(p.sword)state.swordHex=p.sword; if(p.mage)state.mageHex=p.mage;
+      setPalette(); SWORD_COL.set(state.swordHex); MAGE_COL.set(state.mageHex);
+      gid('cCool').value=state.coolHex; gid('cWarm').value=state.warmHex; gid('cSword').value=state.swordHex; gid('cMage').value=state.mageHex;
+      document.querySelectorAll('#presets button').forEach(b=>b.classList.remove('on'));
+      buildManifold(); buildCore(); }
+    if(cfg.descriptions&&typeof cfg.descriptions==='object'){ DESC={}; for(const k in cfg.descriptions){ const n=+k; if(n>=0&&n<N) DESC[n]=String(cfg.descriptions[k]); } }
+    LIT = new Set(Array.isArray(cfg.lit)?cfg.lit.filter(n=>Number.isInteger(n)&&n>=0&&n<N):[]);
+    IDENT = (cfg.identity&&typeof cfg.identity==='object')?cfg.identity:null;
+    if(cfg.trace && typeof cfg.trace==='object'){ TRACE_PROOF=cfg.trace; laps=+cfg.trace.laps||0; traceSeconds=+cfg.trace.seconds||0; tourSeconds=+cfg.trace.tourSeconds||0; const tl=gid('tracerLaps'); if(tl) tl.textContent=laps; }
+    buildLattice();
+    exitTour(); { const kt=gid('keyTour'); if(kt){ kt.disabled=(LIT.size===0); kt.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } }
+    keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='💾 save trace'; } }
+    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+identityHtml(IDENT); _lastX=-1; updateDesc();
+    if(!fromRemote&&_bc){ try{ _bc.postMessage({config:cfg,src:'manifold'}); }catch(e){} } }
+  function exportKey(){ const cfg={ name:keyName||'city key', version:1,
+      palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex}, descriptions:{...DESC} };
+    if(LIT.size) cfg.lit=[...LIT].sort((a,b)=>a-b);
+    if(IDENT) cfg.identity=IDENT;
+    if(TRACE_PROOF) cfg.trace=TRACE_PROOF;
+    const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+  function applyPalettePreset(p,id,fromRemote){ if(!p)return;
+    if(p.cool)state.coolHex=p.cool; if(p.warm)state.warmHex=p.warm; if(p.sword)state.swordHex=p.sword; if(p.mage)state.mageHex=p.mage;
+    setPalette(); SWORD_COL.set(state.swordHex); MAGE_COL.set(state.mageHex);
+    gid('cCool').value=state.coolHex; gid('cWarm').value=state.warmHex; gid('cSword').value=state.swordHex; gid('cMage').value=state.mageHex;
+    document.querySelectorAll('#presets button').forEach(b=>b.classList.toggle('on',b.dataset.p===id));
+    buildManifold(); buildLattice(); buildCore();
+    if(!fromRemote&&_bc){ try{ _bc.postMessage({palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex},presetId:id,src:'manifold'}); }catch(e){} } }
+  if(_bc) _bc.onmessage=ev=>{ const d=ev&&ev.data; if(!d||d.src==='manifold')return;
+    if(d.config){ _bcMute=true; loadConfig(d.config,true); _bcMute=false; }
+    if(d.palette){ _bcMute=true; applyPalettePreset(d.palette,d.presetId,true); _bcMute=false; }
+    if(typeof d.vertex==='number'){ _bcMute=true; setMarker(d.vertex); setPlaying(false); _bcMute=false; } };
+
+  const clock=new THREE.Clock();
+  function tick(){ const dt=clock.getDelta(),t=clock.elapsedTime;
+    if(focusMode){ focusT+=dt; az+=dt*0.22; pol=Math.PI*0.5+Math.sin(focusT*0.16)*0.5; }
+    else if(!dragging){az+=state.spin*0.35*dt;azV*=0.92;polV*=0.92;az+=azV;pol+=polV;pol=Math.max(0.25,Math.min(Math.PI-0.25,pol));}
+    camera.position.set(camDist*Math.sin(pol)*Math.sin(az),camDist*Math.cos(pol),camDist*Math.sin(pol)*Math.cos(az)); camera.lookAt(0,0,0);
+    coreGroup.rotation.y+=dt*0.55; coreGroup.rotation.x=0.32; latticeGroup.rotation.y-=dt*0.12;
+    const mix=0.5+0.5*Math.sin(coreGroup.rotation.y*0.9), gOn=state.glow;
+    coreLight.color.copy(SWORD_COL).lerp(MAGE_COL,mix); coreLight.intensity=gOn?1.2*(0.85+0.2*Math.sin(t*1.6)):0.1;
+    if(heartMesh){heartMesh.material.color.copy(SWORD_COL).lerp(MAGE_COL,mix); heartMesh.material.opacity=gOn?(0.42+0.12*Math.sin(t*1.6)):0.05;}
+    const starOp = gOn ? (0.6+0.35*Math.sin(t*1.6)) : 0.12;  // stars follow the core glow (pulse + on/off)
+    coreObjs.forEach(o=>{if(o.isSprite){ o.scale.setScalar((gOn?0.5:0.44)+0.12*Math.sin(t*1.6)); o.material.opacity=starOp; }});
+    if(state.playing&&!tourMode&&state.showLattice&&state.showSucc){ const prevMF=state.markerF; state.markerF=(state.markerF+dt*state.speed*N)%N;
+      if(keyLoaded){ traceSeconds+=dt;
+        if(state.markerF<prevMF){ laps++; const tl=gid('tracerLaps'); if(tl) tl.textContent=laps;
+          const sb=gid('tracerSave'); if(sb&&sb.classList.contains('on')){ sb.classList.remove('on'); sb.textContent='💾 save trace'; } } }
+      const prog=(state.markerF%N)/N;
+      const arc=gid('tracerArc'); if(arc) arc.style.strokeDashoffset=(97.39*(1-prog)).toFixed(2);
+      const dg=gid('tracerDotG'); if(dg) dg.setAttribute('transform','rotate('+(prog*360).toFixed(1)+' 18 18)');
+      const v=currentVertex(), tv=gid('tracerV'); if(tv&&tv._v!==v){ tv._v=v; tv.textContent=v; const ts=gid('tracerStratum'); if(ts) ts.textContent='stratum '+popcount(v); } }
+    // ✦ key-tour walk timer — how long you've walked the City Key's tour (dwell time, accumulates across engagements)
+    if(tourMode&&keyLoaded){ tourSeconds+=dt; const sec=Math.floor(tourSeconds); if(sec!==_lastTourSec){ _lastTourSec=sec; const b=gid('keyTour'); if(b) b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; } }
+    if(latMarker&&latMarker.visible){ const x=Math.floor(state.markerF)%N,x1=(x+1)%N,fr=state.playing?(state.markerF-Math.floor(state.markerF)):0,a=VERTS[x],b=VERTS[x1];
+      latMarker.position.set(a[0]+(b[0]-a[0])*fr,a[1]+(b[1]-a[1])*fr,a[2]+(b[2]-a[2])*fr);
+      latMarker.scale.setScalar((state.playing?0.16:0.22)+0.04*Math.sin(t*4)); updateInspector(); if(!state.playing)refreshHighlight(); }
+    renderer.render(scene,camera); requestAnimationFrame(tick); }
+  tick();
+
+  // ===== UI =====
+  const $=id=>document.getElementById(id);
+  function bind(sl,la,key,fmt,rb){const el=$(sl),lab=$(la);el.addEventListener('input',()=>{state[key]=parseFloat(el.value);lab.textContent=fmt(state[key]);if(rb)rb();});}
+  bind('sEps','vEps','eps',v=>v.toFixed(3),buildManifold); bind('sM','vM','m',v=>String(v|0),buildManifold);
+  bind('sN','vN','n',v=>String(v|0),buildManifold); bind('sCore','vCore','core',v=>v.toFixed(2),buildCore);
+  bind('sRatio','vRatio','smRatio',v=>(Math.abs(v-PHI)<0.02?('φ · '+v.toFixed(3)):v.toFixed(3)),buildCore);
+  bind('sCell','vCell','cellOpacity',v=>v.toFixed(2),()=>{ if(latCell)latCell.material.opacity=state.cellOpacity; });
+  bind('sSpin','vSpin','spin',v=>v.toFixed(2),null); bind('sSpeed','vSpeed','speed',v=>v.toFixed(2),null);
+
+  $('playPause').addEventListener('click',()=>setPlaying(!state.playing));
+  $('stepBack').addEventListener('click',()=>stepBy(-1)); $('stepFwd').addEventListener('click',()=>stepBy(1));
+  $('snap').addEventListener('click',snapshot);
+
+  function seg(id,key,attr,after){ document.querySelectorAll('#'+id+' button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); state[key]=b.dataset[attr]; after(); })); }
+  seg('mode','mode','m',applyMode);
+  seg('edgeMode','edgeMode','e',applyLattice);
+
+  $('tLattice').addEventListener('change',e=>{state.showLattice=e.target.checked;applyLattice();});
+  $('tSucc').addEventListener('change',e=>{state.showSucc=e.target.checked;applyLattice();});
+  $('tGlow').addEventListener('change',e=>{state.glow=e.target.checked;});
+  $('tInfo').addEventListener('change',e=>{state.showInfo=e.target.checked;applyLattice();});
+
+  // palette
+  function clearPresetActive(){ document.querySelectorAll('#presets button').forEach(b=>b.classList.remove('on')); }
+  function applyAgentColors(){ SWORD_COL.set(state.swordHex); MAGE_COL.set(state.mageHex);
+    if(latNbr)latNbr.material.color.set(state.swordHex); if(latAnti)latAnti.material.color.set(state.mageHex); buildCore(); }
+  $('cCool').addEventListener('input',e=>{state.coolHex=e.target.value;clearPresetActive();setPalette();buildManifold();buildLattice();});
+  $('cWarm').addEventListener('input',e=>{state.warmHex=e.target.value;clearPresetActive();setPalette();buildManifold();buildLattice();});
+  $('cSword').addEventListener('input',e=>{state.swordHex=e.target.value;clearPresetActive();applyAgentColors();});
+  $('cMage').addEventListener('input',e=>{state.mageHex=e.target.value;clearPresetActive();applyAgentColors();});
+  document.querySelectorAll('#presets button').forEach(b=>b.addEventListener('click',()=>{ applyPalettePreset(PRESETS[b.dataset.p], b.dataset.p, false); }));
+
+  $('reset').addEventListener('click',()=>{ Object.assign(state,DEFAULTS);
+    $('sEps').value=state.eps;$('vEps').textContent=state.eps.toFixed(3);
+    $('sM').value=state.m;$('vM').textContent=String(state.m); $('sN').value=state.n;$('vN').textContent=String(state.n);
+    $('sCore').value=state.core;$('vCore').textContent=state.core.toFixed(2);
+    $('sSpin').value=state.spin;$('vSpin').textContent=state.spin.toFixed(2); $('sSpeed').value=state.speed;$('vSpeed').textContent=state.speed.toFixed(2);
+    $('tLattice').checked=state.showLattice;$('tSucc').checked=state.showSucc;$('tGlow').checked=state.glow;$('tInfo').checked=state.showInfo;
+    $('sRatio').value=state.smRatio;$('vRatio').textContent=state.smRatio.toFixed(3);
+    $('sCell').value=state.cellOpacity;$('vCell').textContent=state.cellOpacity.toFixed(2);
+    $('cCool').value=state.coolHex;$('cWarm').value=state.warmHex;$('cSword').value=state.swordHex;$('cMage').value=state.mageHex;
+    document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x.dataset.m===state.mode));
+    document.querySelectorAll('#edgeMode button').forEach(x=>x.classList.toggle('on',x.dataset.e===state.edgeMode));
+    document.querySelectorAll('#presets button').forEach(x=>x.classList.toggle('on',x.dataset.p==='artificial'));
+    $('playPause').textContent='❚❚ Pause'; SWORD_COL.set(state.swordHex);MAGE_COL.set(state.mageHex); setPalette();
+    laps=0; traceSeconds=0; tourSeconds=0; _lastTourSec=-1; TRACE_PROOF=null;
+    { const tl=gid('tracerLaps'); if(tl) tl.textContent='0'; const sb=gid('tracerSave'); if(sb){ sb.classList.remove('on'); sb.disabled=!keyLoaded; sb.textContent=keyLoaded?'💾 save trace':'💾 import a City Key first'; } }
+    buildManifold();buildLattice();buildCore();updateInspector(); });
+
+  $('foldBtn').addEventListener('click',()=>{ $('console').classList.add('folded'); $('launcher').classList.add('show'); });
+  $('launcher').addEventListener('click',()=>{ $('console').classList.remove('folded'); $('launcher').classList.remove('show'); });
+  $('foldBtn2').addEventListener('click',()=>{ $('trace').classList.add('folded'); $('launcher2').classList.add('show'); });
+  $('launcher2').addEventListener('click',()=>{ $('trace').classList.remove('folded'); $('launcher2').classList.remove('show'); });
+  // City Key import / export
+  $('impBtn').addEventListener('click',()=>$('impFile').click());
+  $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader();
+    r.onload=()=>{ try{ loadConfig(JSON.parse(r.result),false); }catch(err){ gid('keyName').textContent='⚠ could not parse JSON'; } }; r.readAsText(f); e.target.value=''; });
+  $('expBtn').addEventListener('click',exportKey);
+  $('tracerSave').addEventListener('click',()=>{ if(!keyLoaded) return; TRACE_PROOF={ laps:laps, seconds:Math.round(traceSeconds), tourSeconds:Math.round(tourSeconds), savedAt:new Date().toISOString() };
+    const b=$('tracerSave'); b.classList.add('on'); b.textContent='✓ trace saved · '+laps+(laps===1?' lap':' laps');
+    toast.textContent='trace saved · '+laps+(laps===1?' lap · ':' laps · ')+Math.round(traceSeconds)+'s succ · tour '+fmtTime(tourSeconds)+' — export the City Key to keep it';
+    toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2800); });
+  // nav link to /lattice (clean route on soulbis.com; use 'codex.html' for a flat-folder deploy)
+  const LATTICE_URL='/lattice'; $('toLattice').setAttribute('href',LATTICE_URL);
+  // single source of truth: drive the colour swatches from state so they always match the render
+  $('cCool').value=state.coolHex; $('cWarm').value=state.warmHex; $('cSword').value=state.swordHex; $('cMage').value=state.mageHex;
+  updateInspector(); updateTracing();
+  { const kt=$('keyTour'); if(kt && kt.disabled) kt.textContent='✦ import a City Key to walk'; }
+
+  // ===== [f] focus mode — fullscreen presentation orbit (chrome fades; the sculpture keeps turning) =====
+  const focusBadge=$('focusbadge');
+  function flashBadge(ms){ if(!focusBadge)return; focusBadge.classList.add('show'); clearTimeout(focusBadge._t); focusBadge._t=setTimeout(()=>focusBadge.classList.remove('show'),ms); }
+  function enterFocus(){ if(focusMode)return; focusMode=true; focusT=0; document.body.classList.add('focus');
+    const el=document.documentElement; if(el.requestFullscreen){ el.requestFullscreen().catch(()=>{}); } flashBadge(2600); }
+  function exitFocus(){ if(!focusMode)return; focusMode=false; document.body.classList.remove('focus');
+    if(document.fullscreenElement&&document.exitFullscreen){ document.exitFullscreen().catch(()=>{}); }
+    if(focusBadge) focusBadge.classList.remove('show'); }
+  document.addEventListener('keydown',e=>{ const tag=(e.target&&e.target.tagName)||''; if(tag==='INPUT'||tag==='TEXTAREA')return;
+    if(e.key==='f'||e.key==='F'){ e.preventDefault(); focusMode?exitFocus():enterFocus(); }
+    else if(e.key==='Escape'&&focusMode){ exitFocus(); } });
+  document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&focusMode){ focusMode=false; document.body.classList.remove('focus'); if(focusBadge) focusBadge.classList.remove('show'); } });
+  document.addEventListener('mousemove',()=>{ if(focusMode) flashBadge(1800); });
+
+  // ===== ✦ City-Key tour — visit ONLY the lit vertices, in key order (≠ succ order, ≠ stratum order).
+  // Reuses the main transport: keyTour engages/exits; ▶/❚❚ play-pauses the path; ◀/▶ step key vertices;
+  // when PAUSED, the lattice surface glow (latCell + neighbours/antipode) shows on the held vertex. =====
+  function litArr(){ return [...LIT].sort((a,b)=>a-b); }
+  function clearTourTimer(){ if(tourTimer){ clearInterval(tourTimer); tourTimer=null; } }
+  function tourGoto(i){ const a=litArr(); if(!a.length)return; tourIdx=((i%a.length)+a.length)%a.length; setMarker(a[tourIdx]); }
+  function startTourTimer(){ clearTourTimer(); tourTimer=setInterval(()=>{ const a=litArr(); if(!a.length){ exitTour(); return; } tourGoto(tourIdx+1); }, 2200); }
+  function engageTour(){ const a=litArr(); if(!a.length)return; tourMode=true;
+    state.showLattice=true; state.showSucc=true; state.showInfo=true;
+    $('tLattice').checked=true; $('tSucc').checked=true; $('tInfo').checked=true;
+    tourIdx=0; setMarker(a[0]); setPlaying(true); // playing in tourMode → startTourTimer (see setPlaying)
+    const b=$('keyTour'); b.classList.add('on'); _lastTourSec=-1; b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; }
+  function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }
+  $('keyTour').addEventListener('click',()=>{ tourMode?exitTour():engageTour(); });
+})();
+</script>
+</body>
+</html>
