@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Skye · the night of many keys · soulbis.com/skye</title>
+<link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
+<link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
+  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16); --glass:rgba(10,13,28,0.62);
+    --sword:#e8523a; --mage:#4dd9e8; --teal:#7fffd4; --gold:#ffe6c2; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ min-height:100vh; font-family:'Spline Sans Mono',monospace; color:var(--ink);
+    background:radial-gradient(120% 90% at 28% 14%, rgba(31,84,214,0.12), transparent 55%),
+      radial-gradient(110% 80% at 80% 88%, rgba(255,69,51,0.10), transparent 55%),
+      radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%);
+    padding:40px clamp(16px,5vw,72px) 64px; }
+  header.top{ max-width:1180px; margin:0 auto 30px; }
+  .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .navgrp{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .navbtn{ text-decoration:none; letter-spacing:0.06em; font-size:10.5px; color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border:1px solid transparent; border-radius:8px; padding:7px 13px; transition:transform .15s, box-shadow .15s; white-space:nowrap; }
+  .navbtn--ghost{ background:none; border-color:var(--line); color:var(--ink); }
+  .navbtn--ghost:hover{ border-color:rgba(120,140,220,0.5); }
+  .navbtn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,150,255,0.35); }
+  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(30px,5vw,56px); line-height:1.08; letter-spacing:-0.01em;
+    padding-bottom:0.14em; /* room for the italic descender */
+    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#ffb9a6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .lede{ margin-top:16px; max-width:760px; font-size:13px; line-height:1.7; color:#aeb8ee; }
+  .lede b{ color:#ffd6c7; font-weight:500; } .lede code{ color:#cfe0ff; }
+  .explain{ margin:2px 0 16px; max-width:880px; font-size:11.5px; line-height:1.7; color:#aeb8ee; }
+  .explain b{ color:#ffd6c7; font-weight:500; }
+
+  .wrap{ max-width:1180px; margin:0 auto; }
+  .card{ background:var(--glass); border:1px solid var(--line); border-radius:16px; padding:20px; backdrop-filter:blur(12px); }
+  .sect{ font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+  .bar{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .btn{ font-family:inherit; font-size:11px; letter-spacing:0.04em; padding:8px 13px; border-radius:8px; cursor:pointer;
+    background:rgba(120,140,220,0.08); border:1px solid var(--line); color:var(--ink); transition:all .18s; white-space:nowrap; }
+  .btn:hover{ border-color:rgba(120,140,220,0.45); }
+  .keyname{ font-size:10.5px; color:var(--dim); letter-spacing:0.02em; } .keyname b{ color:#ffd6c7; font-weight:500; }
+  .skywrap{ position:relative; width:100%; }
+  canvas#sky{ width:100%; height:560px; display:block; cursor:crosshair; border:1px solid var(--line); border-radius:12px;
+    background:radial-gradient(110% 110% at 50% 40%, rgba(14,18,40,0.55), rgba(3,4,10,0.9)); }
+  .skyhint{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;
+    font-size:12px; color:var(--dim); letter-spacing:0.08em; }
+  .inspect{ margin-top:12px; font-size:11px; line-height:1.8; color:var(--dim); min-height:40px; }
+  .inspect b{ color:#ffd6c7; font-weight:500; } .inspect .k{ color:#9aa6d6; word-break:break-all; }
+  .inspect .teal{ color:var(--teal); } .inspect .gold{ color:var(--gold); }
+  .psigrid{ display:grid; grid-template-columns:repeat(8,1fr); gap:5px; max-width:420px; margin-top:14px; }
+  .psigrid .pc{ position:relative; aspect-ratio:1; border-radius:6px; border:1px solid rgba(255,255,255,0.06);
+    display:flex; align-items:center; justify-content:center; font-size:10px; color:rgba(124,134,184,0.45);
+    background:rgba(120,140,220,0.05); }
+  .psigrid .pc.common{ background:rgba(127,255,212,0.30); outline:1px solid rgba(127,255,212,0.65);
+    box-shadow:0 0 12px rgba(127,255,212,0.4); color:#d6fff0; }
+
+  .legend{ max-width:1180px; margin:24px auto 0; background:var(--glass); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(12px); overflow:hidden; }
+  .legend>summary{ list-style:none; cursor:pointer; padding:16px 20px; font-size:12px; letter-spacing:0.06em; color:#ffd6c7; }
+  .legend>summary::-webkit-details-marker{ display:none; }
+  .legend>summary::before{ content:'▸ '; color:var(--dim); } .legend[open]>summary::before{ content:'▾ '; }
+  .legend-body{ padding:0 20px 20px; }
+  .legend-grid{ display:grid; grid-template-columns:auto 1fr; gap:10px 18px; font-size:12px; }
+  .legend-grid .lk{ color:#ffd6c7; white-space:nowrap; font-weight:500; }
+  .legend-grid .lv{ color:#cdd6f5; line-height:1.6; } .legend-grid .lv b{ color:#ffd6c7; font-weight:500; }
+  .legend a{ color:var(--sword); }
+  @media (max-width:560px){ .legend-grid{ grid-template-columns:1fr; gap:2px 0; } .legend-grid .lk{ margin-top:10px; } }
+  footer{ max-width:1180px; margin:30px auto 0; font-size:10.5px; color:rgba(124,134,184,0.7); line-height:1.7; }
+  footer b{ color:#aeb8ee; font-weight:500; } footer code{ color:#aeb8ee; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="eyebrow"><span>soulbis.com/skye · the fourth projection · the night of many keys</span>
+      <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a><a class="navbtn" href="/sigil" title="κ derivation · the constellation · compare">🪬 /sigil</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
+    <h1>The Skye</h1>
+    <p class="lede">Many keys, <b>one sky</b>. Add any number — JSON or sigil PNG — and each rises as a star: its <b>κ places it</b> (identity is content, even its place in the night), its own palette lights its 64-glyph cluster. <b>Gold threads</b> are lineage (<code>prior</code> chains); <b>teal threads</b> are common ground (shared touched vertices). Grounding in the 📖 legend.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="sect">The night — every key a star, every star a full instance</div>
+      <div class="bar">
+        <button id="addBtn" class="btn">⬆ Add keys</button>
+        <button id="snapBtn" class="btn" title="save the night as a PNG — the picture carries every risen key (tEXt chunk, keyword citySky); drop the shot back here and the whole sky rises again">📸 sky shot</button>
+        <button id="clearBtn" class="btn">🌑 Clear the sky</button>
+        <span id="skyCount" class="keyname">empty sky</span>
+        <input type="file" id="addFile" accept="application/json,.json,image/png,.png" multiple hidden>
+      </div>
+      <div class="skywrap">
+        <canvas id="sky"></canvas>
+        <div class="skyhint" id="skyHint">drop keys here — or ⬆ Add keys</div>
+      </div>
+      <div class="inspect" id="inspect">hover a star to read it · the sky is local — nothing leaves this page</div>
+    </div>
+
+    <div class="card" style="margin-top:26px">
+      <div class="sect">🤝 Common ground — zero knowledge (DH-PSI)</div>
+      <p class="explain">Learn what two keys share — and <b>only</b> that. Keys never travel: only <b>blinded points</b> do, as two small files exchanged however you already exchange sigils. No server.</p>
+      <div class="bar">
+        <button id="psiKeyBtn" class="btn">⬆ Your key</button>
+        <span id="psiKeyName" class="keyname">no key entered</span>
+        <span class="keyname" style="margin-left:auto">enter:</span>
+        <button id="psiScopeT" class="btn on" title="lit + described + poured + proven">⭐ touched</button>
+        <button id="psiScopeL" class="btn" title="achievement-lit only — enter less, attest less">✦ lit only</button>
+        <input type="file" id="psiKeyFile" accept="application/json,.json,image/png,.png" hidden>
+      </div>
+      <div class="bar">
+        <button id="psiChalBtn" class="btn" disabled>① export challenge</button>
+        <button id="psiImpBtn" class="btn">⬆ Import exchange file</button>
+        <input type="file" id="psiInFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="inspect" id="psiOut">initiator: enter your key → ① export a challenge, send the file · responder: enter your key → import their challenge, send back the answer · initiator: import the answer — the common ground appears, and nothing else does</div>
+      <div class="psigrid" id="psiGrid" style="display:none"></div>
+    </div>
+  </div>
+
+  <details class="legend">
+    <summary>📖 The grounding — how the sky arranges itself</summary>
+    <div class="legend-body">
+      <div class="legend-grid">
+        <span class="lk">the placement</span><span class="lv">each star sits where its <b>re-derived κ</b> puts it — the first 16 hex glyphs become its coordinates. No curator, no order of arrival: <b>the content addresses the sky</b>. Re-import the same key anywhere and it rises in the same place.</span>
+        <span class="lk">the star</span><span class="lv">a key's star is its sigil in miniature — 64 glyph points in succ order, lit by the κ's own hex intensities, coloured by the key's own palette by stratum. Every framing is a full instance: each star still <i>carries</i> everything its key carries.</span>
+        <span class="lk">gold threads · lineage</span><span class="lv">when one key's <code>prior</code> equals another's κ, a gold thread joins child to ancestor — the κ-chain drawn (C87: <i>the key accumulates</i>). A sky of one bearer's exports is their key's history, visible.</span>
+        <span class="lk">teal threads · common ground</span><span class="lv">between every pair, the count of <b>shared touched vertices</b> (lit · described · poured · proven on both) draws as a teal thread — brighter the more ground is shared. Divergence is the default; the threads show what is <i>in common</i>.</span>
+        <span class="lk">the sky shot</span><span class="lv">📸 exports the night as a PNG that <b>carries every risen key</b> — <code>{version, sky:true, keys:[…]}</code> in a <code>tEXt</code> chunk, keyword <code>citySky</code> (the single-key carrier's grammar, one rung up). Drop the shot back here and the whole night rises again; each carried key still imports individually on /star, /lattice, /sigil. One picture, a whole gathering — share it knowing it shares <i>all</i> of it.</span>
+        <span class="lk">the boundary</span><span class="lv">reading full keys (or a sky shot) learns full contents — this is the <i>plaintext</i> sky, local to this browser. The zero-knowledge alternative is 🤝 <b>common ground</b> below: blinded intersection (DH-PSI) — learn the common ground and <b>only</b> the common ground.</span>
+      </div>
+      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V5.4 / V6) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
+    </div>
+  </details>
+
+  <footer>
+    <b>The sky is local.</b> Keys you add are read in this browser and drawn; nothing is uploaded anywhere. A sigil PNG dropped here unfolds its carried key exactly as it does on /star, /lattice and /sigil; a 📸 sky shot dropped here raises its whole night again. Keys without a κ derive one on arrival — they learn their name, then their place.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  const BITS=6, N=64;
+  const neg=x=>(N-x)%N, bnot=x=>(N-1)-x, succ=x=>(x+1)%N;
+  const pc=x=>{let c=0;while(x){c+=x&1;x>>=1;}return c;};
+  const b6=x=>x.toString(2).padStart(BITS,'0');
+  const esc=s=>String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+  // ---- κ-label (UOR-ADDR · sha256 axis) — same canon as /star + /lattice
+  function canonicalJSON(v){ if(v===null||typeof v!=='object') return JSON.stringify(v);
+    if(Array.isArray(v)) return '['+v.map(canonicalJSON).join(',')+']';
+    return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalJSON(v[k])).join(',')+'}'; }
+  function kappaLabel(obj){ if(!(window.crypto&&crypto.subtle&&crypto.subtle.digest)) return Promise.resolve(null);
+    const c={...obj}; delete c.kappa;
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalJSON(c)))
+      .then(buf=>'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''))
+      .catch(()=>null); }
+
+  // ---- the sigil PNG carries the key: full City Key JSON (base64) in a PNG tEXt chunk,
+  // keyword 'cityKey', inserted before IEND. The image IS the artifact — import it anywhere.
+  function b2s(a){ let s=''; for(let i=0;i<a.length;i+=8192) s+=String.fromCharCode.apply(null,a.subarray(i,i+8192)); return s; }
+  function pngExtractKey(buf){ const u=new Uint8Array(buf);
+    if(u.length<20||u[0]!==0x89||u[1]!==0x50||u[2]!==0x4e||u[3]!==0x47) return null;
+    let p=8;
+    while(p+12<=u.length){ const len=((u[p]<<24)|(u[p+1]<<16)|(u[p+2]<<8)|u[p+3])>>>0;
+      const type=String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+      if(type==='tEXt'){ const data=u.subarray(p+8,p+8+len), z=data.indexOf(0);
+        if(z>0&&b2s(data.subarray(0,z))==='cityKey'){ try{
+          const bin=atob(b2s(data.subarray(z+1))), bytes=new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; } } }
+      if(type==='IEND') break; p+=12+len; }
+    return null; }
+  function readKeyFile(file,cb,onErr){ const r=new FileReader();
+    r.onload=()=>{ try{ const cfg=pngExtractKey(r.result)||JSON.parse(new TextDecoder().decode(r.result)); if(!cfg||typeof cfg!=='object')throw 0; cb(cfg); }catch(e){ onErr(); } };
+    r.readAsArrayBuffer(file); }
+  // the sky shot carries the whole night: { version, sky:true, keys:[…] } in a tEXt chunk,
+  // keyword 'citySky' — same chunk grammar as the single-key carrier, one rung up the ladder.
+  function pngExtractSky(buf){ const u=new Uint8Array(buf);
+    if(u.length<20||u[0]!==0x89||u[1]!==0x50||u[2]!==0x4e||u[3]!==0x47) return null;
+    let p=8;
+    while(p+12<=u.length){ const len=((u[p]<<24)|(u[p+1]<<16)|(u[p+2]<<8)|u[p+3])>>>0;
+      const type=String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+      if(type==='tEXt'){ const data=u.subarray(p+8,p+8+len), z=data.indexOf(0);
+        if(z>0&&b2s(data.subarray(0,z))==='citySky'){ try{
+          const bin=atob(b2s(data.subarray(z+1))), bytes=new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; } } }
+      if(type==='IEND') break; p+=12+len; }
+    return null; }
+  function readSkyFile(file,cb,onErr){ const r=new FileReader();
+    r.onload=()=>{ try{ const o=pngExtractSky(r.result)||pngExtractKey(r.result)||JSON.parse(new TextDecoder().decode(r.result)); if(!o||typeof o!=='object')throw 0; cb(o); }catch(e){ onErr(); } };
+    r.readAsArrayBuffer(file); }
+  const CRCT=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1); t[n]=c; } return t; })();
+  function crc32(bytes){ let c=0xffffffff; for(let i=0;i<bytes.length;i++) c=CRCT[(c^bytes[i])&0xff]^(c>>>8); return (c^0xffffffff)>>>0; }
+  function pngEmbedText(dataURL,kw,obj){ const bin=atob(dataURL.slice(dataURL.indexOf(',')+1));
+    const png=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) png[i]=bin.charCodeAt(i);
+    const payload=btoa(b2s(new TextEncoder().encode(JSON.stringify(obj))));
+    const data=new Uint8Array(kw.length+1+payload.length);
+    for(let i=0;i<kw.length;i++) data[i]=kw.charCodeAt(i); data[kw.length]=0;
+    for(let i=0;i<payload.length;i++) data[kw.length+1+i]=payload.charCodeAt(i);
+    const chunk=new Uint8Array(12+data.length), dv=new DataView(chunk.buffer);
+    dv.setUint32(0,data.length); chunk[4]=0x74;chunk[5]=0x45;chunk[6]=0x58;chunk[7]=0x74; chunk.set(data,8);
+    const crcBuf=new Uint8Array(4+data.length); crcBuf.set(chunk.subarray(4,8),0); crcBuf.set(data,4);
+    dv.setUint32(8+data.length,crc32(crcBuf));
+    const iend=png.length-12; // canvas PNGs end with the 12-byte IEND chunk
+    const out=new Uint8Array(png.length+chunk.length);
+    out.set(png.subarray(0,iend),0); out.set(chunk,iend); out.set(png.subarray(iend),iend+chunk.length);
+    return new Blob([out],{type:'image/png'}); }
+
+  // ---- per-key palette gradient (same as /sigil's compare)
+  function hex2hsl(hex){ let r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+    const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2; let h=0,s=0;
+    if(mx!==mn){const d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);
+      h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4; h/=6;} return {h,s,l}; }
+  function palOf(cfg){ const d={cool:'#141a3d',warm:'#f0eee8',sword:'#e8523a',mage:'#4dd9e8'};
+    const p=cfg&&cfg.palette&&typeof cfg.palette==='object'?cfg.palette:{};
+    return { cool:typeof p.cool==='string'?p.cool:d.cool, warm:typeof p.warm==='string'?p.warm:d.warm,
+             sword:typeof p.sword==='string'?p.sword:d.sword, mage:typeof p.mage==='string'?p.mage:d.mage }; }
+  function gradWith(p){ const C=hex2hsl(p.cool), Wm=hex2hsl(p.warm);
+    return (t,alpha)=>{ t=Math.max(0,Math.min(1,t));
+      let dh=Wm.h-C.h; if(dh>0.5)dh-=1; if(dh<-0.5)dh+=1;
+      const h=(C.h+dh*t+1)%1, s=Math.min(1,C.s+(Wm.s-C.s)*t+0.06*Math.sin(t*Math.PI)), l=Math.min(1,C.l+(Wm.l-C.l)*t+0.04*Math.sin(t*Math.PI));
+      return `hsla(${(h*360).toFixed(0)},${(s*100).toFixed(0)}%,${(l*100).toFixed(0)}%,${alpha===undefined?1:alpha})`; }; }
+
+  // which vertices a key has actually touched (content, not hash): lit · described · poured · proven
+  function touchedSet(cfg){ const out=new Set(); if(!cfg||typeof cfg!=='object') return out;
+    const desc=cfg.descriptions||{}, focus=cfg.focus||{}, spent=(cfg.witness&&cfg.witness.spent)||{};
+    const lit=new Set(Array.isArray(cfg.lit)?cfg.lit:[]);
+    for(let x=0;x<N;x++){ if(lit.has(x)||desc[x]||+focus[x]>0||+spent[x]>0) out.add(x); }
+    return out; }
+
+  // ---- the sky
+  const $=id=>document.getElementById(id);
+  const sky=$('sky'), sctx=sky.getContext('2d');
+  // STARS: { cfg, kappa, grad, touched, u, v } — u,v ∈ [0,1) read straight from the κ hex:
+  // the content addresses the sky. Same key ⇒ same place, on anyone's night.
+  let STARS=[], hover=-1;
+  function placeOf(kappa){ const hex=kappa.slice(7);
+    return { u:parseInt(hex.slice(0,8),16)/0x100000000, v:parseInt(hex.slice(8,16),16)/0x100000000 }; }
+  function addKey(cfg){ kappaLabel(cfg).then(k=>{ if(!k){ $('inspect').textContent='crypto.subtle unavailable — serve over localhost or https.'; return; }
+      if(STARS.some(s=>s.kappa===k)) { $('inspect').innerHTML='that key is already in the sky — same content, same κ, <b>same star</b>.'; return; }
+      STARS.push({ cfg, kappa:k, grad:gradWith(palOf(cfg)), touched:touchedSet(cfg), ...placeOf(k) });
+      drawSky(); }); }
+  function starXY(s,w,h,k){ const M=64*(k||1); return { x:M+s.u*(w-2*M), y:M+s.v*(h-2*M) }; }
+  function shared(a,b){ let n=0; for(const v of a.touched) if(b.touched.has(v)) n++; return n; }
+  // one painter, two framings: the live canvas (k=1) and the 📸 sky shot (scaled up)
+  function paintSky(ctx,w,h,hov,k){ k=k||1;
+    // threads first — under the stars
+    for(let i=0;i<STARS.length;i++) for(let j=i+1;j<STARS.length;j++){
+      const A=STARS[i], B=STARS[j], a=starXY(A,w,h,k), b=starXY(B,w,h,k);
+      // gold — lineage: child's prior names ancestor's κ
+      const lin=(A.cfg.prior===B.kappa)||(B.cfg.prior===A.kappa);
+      if(lin){ ctx.strokeStyle='rgba(255,230,194,0.55)'; ctx.lineWidth=1.2*k; ctx.setLineDash([5*k,4*k]);
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); ctx.setLineDash([]); }
+      // teal — common ground: shared touched vertices
+      const n=shared(A,B);
+      if(n>0){ ctx.strokeStyle='rgba(127,255,212,'+(0.10+0.40*Math.min(1,n/16)).toFixed(2)+')'; ctx.lineWidth=0.8*k;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+        ctx.font=(9*k)+'px "Spline Sans Mono",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillStyle='rgba(127,255,212,'+(lin?0.9:0.55)+')'; ctx.fillText('∩'+n,mx,my-6*k); } }
+    // stars — each key's sigil in miniature
+    for(let i=0;i<STARS.length;i++){ const s=STARS[i], {x,y}=starXY(s,w,h,k), R=(hov===i?30:24)*k;
+      for(let v=0;v<N;v++){ const a=(v/N)*Math.PI*2-Math.PI/2, g=parseInt(s.kappa[7+v],16), t=pc(v)/BITS;
+        const inten=0.12+0.88*g/15, rr=R*(0.72+0.28*g/15);
+        ctx.fillStyle=s.grad(t,Math.max(0.15,inten));
+        ctx.beginPath(); ctx.arc(x+rr*Math.cos(a),y+rr*Math.sin(a),(0.6+1.5*g/15)*k,0,Math.PI*2); ctx.fill(); }
+      ctx.fillStyle=hov===i?'#ffffff':'rgba(232,237,255,0.85)';
+      ctx.beginPath(); ctx.arc(x,y,1.8*k,0,Math.PI*2); ctx.fill();
+      ctx.font='italic 300 '+(12*k)+'px Fraunces,serif'; ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillStyle=hov===i?'#e8edff':'rgba(174,184,238,0.75)';
+      ctx.fillText(s.cfg.name||'city key',x,y+R+8*k);
+      ctx.font=(8.5*k)+'px "Spline Sans Mono",monospace'; ctx.fillStyle='rgba(124,134,184,0.7)';
+      ctx.fillText(s.kappa.slice(0,15)+'…',x,y+R+24*k); } }
+  function drawSky(){ const dpr=Math.min(window.devicePixelRatio||1,2), w=sky.clientWidth||1100, h=560;
+    sky.width=w*dpr; sky.height=h*dpr; sctx.setTransform(dpr,0,0,dpr,0,0); sctx.clearRect(0,0,w,h);
+    $('skyHint').style.display=STARS.length?'none':'flex';
+    $('skyCount').textContent=STARS.length?(STARS.length+(STARS.length===1?' key risen':' keys risen')):'empty sky';
+    paintSky(sctx,w,h,hover,1); }
+  // 📸 the sky shot — the final export: the picture carries every risen key
+  // ({version, sky:true, keys:[…]} · tEXt keyword 'citySky'); re-import raises the night whole.
+  function snapshot(){ if(!STARS.length){ $('inspect').textContent='nothing risen yet — add keys before the shot'; return; }
+    const S=1600, H=900, pad=110, c=document.createElement('canvas'); c.width=S; c.height=H;
+    const ctx=c.getContext('2d');
+    const bg=ctx.createRadialGradient(S/2,(H-pad)*0.4,0,S/2,(H-pad)*0.4,S*0.7);
+    bg.addColorStop(0,'#0e1228'); bg.addColorStop(1,'#04050b');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,S,H);
+    paintSky(ctx,S,H-pad,-1,S/1100);
+    ctx.font='italic 300 30px Fraunces,serif'; ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+    ctx.fillStyle='#e8edff'; ctx.fillText('the skye',S/2,H-58);
+    ctx.font='13px "Spline Sans Mono",monospace'; ctx.fillStyle='rgba(124,134,184,0.95)';
+    ctx.fillText(STARS.length+(STARS.length===1?' key risen':' keys risen')+' · soulbis.com/skye',S/2,H-32);
+    const carried={ version:1, sky:true, keys:STARS.map(s=>({...s.cfg, kappa:s.kappa})) };
+    let url, ok=true;
+    try{ url=URL.createObjectURL(pngEmbedText(c.toDataURL('image/png'),'citySky',carried)); }
+    catch(e){ url=c.toDataURL('image/png'); ok=false; }
+    const a=document.createElement('a'); a.href=url; a.download='skye-'+STARS.length+(STARS.length===1?'-key':'-keys')+'.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    if(url.startsWith('blob:')) setTimeout(()=>URL.revokeObjectURL(url),1000);
+    $('inspect').innerHTML='📸 sky shot saved'+(ok?' — the picture carries all '+STARS.length+' key'+(STARS.length===1?'':'s')+'; drop it back here and the night rises again':''); }
+  function starAt(ev){ const r=sky.getBoundingClientRect(), w=r.width, h=r.height;
+    const mx=ev.clientX-r.left, my=ev.clientY-r.top; let best=-1, bd=44;
+    for(let i=0;i<STARS.length;i++){ const {x,y}=starXY(STARS[i],w,h), d=Math.hypot(mx-x,my-y);
+      if(d<bd){ bd=d; best=i; } } return best; }
+  sky.addEventListener('mousemove',ev=>{ const i=starAt(ev); if(i!==hover){ hover=i; drawSky(); inspect(i); } });
+  sky.addEventListener('mouseleave',()=>{ if(hover!==-1){ hover=-1; drawSky(); } });
+  function inspect(i){ const el=$('inspect');
+    if(i<0){ el.innerHTML='hover a star to read it · the sky is local — nothing leaves this page'; return; }
+    const s=STARS[i], lit=Array.isArray(s.cfg.lit)?s.cfg.lit.length:0;
+    const anc=STARS.find(o=>o.kappa===s.cfg.prior);
+    const kin=STARS.reduce((m,o,j)=>{ if(j===i) return m; const n=shared(s,o); return n>m.n?{n,o}:m; },{n:0,o:null});
+    el.innerHTML='<b>'+esc(s.cfg.name||'city key')+'</b> · <span class="k">'+esc(s.kappa.slice(0,23))+'…</span>'
+      +' · ✦ '+lit+' lit · '+s.touched.size+' touched'
+      +(typeof s.cfg.prior==='string'?' · <span class="gold">descends from '+esc(s.cfg.prior.slice(0,15))+'…'+(anc?' — risen here as <b>'+esc(anc.cfg.name||'city key')+'</b>':'')+'</span>':'')
+      +(kin.o?' · <span class="teal">closest kin: <b>'+esc(kin.o.cfg.name||'city key')+'</b> (∩'+kin.n+')</span>':''); }
+  // import — files or drag-drop; each file is one key (JSON or sigil PNG) or a whole sky shot
+  function takeFiles(files){ [...files].forEach(f=>readSkyFile(f,o=>{
+      if(o.sky===true&&Array.isArray(o.keys)) o.keys.forEach(kk=>{ if(kk&&typeof kk==='object') addKey(kk); });
+      else addKey(o);
+    },()=>{ $('inspect').textContent='⚠ no City Key in '+f.name+' (key JSON, sigil PNG, or sky shot)'; })); }
+  $('addBtn').addEventListener('click',()=>$('addFile').click());
+  $('snapBtn').addEventListener('click',snapshot);
+  $('addFile').addEventListener('change',e=>{ takeFiles(e.target.files); e.target.value=''; });
+  $('clearBtn').addEventListener('click',()=>{ STARS=[]; hover=-1; drawSky(); inspect(-1); });
+  ['dragover','dragenter'].forEach(t=>sky.addEventListener(t,e=>{ e.preventDefault(); }));
+  sky.addEventListener('drop',e=>{ e.preventDefault(); if(e.dataTransfer&&e.dataTransfer.files) takeFiles(e.dataTransfer.files); });
+  // ===================== 🤝 common ground — DH-PSI =====================
+  // Blinded set intersection over the 64-vertex domain (the domain is tiny, so unsalted
+  // tokens would be enumerable in microseconds — blinding is the whole point).
+  // Group: RFC 3526 §3, 2048-bit MODP (id 14), prime p safe (q=(p-1)/2 prime); elements
+  // are forced into the quadratic-residue subgroup (order q) by squaring at hash time,
+  // where DDH is believed to hold. Exponents are 256-bit (short-exponent DH, as TLS DHE
+  // practice) so 64 blindings stay ~a second. Protocol (A initiates, B answers):
+  //   A → B  { h(v)^a : v ∈ A's set }  shuffled        (A keeps the order + a)
+  //   B → A  reply = challenge^b IN ORDER  ·  { h(w)^b : w ∈ B's set } shuffled
+  //   A:     theirs^a vs reply — matches name A's common vertices. A learns ∩ and |B|;
+  //          B learns |A| (and ∩ only if A sends the optional result file back).
+  const PSI_P=BigInt('0x'+(
+    'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74'+
+    '020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437'+
+    '4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED'+
+    'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF05'+
+    '98DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB'+
+    '9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B'+
+    'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF695581718'+
+    '3995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF'));
+  function modpow(b,e,m){ b%=m; let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+  const bytes2big=u=>{ let x=0n; for(const b of u) x=(x<<8n)|BigInt(b); return x; };
+  const big2hex=x=>x.toString(16), hex2big=s=>BigInt('0x'+s);
+  async function psiH2G(v){ // hash-to-group: 512-bit digest mod p, squared → QR subgroup
+    const d=await crypto.subtle.digest('SHA-512',new TextEncoder().encode('agentprivacy-psi-v1|'+v));
+    const x=bytes2big(new Uint8Array(d))%PSI_P;
+    return modpow(x<2n?2n:x,2n,PSI_P); }
+  function psiScalar(){ const u=new Uint8Array(32); crypto.getRandomValues(u);
+    const x=bytes2big(u); return x<2n?x+2n:x; }
+  const psiValid=x=>x>1n&&x<PSI_P-1n; // reject 0/1/p-1 — tampered or degenerate points
+  function psiShuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){
+      const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  // — state: the bearer's key + what they choose to enter (C81/C84: even set size attests;
+  //   entering is a choice, also at the meta level)
+  let PSIKEY=null, PSISCOPE='touched';
+  function psiSet(){ if(!PSIKEY) return [];
+    if(PSISCOPE==='lit') return Array.isArray(PSIKEY.lit)?[...new Set(PSIKEY.lit.filter(n=>Number.isInteger(n)&&n>=0&&n<N))].sort((a,b)=>a-b):[];
+    return [...touchedSet(PSIKEY)].sort((a,b)=>a-b); }
+  const psiOut=m=>{ $('psiOut').innerHTML=m; };
+  function psiRefresh(){ const n=psiSet().length;
+    $('psiChalBtn').disabled=!(PSIKEY&&n>0);
+    if(PSIKEY) $('psiKeyName').innerHTML='key: <b>'+esc(PSIKEY.name||'city key')+'</b> · entering <b>'+n+'</b> '+(PSISCOPE==='lit'?'lit ✦':'touched ⭐'); }
+  function psiDownload(name,obj){ const blob=new Blob([JSON.stringify(obj)],{type:'application/json'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+  function psiGridShow(common){ const g=$('psiGrid'); g.style.display='grid'; g.innerHTML='';
+    const set=new Set(common);
+    for(let x=0;x<N;x++){ const d=document.createElement('div'); d.className='pc'+(set.has(x)?' common':'');
+      d.textContent=x; d.title='vertex '+x+' · '+b6(x)+(set.has(x)?' · common ground':''); g.appendChild(d); } }
+  // ① initiator: blind own set, export the challenge, keep the secret for this session
+  async function psiChallenge(){ const verts=psiSet(); if(!verts.length) return;
+    psiOut('blinding '+verts.length+' points…');
+    const a=psiScalar(), order=psiShuffle(verts), set=[];
+    for(const v of order) set.push(big2hex(modpow(await psiH2G(v),a,PSI_P)));
+    const id=[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');
+    try{ sessionStorage.setItem('psi:'+id,JSON.stringify({a:big2hex(a),order})); }catch(e){}
+    psiDownload('psi-challenge-'+id+'.json',{version:1,psi:1,round:1,group:'modp2048',id,set});
+    psiOut('① challenge exported (<b>'+verts.length+'</b> blinded points, shuffled) — send the file. Keep this tab’s session alive: the unblinding secret lives only here.'); }
+  // ② responder: raise their set to b (in order), add own blinded set (shuffled)
+  async function psiAnswer(ch){ const verts=psiSet();
+    if(!PSIKEY||!verts.length){ psiOut('⚠ enter your key first (and make sure it has '+(PSISCOPE==='lit'?'lit':'touched')+' vertices), then re-import the challenge.'); return; }
+    const pts=(ch.set||[]).map(t=>{ try{ const x=hex2big(t); return psiValid(x)?x:null; }catch(e){ return null; } });
+    if(!pts.length||pts.every(p=>p===null)){ psiOut('⚠ no valid points in that challenge.'); return; }
+    psiOut('answering '+pts.length+' points + blinding '+verts.length+' of yours…');
+    const b=psiScalar();
+    const reply=pts.map(p=>p===null?null:big2hex(modpow(p,b,PSI_P))); // tampered points drop to null, not a crash
+    const set=[]; for(const v of psiShuffle(verts)) set.push(big2hex(modpow(await psiH2G(v),b,PSI_P)));
+    psiDownload('psi-response-'+ch.id+'.json',{version:1,psi:1,round:2,group:'modp2048',id:ch.id,reply,set,n:set.length});
+    psiOut('② answered — send <b>psi-response-'+ch.id+'.json</b> back. They learn the common ground + your count (<b>'+set.length+'</b>); you learned their count (<b>'+pts.filter(Boolean).length+'</b>). Nothing else crossed.'); }
+  // ③ initiator: unblind with a — matches are the common vertices
+  function psiFinish(resp){ let st=null;
+    try{ st=JSON.parse(sessionStorage.getItem('psi:'+resp.id)||'null'); }catch(e){}
+    if(!st){ psiOut('⚠ no secret for exchange <b>'+esc(String(resp.id))+'</b> in this session — the challenge must be finished in the tab that minted it.'); return; }
+    const a=hex2big(st.a);
+    const theirs=new Set((resp.set||[]).map(t=>{ try{ const x=hex2big(t); return psiValid(x)?big2hex(modpow(x,a,PSI_P)):null; }catch(e){ return null; } }).filter(Boolean));
+    const common=[]; (resp.reply||[]).forEach((t,i)=>{ if(t===null||i>=st.order.length) return;
+      try{ const x=hex2big(t); if(psiValid(x)&&theirs.has(big2hex(x))) common.push(st.order[i]); }catch(e){} });
+    common.sort((x,y)=>x-y);
+    psiGridShow(common);
+    psiOut('🤝 common ground: <b>'+common.length+'</b> of your '+st.order.length+' (they entered '+theirs.size+')'+
+      (common.length?' — vertices <b>'+common.join(' · ')+'</b>':' — none yet')+
+      '. You learned the ∩ and their count; they learned your count. <button id="psiResBtn" class="btn" style="margin-left:8px">③ share the result back</button>');
+    const rb=document.getElementById('psiResBtn');
+    if(rb) rb.addEventListener('click',()=>{ psiDownload('psi-common-'+resp.id+'.json',{version:1,psi:1,round:3,id:resp.id,common});
+      psiOut('③ result exported — note: the result file is a <i>report</i>, not a proof; the κ-commitment ZK layer is the designed v3 rung.'); }); }
+  function psiRoute(o){ if(!o||o.psi!==1){ psiOut('⚠ not a PSI exchange file.'); return; }
+    if(o.round===1) psiAnswer(o);
+    else if(o.round===2) psiFinish(o);
+    else if(o.round===3&&Array.isArray(o.common)){ psiGridShow(o.common.filter(v=>Number.isInteger(v)&&v>=0&&v<N));
+      psiOut('🤝 they report <b>'+o.common.length+'</b> common — shown below (their report, unverified; v3 makes it provable).'); }
+    else psiOut('⚠ unrecognised round.'); }
+  $('psiKeyBtn').addEventListener('click',()=>$('psiKeyFile').click());
+  $('psiKeyFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    readKeyFile(f,cfg=>{ PSIKEY=cfg; psiRefresh(); psiOut('key entered — it stays in this tab; only blinded points will leave.'); },
+      ()=>psiOut('⚠ no City Key in that file (key JSON or sigil PNG).')); e.target.value=''; });
+  $('psiScopeT').addEventListener('click',()=>{ PSISCOPE='touched'; $('psiScopeT').classList.add('on'); $('psiScopeL').classList.remove('on'); psiRefresh(); });
+  $('psiScopeL').addEventListener('click',()=>{ PSISCOPE='lit'; $('psiScopeL').classList.add('on'); $('psiScopeT').classList.remove('on'); psiRefresh(); });
+  $('psiChalBtn').addEventListener('click',()=>{ psiChallenge(); });
+  $('psiImpBtn').addEventListener('click',()=>$('psiInFile').click());
+  $('psiInFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{ try{ psiRoute(JSON.parse(r.result)); }catch(err){ psiOut('⚠ could not read that exchange file.'); } };
+    r.readAsText(f); e.target.value=''; });
+
+  window.addEventListener('resize',drawSky);
+  drawSky();
+})();
+</script>
+</body>
+</html>

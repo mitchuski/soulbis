@@ -75,9 +75,13 @@ Never hardcode coral/cyan on the wrong architectural side.
 | Soulbae | `cyan` |
 | City of Mages | `neutral` |
 
-### Tool cards
+### Tool cards (RETIRED 2026-06-11)
 
-Status is expressed in markup/CSS:
+The "Code as commitment" Tools section was removed from the landing — its links
+duplicated the Built section and The Key section. Do NOT reintroduce it. Tools
+are listed as built-items in **Built**; the four rooms link from **The Key**.
+The `.tools-grid` / `.tool-card` / `.tool-action` / `.status-dot` CSS is kept
+(unused) in case cards return elsewhere. Status semantics if they do:
 
 - **available** — cyan dot, pulse animation  
 - **building** — coral dot, pulse animation  
@@ -132,14 +136,12 @@ When writing tool descriptions:
 
 ## Adding new tools
 
-When a new Soulbis tool is ready to list:
+When a new Soulbis tool is ready to list (the Tools section is retired — see above):
 
-1. Add a new tool card block in the **Tools** section of **`index.html`**
-2. Set status classes/markup to match `available` / `building` / `planned` (see above)
-3. Decide if it is Swordsman-side (boundary enforcement) or supporting infrastructure
-4. Write a description following the content rules above
-5. Add the corresponding entry in the **Built** section under the correct category
-6. If it has a GitHub repo, link it in the built entry
+1. Add the entry in the **Built** section of **`index.html`** under the correct category
+2. Decide if it is Swordsman-side (boundary enforcement) or supporting infrastructure
+3. Write a description following the content rules above
+4. If it has a GitHub repo, link it in the built entry
 
 ---
 
@@ -150,8 +152,8 @@ When a new node enters the ecosystem:
 1. Add the node markup in the **Ecosystem** section of **`index.html`**
 2. Assign `node-role--*` / `node-name--*` classes per the table above
 3. Choose an appropriate glyph (single emoji, visible at 18px)
-4. Update the section heading if the count changes ("Four nodes / One architecture" → adjust)
-5. The grid is `repeat(3, 1fr)` — 7 nodes currently render as 2 rows of 3 plus a lone node; keep the count in the heading ("Seven nodes / One architecture") in sync
+4. The section heading is fixed: "The dual-agent architecture." (named 2026-06-11, replacing the node-count line) — do NOT reintroduce a count
+5. The grid is `repeat(3, 1fr)` — an uneven count renders with a lone node on the last row; that's fine
 
 ---
 

@@ -85,3 +85,15 @@ The line that organised all of it — *value lives on the path, not the vertex* 
 ---
 
 *Reflection written 2026-05-28 — the equation learned to walk.* `(⚔️ ⊥ ⿻ ⊥ 🧙) 😊`
+
+---
+
+## V6 addendum (2026-06-10)
+
+The model this console renders reached V6 (`agentprivacy-docs/privacy_value_v6.md`). Three notes for the walkable model:
+
+- **R is R(t) now.** The reconstruction ceiling is time-dependent (C82, ~65%): the rendered geometry is a snapshot at t₀, and the honest rendering of the ceiling would carry a clock. Candidate console upgrade: a time control on the Σ core.
+- **🪢 regime declared (regime 1).** Presence mana is non-transferable, non-attesting local color: not proof, not stake-weight, not an attestation input, and no page on this site may say otherwise. Upgrade ladder if presence is ever asked to attest: witness co-signing at gates, then elapsed-time proofs.
+- **The Key is a reading (C66, ~55%).** The City Key grants nothing it does not already describe, now with the object-capability lineage cited (SPKI/SDSI, designation without authority), and with the κ-label (sha256 over canonical form, per the star repo holospace packaging) making the reading verify itself at import.
+
+Conjecture tags in this document resolve to `agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md` (head C89).

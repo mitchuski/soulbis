@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Swordsman Guide · soulbis.com/guide</title>
+<meta name="description" content="The Swordsman's guide to the City Key: what it is, how the walk earns proof, how the κ names it, and how the sigil carries it.">
+<link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
+<link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
+  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16); --glass:rgba(10,13,28,0.62);
+    --sword:#e8523a; --mage:#4dd9e8; --teal:#7fffd4; --gold:#ffe6c2; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ min-height:100vh; font-family:'Spline Sans Mono',monospace; color:var(--ink);
+    background:radial-gradient(120% 90% at 28% 14%, rgba(31,84,214,0.12), transparent 55%),
+      radial-gradient(110% 80% at 80% 88%, rgba(255,69,51,0.10), transparent 55%),
+      radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%);
+    padding:40px clamp(16px,5vw,72px) 64px; }
+  .page{ max-width:880px; margin:0 auto; }
+  .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .navgrp{ display:flex; gap:8px; flex-wrap:wrap; }
+  .navbtn{ text-decoration:none; letter-spacing:0.06em; font-size:10.5px; color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border:1px solid transparent; border-radius:8px; padding:7px 13px; transition:transform .15s; white-space:nowrap; }
+  .navbtn--ghost{ background:none; border-color:var(--line); color:var(--ink); }
+  .navbtn:hover{ transform:translateY(-1px); }
+  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(30px,5vw,54px); line-height:1.06; padding-bottom:0.12em; letter-spacing:-0.01em;
+    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#ffb9a6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .lede{ margin-top:14px; font-size:13.5px; line-height:1.75; color:#aeb8ee; }
+  .lede b{ color:#ffd6c7; font-weight:500; }
+  h2{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:24px; color:#dbe6ff; margin:38px 0 12px; }
+  p, li{ font-size:12.5px; line-height:1.8; color:#cdd6f5; }
+  p+p{ margin-top:10px; }
+  b{ color:#ffd6c7; font-weight:500; } code{ color:#cfe0ff; font-size:11.5px; } em{ color:#bfeef5; font-style:normal; }
+  .loop{ background:var(--glass); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:16px 0;
+    font-size:11.5px; line-height:2; color:#cdd6f5; overflow-x:auto; white-space:pre; backdrop-filter:blur(10px); }
+  .rooms{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:16px 0; }
+  @media (max-width:720px){ .rooms{ grid-template-columns:1fr; } }
+  .room{ display:block; text-decoration:none; color:var(--ink); background:var(--glass); border:1px solid var(--line); border-radius:14px; padding:18px 16px; transition:transform .18s, border-color .18s; }
+  .room:hover{ transform:translateY(-2px); border-color:rgba(120,140,220,0.5); }
+  .room .glyph{ font-size:22px; }
+  .room h3{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:19px; margin:8px 0 6px; color:#ffd6c7; }
+  .room p{ font-size:11px; line-height:1.65; color:var(--dim); }
+  .room .go{ display:inline-block; margin-top:10px; font-size:10px; letter-spacing:0.06em; color:#9fc0ff; }
+  .triad{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+  @media (max-width:720px){ .triad{ grid-template-columns:1fr; } }
+  .tri{ background:var(--glass); border:1px solid var(--line); border-radius:12px; padding:14px 15px; }
+  .tri .tk{ font-size:10px; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px; }
+  .tri p{ font-size:11px; line-height:1.7; color:#aeb8ee; }
+  .tri--colour .tk{ color:var(--mage); } .tri--shape .tk{ color:var(--gold); } .tri--light .tk{ color:var(--teal); }
+  .note{ border:1px dashed var(--line); border-radius:10px; padding:12px 15px; margin:14px 0; font-size:11.5px; line-height:1.7; color:var(--dim); }
+  .note b{ color:#aeb8ee; }
+  footer{ margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:10.5px; color:rgba(124,134,184,0.75); line-height:1.9; }
+  footer a{ color:var(--sword); text-decoration:none; }
+  .inscription{ font-size:13px; letter-spacing:0.1em; color:#cdd6f5; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow"><span>soulbis · the swordsman guide · how the key works</span>
+    <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star">⚔️ /star</a><a class="navbtn" href="/lattice">🧙 /lattice</a><a class="navbtn" href="/sigil">🪬 /sigil</a><a class="navbtn" href="/skye">🌌 /skye</a></span></div>
+  <h1>The Swordsman Guide</h1>
+  <p class="lede">You hold a <b>City Key 🗝️</b> — a small file, not an account — that records your standing in the City of Mages. These four rooms let you <b>walk it</b>, <b>prove it</b>, <b>turn it into a portrait that carries itself</b>, and <b>gather many under one night</b>. No server holds your identity at any step; everything below happens in your browser, checkably.</p>
+
+  <h2>The key, in one paragraph</h2>
+  <p>Every meaningful thing you do in the City — a workshop entered, a ceremony walked, attention genuinely staked — lands somewhere specific: one of <b>64 states</b>, each a six-bit address across the six sovereignty dimensions (<b>🛡️ Protection · 🤝 Delegation · 📜 Memory · 🔗 Connection · ⚡ Computation · 💎 Value</b>). Your key is the compressed record of where you've stood and what you've done there: a palette you chose, vertices you've lit, descriptions you've earned, focus you've poured, laps you've walked. A whole standing, a few kilobytes, yours as a file.</p>
+  <p>In the Swordsman's register each state is a <b>blade</b>, and the tiers cut the strata: <b>Null</b> (stratum 0 — total exposure, one state) · <b>Light</b> (1–2) · <b>Heavy</b> (3–4) · <b>Dragon</b> (5–6 — full sovereignty, the mathematical closure). The ceremony's trust tiers (<em>blade → light → heavy → dragon</em>) climb the same strata; vertex 63, all six dimensions held, is the full blade.</p>
+
+  <h2>The loop</h2>
+  <div class="loop">  mint 🗝️  at <b>agentprivacy.ai/city</b>        your standing, exported as the key · κ stamped
+    ⇣
+  walk ⚔️  at <b>/star</b>                       follow the path · laps and dwell accrue as trace
+    ⇣
+  prove 🧙  at <b>/lattice</b>                   walk each focused vertex its weight → witness minted
+    ⇣
+  name 🪬  at <b>/sigil</b>                      the κ derived in the open · the sigil drawn · 📸 the portrait
+    ⇣
+  charge 🗝️ back at <b>/city</b>                 the proof banks 🪢 mana · κ re-derived on arrival
+</div>
+  <p>The loop is the point: the key is a <em>claim</em> when minted and a <em>record</em> after walking. Time spent in the geometry becomes proof nobody attested to — it's just arithmetic about where you stood.</p>
+  <p>Both ends now speak κ: <b>/city</b> stamps the κ at mint and re-derives it at charge — a <em>reading, never a gate</em>; a mismatch is reported, not punished. And when only the proof should travel, <b>/lattice</b> exports a <b>⚡ charge pass</b> — trace, witness and κ, nothing else. Inscriptions, palette, focus amounts and identity stay home; /city charges it exactly as it would the full key.</p>
+
+  <h2>The four rooms</h2>
+  <div class="rooms">
+    <a class="room" href="/star"><span class="glyph">⚔️</span><h3>/star · walk it</h3>
+      <p>The 3D boundary: the star-tetrahedron core inside the 64-vertex lattice. Import your key, set your <em>stance</em> on the console (the manifold's shape — it travels in the key), play the succ cycle, walk your lit vertices, save the trace. <b>F</b> for the cinematic orbit · <b>S</b> snaps a portrait that carries your key.</p>
+      <span class="go">walk →</span></a>
+    <a class="room" href="/lattice"><span class="glyph">🧙</span><h3>/lattice · prove it</h3>
+      <p>The flat codex: all 64 states, each openable — its stratum, its six bits, its reflections. Focus you poured at /city glows gold here; walking the cycle discharges it, vertex by vertex, until the witness is minted: <em>focus claimed, then made real by presence.</em></p>
+      <span class="go">prove →</span></a>
+    <a class="room" href="/sigil"><span class="glyph">🪬</span><h3>/sigil · name it</h3>
+      <p>The bytes: watch the key's name — its κ — be recomputed from its exact content and checked against what it claims. Then see the name drawn: 64 hash glyphs on 64 vertices, your constellation. Compare two keys: shared ground in teal, divergence pulsing.</p>
+      <span class="go">derive →</span></a>
+    <a class="room" href="/skye"><span class="glyph">🌌</span><h3>/skye · gather it</h3>
+      <p>The night of many keys: add any number — yours, friends', your own key's ancestors — and each rises as a star placed by its κ. Gold threads are lineage (the <code>prior</code> chain); teal threads are common ground — drawn locally, or computed <em>blind</em> with a friend via a two-file 🤝 exchange that reveals the overlap and nothing else. 📸 snaps the whole night as one image carrying every risen key.</p>
+      <span class="go">gather →</span></a>
+  </div>
+
+  <h2>The κ — the name that can't be given, only earned</h2>
+  <p>Hash the key's exact bytes and you get its <b>κ-label</b>: <code>kappa = "sha256:" + H(canonical form)</code>. This is a <b>fingerprint, not a transformation</b> — your key's content is untouched; the κ is one extra line, derived <em>from</em> the content. Delete it and the key still works. Recompute it and you get the same answer back if — and only if — nothing changed. Every import, on every page, re-derives it and shows <em style="color:var(--teal)">κ verified</em> or <em style="color:var(--sword)">⚠ κ mismatch</em>. The rule underneath: <b>identity is content, not location</b> — a key is what it says, wherever it travels, and nobody has to take its word for it.</p>
+
+  <h2>The sigil — three layers, three sources</h2>
+  <div class="triad">
+    <div class="tri tri--colour"><div class="tk">colour · chosen</div><p>Your palette — the four gems you picked. Expression. Two bearers can share it; you can change yours tomorrow. <b>The voice.</b></p></div>
+    <div class="tri tri--shape"><div class="tk">shape · chosen + earned</div><p>The manifold parameters ride in your key: six petals, one per dimension — your <em>stance</em> — engraved vertex by vertex with the work you actually did (focus, lit, witness, inscription). And once the City measures your <em>figures</em>, the shape stops being chosen: it's read. <b>The posture.</b></p></div>
+    <div class="tri tri--light"><div class="tk">light · derived</div><p>Which vertices glow comes from the κ. You cannot choose it or fake it; it moves only when your content moves — and then it moves everywhere (~60 of 64 glyphs on one edit). <b>The fact.</b></p></div>
+  </div>
+  <p>A forged sigil doesn't fail quietly in a log somewhere. It <em>looks wrong</em> — in your own colours, on your own shape.</p>
+
+  <h2>The portrait carries the key</h2>
+  <p>Export the sigil (or snap /star with your key loaded) and the <b>entire key rides inside the image</b> — in a standard, labelled PNG metadata chunk, with the κ caption visible in the pixels. Every image viewer shows the constellation; every room here (and /city's charge) reads the chunk and gets your key back <b>byte-for-byte</b>. Zoom in, crop, snap mid-orbit — any framing is the full record, because what you framed and what you carry are different layers of the same file.</p>
+  <div class="note"><b>Two honest boundaries.</b> ① It's the <b>exported file</b> that carries — an OS screenshot is pixels only. Platforms that recompress images (most chat apps, inline) strip the hidden layer; send the PNG <em>as a file</em> and it carries; even stripped, the visible κ caption still names the key. ② The carrier is <b>portability, not secrecy</b> — the full key is inside, extractable by anyone holding the file. Share a sigil exactly as deliberately as you'd share the key itself.</div>
+
+  <h2>Who holds what (and who holds nothing)</h2>
+  <p>The architecture is two agents and a gap. The <b>⚔️ Swordsman</b> was forged and then <em>forgot</em> — his private key burned at the ceremony, by design: he guards the boundary precisely because he can't be made to reveal what he was never told. The <b>🧙 Mage</b> remembers — the graph, the deeds, the library; at <b>spellweb</b> the key itself now equips her graph, and her export rides back out as the same κ-stamped file, round-tripping to every room here. The key carries what he may not hold and what she must not lose; importing it anywhere re-equips <em>both</em>, separately. And the <b>First Person 😊</b> — you — are never in the file. What travels is everything <em>around</em> the gap. The gap survives every round trip because it was never encoded.</p>
+
+  <footer>
+    <span class="inscription">(⚔️ ⊥ ⿻ ⊥ 🧙) 😊</span> — The Swordsman guards the gap. The gap is the proof.<br>
+    deeper: <a href="https://github.com/mitchuski/star">github.com/mitchuski/star</a> (the source + the full write-ups) · <a href="https://agentprivacy.ai/model">agentprivacy.ai/model</a> (the mathematics) · <a href="https://agentprivacy.ai/city">agentprivacy.ai/city</a> (mint + charge) · <a href="https://spellweb.ai">spellweb.ai</a> (the Mage's graph — the key equips there too)<br>
+    privacymage / 0xagentprivacy
+  </footer>
+</div>
+</body>
+</html>

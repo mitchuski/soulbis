@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sigil · κ derivation · soulbis.com/sigil</title>
+<link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
+<link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
+  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16); --glass:rgba(10,13,28,0.62);
+    --sword:#e8523a; --mage:#4dd9e8; --teal:#7fffd4; --gold:#ffe6c2; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ min-height:100vh; font-family:'Spline Sans Mono',monospace; color:var(--ink);
+    background:radial-gradient(120% 90% at 28% 14%, rgba(31,84,214,0.12), transparent 55%),
+      radial-gradient(110% 80% at 80% 88%, rgba(255,69,51,0.10), transparent 55%),
+      radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%);
+    padding:40px clamp(16px,5vw,72px) 64px; }
+  header.top{ max-width:1180px; margin:0 auto 30px; }
+  .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .navgrp{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .navbtn{ text-decoration:none; letter-spacing:0.06em; font-size:10.5px; color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border:1px solid transparent; border-radius:8px; padding:7px 13px; transition:transform .15s, box-shadow .15s; white-space:nowrap; }
+  .navbtn--ghost{ background:none; border-color:var(--line); color:var(--ink); }
+  .navbtn--ghost:hover{ border-color:rgba(120,140,220,0.5); }
+  .navbtn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,150,255,0.35); }
+  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(30px,5vw,56px); line-height:1.08; letter-spacing:-0.01em;
+    padding-bottom:0.14em; /* room for the italic g descender — keep its tail out of the lede */
+    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#ffb9a6); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .explain{ margin:2px 0 16px; max-width:880px; font-size:11.5px; line-height:1.7; color:#aeb8ee; }
+  .explain b{ color:#ffd6c7; font-weight:500; } .explain i{ color:#cfe0ff; font-style:normal; }
+  .lede{ margin-top:16px; max-width:720px; font-size:13px; line-height:1.7; color:#aeb8ee; }
+  .lede b{ color:#ffd6c7; font-weight:500; } .lede code{ color:#cfe0ff; }
+
+  .wrap{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:minmax(300px,1fr) minmax(0,1.3fr); gap:26px; align-items:start; }
+  @media (max-width:880px){ .wrap{ grid-template-columns:1fr; } }
+  .card{ background:var(--glass); border:1px solid var(--line); border-radius:16px; padding:20px; backdrop-filter:blur(12px); }
+  .sect{ font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+  .bar{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .btn{ font-family:inherit; font-size:11px; letter-spacing:0.04em; padding:8px 13px; border-radius:8px; cursor:pointer;
+    background:rgba(120,140,220,0.08); border:1px solid var(--line); color:var(--ink); transition:all .18s; white-space:nowrap; }
+  .btn:hover{ border-color:rgba(120,140,220,0.45); }
+  .btn.on{ color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border-color:transparent; font-weight:500; }
+  .keyname{ font-size:10.5px; color:var(--dim); letter-spacing:0.02em; } .keyname b{ color:#ffd6c7; font-weight:500; }
+
+  /* movement 1 — derive */
+  .canon{ font-size:10px; line-height:1.6; color:#9aa6d6; background:rgba(8,11,26,0.7); border:1px solid var(--line);
+    border-radius:9px; padding:10px 12px; max-height:140px; overflow:auto; word-break:break-all; }
+  .canon::-webkit-scrollbar{ width:6px; } .canon::-webkit-scrollbar-thumb{ background:rgba(120,140,220,0.25); border-radius:3px; }
+  .canon-meta{ margin:8px 0 14px; font-size:10px; color:var(--dim); letter-spacing:0.04em; }
+  .hashrow{ font-size:12px; letter-spacing:0.06em; word-break:break-all; line-height:1.8; min-height:44px; }
+  .hashrow .axis{ color:var(--dim); }
+  .hashrow .h{ color:#cfe0ff; } .hashrow .h.ok{ color:var(--teal); } .hashrow .h.bad{ color:var(--sword); text-decoration:underline; }
+  .verdict{ margin-top:12px; font-size:11.5px; line-height:1.6; padding:10px 13px; border-radius:9px; border:1px dashed var(--line); color:#aeb8ee; }
+  .verdict.ok{ border-style:solid; border-color:rgba(127,255,212,0.4); color:#d6fff0; background:rgba(127,255,212,0.06); }
+  .verdict.bad{ border-style:solid; border-color:rgba(232,82,58,0.5); color:#ffd9d0; background:rgba(232,82,58,0.08); }
+  .verdict.name{ border-style:solid; border-color:rgba(255,213,170,0.4); color:var(--gold); background:rgba(255,170,90,0.06); }
+  .prov{ margin-top:14px; padding-top:12px; border-top:1px solid var(--line); font-size:11px; color:var(--dim); line-height:1.9; }
+  .prov b{ color:#cfe0ff; font-weight:500; }
+
+  /* movement 2 — constellate */
+  .ringwrap{ position:relative; width:100%; aspect-ratio:1; max-width:560px; margin:0 auto; }
+  canvas#ring{ width:100%; height:100%; display:block; cursor:crosshair; }
+  .inspect{ margin-top:12px; font-size:11px; line-height:1.8; color:var(--dim); min-height:54px; }
+  .inspect b{ color:#ffd6c7; font-weight:500; } .inspect .dims{ color:#cfe0ff; }
+  .glyphbar{ display:flex; align-items:center; gap:8px; margin-top:10px; font-size:10px; color:var(--dim); }
+  .glyphscale{ flex:1; height:8px; border-radius:5px; border:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(20,26,61,0.2), #9fc0ff 55%, #fff); }
+
+  /* movement 3 — compare */
+  .compare{ max-width:1180px; margin:26px auto 0; }
+  .cgrids{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:14px; }
+  @media (max-width:720px){ .cgrids{ grid-template-columns:1fr; } }
+  .cg{ }
+  .cg .cgname{ font-size:10.5px; color:var(--dim); margin-bottom:8px; letter-spacing:0.03em; } .cg .cgname b{ color:#ffd6c7; font-weight:500; }
+  .cg .kshort{ font-size:9.5px; color:#9aa6d6; word-break:break-all; margin-bottom:10px; }
+  .grid8{ display:grid; grid-template-columns:repeat(8,1fr); gap:5px; }
+  .gcell{ position:relative; aspect-ratio:1; border-radius:6px; border:1px solid rgba(255,255,255,0.06);
+    display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.8); }
+  .gcell.diff{ outline:2px solid var(--sword); outline-offset:1px; animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 4px 1px rgba(232,82,58,0.3);} 50%{ box-shadow:0 0 14px 4px rgba(232,82,58,0.65);} }
+  /* the overlap lattice — where the two keys touch the same ground (content, not hash) */
+  .ovkey{ display:flex; gap:16px; flex-wrap:wrap; margin:12px 0 10px; font-size:10.5px; color:var(--dim); align-items:center; }
+  .ovkey .chip{ display:flex; align-items:center; gap:6px; }
+  .ovdot{ width:10px; height:10px; border-radius:3px; }
+  .gcell.ov-both{ background:rgba(127,255,212,0.30); outline:1px solid rgba(127,255,212,0.65); box-shadow:0 0 12px rgba(127,255,212,0.4); color:#d6fff0; }
+  .gcell.ov-a{ background:rgba(232,82,58,0.22); outline:1px solid rgba(232,82,58,0.5); color:#ffd9d0; }
+  .gcell.ov-b{ background:rgba(159,192,255,0.22); outline:1px solid rgba(159,192,255,0.55); color:#dbe6ff; }
+  .gcell.ov-none{ background:rgba(120,140,220,0.05); color:rgba(124,134,184,0.45); }
+  .ovsum{ font-size:11px; color:#cdd6f5; margin-left:auto; } .ovsum b{ color:#7fffd4; font-weight:500; }
+  .difflist{ margin-top:16px; font-size:11.5px; line-height:1.8; color:#cdd6f5; }
+  .difflist b{ color:#ffd6c7; font-weight:500; } .difflist .same{ color:var(--teal); }
+
+  /* grounding legend */
+  .legend{ max-width:1180px; margin:24px auto 0; background:var(--glass); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(12px); overflow:hidden; }
+  .legend>summary{ list-style:none; cursor:pointer; padding:16px 20px; font-size:12px; letter-spacing:0.06em; color:#ffd6c7; }
+  .legend>summary::-webkit-details-marker{ display:none; }
+  .legend>summary::before{ content:'▸ '; color:var(--dim); } .legend[open]>summary::before{ content:'▾ '; }
+  .legend-body{ padding:0 20px 20px; }
+  .legend-grid{ display:grid; grid-template-columns:auto 1fr; gap:10px 18px; font-size:12px; }
+  .legend-grid .lk{ color:#ffd6c7; white-space:nowrap; font-weight:500; }
+  .legend-grid .lv{ color:#cdd6f5; line-height:1.6; } .legend-grid .lv b{ color:#ffd6c7; font-weight:500; }
+  .legend a{ color:var(--sword); }
+  @media (max-width:560px){ .legend-grid{ grid-template-columns:1fr; gap:2px 0; } .legend-grid .lk{ margin-top:10px; } }
+  footer{ max-width:1180px; margin:30px auto 0; font-size:10.5px; color:rgba(124,134,184,0.7); line-height:1.7; }
+  footer b{ color:#aeb8ee; font-weight:500; } footer code{ color:#aeb8ee; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="eyebrow"><span>soulbis.com/sigil · the third projection · beneath the lattice</span>
+      <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a><a class="navbtn" href="/skye" title="the night of many keys">🌌 /skye</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
+    <h1>The Sigil</h1>
+    <p class="lede">Your <b>City Key 🗝️</b>, read three ways. <b>① Derive</b> — its name, the <b>κ</b> = <code>sha256:H(canonical form)</code>, recomputed from its bytes and checked, in the open. <b>② Constellate</b> — the name drawn: <b>64 hash glyphs, one per vertex</b>. <b>③ Compare</b> — two keys side by side. <b>Identity is content, not location.</b> Full grounding in the 📖 legend below.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="sect">① Derive — verification is re-derivation</div>
+      <p class="explain">The key's exact bytes, then their SHA-256 typed out against the stamped κ. <b>Teal</b> = it is what it says · <b>coral</b> = it isn't · no κ yet = the key learns its name here.</p>
+      <div class="bar">
+        <button id="impBtn" class="btn">⬆ Import City Key</button>
+        <button id="dfltBtn" class="btn">🗝️ the default key</button>
+        <input type="file" id="impFile" accept="application/json,.json,image/png,.png" hidden>
+      </div>
+      <div class="keyname" id="keyName">no key loaded — import one, or summon the default</div>
+      <div class="canon-meta" id="canonMeta"></div>
+      <div class="canon" id="canonBox">the canonical form will appear here — keys sorted recursively, no whitespace, the κ field excluded from its own preimage.</div>
+      <div class="canon-meta" style="margin-top:10px">↓ SHA-256</div>
+      <div class="hashrow" id="hashRow"><span class="axis">sha256:</span><span class="h" id="hashHex"></span></div>
+      <div class="verdict" id="verdict">Law L5: a κ-label is never trusted, only re-derived. Import a key to watch its name be earned.</div>
+      <div class="prov" id="prov"></div>
+      <div class="bar" style="margin-top:10px">
+        <button id="vpktBtn" class="btn" title="load a spellweb.bearer.packets bundle (⬇ proof packets, from agentprivacy /runecraft) — each packet's proof re-derives (Law L5) and the Merkle root is matched against this key's packets digest">🧾 verify packets bundle</button>
+        <input type="file" id="vpktFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="verdict" id="pktVerdict" style="display:none"></div>
+    </div>
+
+    <div class="card">
+      <div class="sect">② Constellate — the κ as a lighting of the 64</div>
+      <p class="explain"><b>Colour</b> = your palette (chosen) · <b>shape</b> = your stance + earned relief (carried) · <b>light</b> = the hash (derived — one edit moves ~60 of 64 glyphs). Click a vertex to read it. 📸 exports a PNG that <i>carries the key</i>.</p>
+      <div class="ringwrap"><canvas id="ring"></canvas></div>
+      <div class="glyphbar"><span>glyph 0 · dark</span><div class="glyphscale"></div><span>glyph f · full</span></div>
+      <div class="inspect" id="inspect">hover or click the ring — each vertex shows its glyph, its six named dimensions, and its ⚔️ neg / 🧙 bnot / 😊 succ.</div>
+      <div class="bar" style="margin:12px 0 0">
+        <button id="snapBtn" class="btn" title="the image carries the full City Key in a PNG tEXt chunk — import it on /star, /lattice, or here and the key unfolds back out">📸 export sigil PNG · carries the key</button>
+        <span class="keyname" id="ringCap"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare card">
+    <div class="sect">③ Compare — two contents, two identities</div>
+    <p class="explain">Between two bearers the κs will <i>always</i> differ — that's identity working, not news. <b>The discovery is the common ground</b>: the ∩ lattice leads — vertices both keys have walked (lit · described · poured · proven). Drop a second key (JSON or sigil PNG) into B. Below the ∩: each sigil in its own palette (the pulse = identity divergence), then the exact diverging fields. <i>Today, compare reads both keys in full; the designed next rung discovers the ∩ with zero knowledge — learn what's shared, reveal nothing else.</i></p>
+    <div class="bar">
+      <button id="impBtn2" class="btn">⬆ import a second key</button>
+      <input type="file" id="impFile2" accept="application/json,.json,image/png,.png" hidden>
+      <span class="keyname" id="keyName2">slot B empty — a key JSON or a sigil PNG (the image carries the key)</span>
+    </div>
+    <div id="ovwrap" style="display:none">
+      <div class="sect" style="margin-top:6px">A ∩ B — common ground · where the two keys touch the same territory</div>
+      <div class="ovkey">
+        <span class="chip"><span class="ovdot" style="background:rgba(127,255,212,0.85)"></span>both walked it</span>
+        <span class="chip"><span class="ovdot" style="background:rgba(232,82,58,0.8)"></span>only A</span>
+        <span class="chip"><span class="ovdot" style="background:rgba(159,192,255,0.85)"></span>only B</span>
+        <span class="chip"><span class="ovdot" style="background:rgba(120,140,220,0.15)"></span>neither</span>
+        <span class="ovsum" id="ovsum"></span>
+      </div>
+      <div class="grid8" id="gridOv"></div>
+    </div>
+    <div class="cgrids" id="cgrids" style="display:none">
+      <div class="cg"><div class="cgname">A · <b id="cgnA"></b></div><div class="kshort" id="kshortA"></div><div class="grid8" id="gridA"></div></div>
+      <div class="cg"><div class="cgname">B · <b id="cgnB"></b></div><div class="kshort" id="kshortB"></div><div class="grid8" id="gridB"></div></div>
+    </div>
+    <div class="difflist" id="difflist"></div>
+  </div>
+
+  <details class="legend">
+    <summary>📖 The grounding — κ ↔ the Privacy Value Model</summary>
+    <div class="legend-body">
+      <div class="legend-grid">
+        <span class="lk">the correspondence</span><span class="lv">SHA-256 = 256 bits = <b>64 hex glyphs</b> — exactly 4 bits per vertex of ℒ = ℤ/64ℤ. No padding, no remainder: the address space of the hash and the address space of sovereignty share a syllabary.</span>
+        <span class="lk">the six dimensions</span><span class="lv">each vertex is a 6-bit posture across <b>d₁ 🛡️ Protection · d₂ 🤝 Delegation · d₃ 📜 Memory · d₄ 🔗 Connection · d₅ ⚡ Computation · d₆ 💎 Value</b> (PVM V5.4 §12.6; vertex 63 = 111111 = full sovereignty).</span>
+        <span class="lk">C85 · the bridge</span><span class="lv">the dimensions pair onto the three-axis gate Φ<sub>v5</sub>: <b>Protection+Delegation → Σ (Φ_agent)</b> · <b>Memory+Value → Δ (Φ_data)</b> · <b>Connection+Computation → Γ (Φ_inference)</b> — the lattice and the equation are one geometry <i>[conjecture]</i>.</span>
+        <span class="lk">κ-label · Law L5</span><span class="lv"><code>sha256:H(canonical form)</code> — a UOR-ADDR content address; the sha256 axis is canon upstream. Never trusted, always <b>re-derived</b>: movement ① is the law performed.</span>
+        <span class="lk">the sigil</span><span class="lv">glyph intensity 0→f lights each vertex; colour follows the key's own palette by stratum. The sigil is always drawn from the <b>re-derived</b> κ — the content's true name — never from the stamped claim. Change one description and the whole constellation reshapes — <b>the key is its content</b>.</span>
+        <span class="lk">the carrier</span><span class="lv">the exported PNG holds the full City Key (base64 JSON in a PNG <code>tEXt</code> chunk, keyword <code>cityKey</code>) with its κ stamped. Import the <i>image</i> on /star, /lattice, or here — the key unfolds back out, and movement ① re-derives its κ from what the image carried.</span>
+        <span class="lk">the shape</span><span class="lv">the second chosen layer: the key's <code>geometry</code> field carries the manifold parameters from /star's Lattice Console (ε · m · n · det(Σ) · ⚔️:🧙 — reserved in the 2026-05-27 interop, filled 2026-06-10). The ring here <b>wears</b> the ε·cos(nθ) envelope of r(θ,φ) — at n = 6, six petals, one per dimension. Shape is content: change it and the κ — and the whole sigil — relight.</span>
+        <span class="lk">the engraving · SHAPE-1.5</span><span class="lv">the petals are the stance you <i>chose</i>; the relief on them is the work you <i>did</i>. Each vertex's radius is raised by its compression weight — w(x) = 0.50·focus + 0.25·lit + 0.15·witness-proven + 0.10·described — a <b>pure function of the key's content</b>, so the same key (JSON, or carried in anyone's sigil PNG) makes the <b>same shape everywhere</b>. The evolution path (measured figures: agent overlap → det(Σ), visibility ratios → petal amplitudes, zkp → the ⚡ petal) is the plan doc <code>PLAN_KEY_EVOLUTION_MEASURED_GEOMETRY_2026-06-10.md</code>.</span>
+        <span class="lk">the figures · FIG-2.0</span><span class="lv">when a key carries a measured <code>figures</code> block (agent-data <b>overlap</b> · ⚔️:🧙 <b>ratio</b> · per-dimension <b>visibility</b> · <b>zkp</b> counts), shape stops being chosen: /star derives the manifold from it (ε = 0.6·(1−overlap) · det(Σ) = overlap), each dimension's petal here scales by its visibility ratio, and proof activity floors the ⚡ petal. Figures are content — they move the κ.</span>
+        <span class="lk">the lineage · prior</span><span class="lv">an <i>evolved</i> export stamps <code>prior</code> = the κ of the key it grew from — keys form a hash chain (C87: <i>the key accumulates</i>). An unchanged re-export keeps its prior and its κ unchanged: lineage marks evolution, not circulation.</span>
+        <span class="lk">vocabulary</span><span class="lv"><b>glyph</b> — one hex character at one vertex · <b>rune-row</b> — the 64 in succ order · <b>sigil</b> — the whole lighting, the key's face. (The City's runes keep their own register; the sigil is the Swordsman's seal.)</span>
+      </div>
+      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V5.4 / V6) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
+    </div>
+  </details>
+
+  <footer>
+    <b>The sigil PNG carries the key</b> — the full City Key JSON rides inside the image (PNG <code>tEXt</code> chunk, keyword <code>cityKey</code>), with the κ caption visible in the pixels. Share the picture and you have shared the key; import it on /star, /lattice, or here and it unfolds back out. <b>Live link:</b> on one origin, a key imported on any page cascades to the others over <code>BroadcastChannel('agentprivacy-succ')</code>; the succ comet's vertex pings the ring. <b>Older keys</b> carry no κ — they derive one here: the key learns its name.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  const BITS=6, N=64;
+  const neg=x=>(N-x)%N, bnot=x=>(N-1)-x, succ=x=>(x+1)%N;
+  const pc=x=>{let c=0;while(x){c+=x&1;x>>=1;}return c;};
+  const b6=x=>x.toString(2).padStart(BITS,'0');
+  const esc=s=>String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  // PVM V5.4 §12.6 — bit i (LSB-first) = dimension d(i+1)
+  const DIMS=['🛡️ Protection','🤝 Delegation','📜 Memory','🔗 Connection','⚡ Computation','💎 Value'];
+
+  // ---- κ-label (UOR-ADDR · sha256 axis) — same canon as /star + /lattice
+  function canonicalJSON(v){ if(v===null||typeof v!=='object') return JSON.stringify(v);
+    if(Array.isArray(v)) return '['+v.map(canonicalJSON).join(',')+']';
+    return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalJSON(v[k])).join(',')+'}'; }
+  function kappaLabel(obj){ if(!(window.crypto&&crypto.subtle&&crypto.subtle.digest)) return Promise.resolve(null);
+    const c={...obj}; delete c.kappa;
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalJSON(c)))
+      .then(buf=>'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''))
+      .catch(()=>null); }
+  // ---- packet verifier (the Tracing Protocol · same canon, `proof` excluded instead of `kappa`)
+  function sha256hex(str){ if(!(window.crypto&&crypto.subtle&&crypto.subtle.digest)) return Promise.resolve(null);
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(str))
+      .then(buf=>'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')).catch(()=>null); }
+  // a packet's proof re-derives over its canonical form with `proof` excluded — the same Law L5 as κ
+  function derivePacketProof(pkt){ const c={...pkt}; delete c.proof; return sha256hex(canonicalJSON(c)); }
+  // Merkle root of packet proofs: leaves sorted lexicographically · sha256(left|right) · odd promoted.
+  // Conformance vector: the three leaves sha256(utf8 "packet-alpha/beta/gamma") → root
+  // sha256:07f20f689c8bef2d8a9a2a71d94e7014ea8398cc603b0ff72dadba5c517983d1
+  async function packetsDigest(proofs){ let level=proofs.filter(p=>typeof p==='string'&&p.length>0).sort();
+    if(!level.length) return null;
+    while(level.length>1){ const next=[];
+      for(let i=0;i<level.length;i+=2){ if(i+1<level.length){ const h=await sha256hex(level[i]+'|'+level[i+1]); if(!h) return null; next.push(h); } else next.push(level[i]); }
+      level=next; }
+    return level[0]; }
+  // verify a spellweb.bearer.packets bundle: re-derive each proof (Law L5), recompute the
+  // Merkle root, and match it against the loaded key's packets.root. Returns verdict HTML.
+  async function verifyPacketsBundle(json){
+    if(!json||typeof json!=='object'||json.kind!=='spellweb.bearer.packets'||!Array.isArray(json.packets))
+      return '⚠ not a packets bundle — expects a <b>spellweb.bearer.packets</b> JSON (⬇ proof packets, from agentprivacy /runecraft).';
+    const pkts=json.packets; if(!pkts.length) return '⚠ the bundle carries no packets.';
+    let verified=0; const tampered=[];
+    for(const p of pkts){ if(!p||typeof p.proof!=='string') continue;
+      const d=await derivePacketProof(p); if(d===p.proof) verified++; else tampered.push(p.shopHref||'?'); }
+    const root=await packetsDigest(pkts.map(p=>p&&p.proof).filter(Boolean));
+    let out='🧾 <b>'+pkts.length+'</b> packets · <b class="'+(verified===pkts.length?'ok':'bad')+'">'+verified+'/'+pkts.length+'</b> re-derive (Law L5)'+(tampered.length?' · ⚠ '+tampered.length+' tampered':'')+'<br>';
+    out+='digest 🌳: <b>'+esc(String(root||'').slice(0,19))+'…</b>';
+    const claimed=(A&&A.packets&&typeof A.packets.root==='string')?A.packets.root:null;
+    if(claimed){ out += (root===claimed)
+      ? ' · <b class="ok">✓ matches this key</b> — the key carries exactly this set of proofs.'
+      : ' · <b class="bad">✗ mismatch</b> — this bundle is not the set the key digests ('+(A.packets.count|0)+' expected).'; }
+    else out+=' · <span style="color:var(--dim)">no key with a packets digest loaded — import a /city key to match against.</span>';
+    return out; }
+
+  // ---- the sigil PNG carries the key: full City Key JSON (base64) in a PNG tEXt chunk,
+  // keyword 'cityKey', inserted before IEND. The image IS the artifact — import it anywhere.
+  function b2s(a){ let s=''; for(let i=0;i<a.length;i+=8192) s+=String.fromCharCode.apply(null,a.subarray(i,i+8192)); return s; }
+  const CRCT=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1); t[n]=c; } return t; })();
+  function crc32(bytes){ let c=0xffffffff; for(let i=0;i<bytes.length;i++) c=CRCT[(c^bytes[i])&0xff]^(c>>>8); return (c^0xffffffff)>>>0; }
+  function pngEmbedKey(dataURL,cfg){ const bin=atob(dataURL.slice(dataURL.indexOf(',')+1));
+    const png=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) png[i]=bin.charCodeAt(i);
+    const payload=btoa(b2s(new TextEncoder().encode(JSON.stringify(cfg))));
+    const kw='cityKey', data=new Uint8Array(kw.length+1+payload.length);
+    for(let i=0;i<kw.length;i++) data[i]=kw.charCodeAt(i); data[kw.length]=0;
+    for(let i=0;i<payload.length;i++) data[kw.length+1+i]=payload.charCodeAt(i);
+    const chunk=new Uint8Array(12+data.length), dv=new DataView(chunk.buffer);
+    dv.setUint32(0,data.length); chunk[4]=0x74;chunk[5]=0x45;chunk[6]=0x58;chunk[7]=0x74; chunk.set(data,8);
+    const crcBuf=new Uint8Array(4+data.length); crcBuf.set(chunk.subarray(4,8),0); crcBuf.set(data,4);
+    dv.setUint32(8+data.length,crc32(crcBuf));
+    const iend=png.length-12; // canvas PNGs end with the 12-byte IEND chunk
+    const out=new Uint8Array(png.length+chunk.length);
+    out.set(png.subarray(0,iend),0); out.set(chunk,iend); out.set(png.subarray(iend),iend+chunk.length);
+    return new Blob([out],{type:'image/png'}); }
+  function pngExtractKey(buf){ const u=new Uint8Array(buf);
+    if(u.length<20||u[0]!==0x89||u[1]!==0x50||u[2]!==0x4e||u[3]!==0x47) return null;
+    let p=8;
+    while(p+12<=u.length){ const len=((u[p]<<24)|(u[p+1]<<16)|(u[p+2]<<8)|u[p+3])>>>0;
+      const type=String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+      if(type==='tEXt'){ const data=u.subarray(p+8,p+8+len), z=data.indexOf(0);
+        if(z>0&&b2s(data.subarray(0,z))==='cityKey'){ try{
+          const bin=atob(b2s(data.subarray(z+1))), bytes=new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; } } }
+      if(type==='IEND') break; p+=12+len; }
+    return null; }
+  function readKeyFile(file,cb,onErr){ const r=new FileReader();
+    r.onload=()=>{ try{ const cfg=pngExtractKey(r.result)||JSON.parse(new TextDecoder().decode(r.result)); if(!cfg||typeof cfg!=='object')throw 0; cb(cfg); }catch(e){ onErr(); } };
+    r.readAsArrayBuffer(file); }
+
+  // ---- palette (follows the loaded key; defaults = artificial, must match /star + /lattice)
+  const pal={ cool:'#141a3d', warm:'#f0eee8', sword:'#e8523a', mage:'#4dd9e8' };
+  function hex2hsl(hex){ let r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+    const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2; let h=0,s=0;
+    if(mx!==mn){const d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);
+      h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4; h/=6;} return {h,s,l}; }
+  let COOL=hex2hsl(pal.cool), WARM=hex2hsl(pal.warm);
+  function grad(t,alpha){ t=Math.max(0,Math.min(1,t));
+    let dh=WARM.h-COOL.h; if(dh>0.5)dh-=1; if(dh<-0.5)dh+=1;
+    const h=(COOL.h+dh*t+1)%1, s=Math.min(1,COOL.s+(WARM.s-COOL.s)*t+0.06*Math.sin(t*Math.PI)), l=Math.min(1,COOL.l+(WARM.l-COOL.l)*t+0.04*Math.sin(t*Math.PI));
+    return `hsla(${(h*360).toFixed(0)},${(s*100).toFixed(0)}%,${(l*100).toFixed(0)}%,${alpha===undefined?1:alpha})`; }
+  function applyPal(p){ ['cool','warm','sword','mage'].forEach(k=>{ if(p&&typeof p[k]==='string') pal[k]=p[k]; });
+    COOL=hex2hsl(pal.cool); WARM=hex2hsl(pal.warm); }
+
+  // ---- state: slot A (the sigil) + slot B (comparison)
+  let A=null, A_KAPPA=null, B=null, B_KAPPA=null, sel=-1, ping=-1, pingT=0;
+
+  // ---- SHAPE-1.5 · the compression shape (see PLAN_KEY_EVOLUTION_MEASURED_GEOMETRY_2026-06-10.md)
+  // w(x) = min(1, 0.50·focus_x/max(focus) + 0.25·[lit] + 0.15·proven_x/focus_x + 0.10·[described])
+  // Pure function of canonical key content — same key (JSON or carried in a sigil PNG) ⇒ same shape, everywhere.
+  let W=new Array(N).fill(0);
+  function computeWeights(cfg){ W=new Array(N).fill(0); if(!cfg||typeof cfg!=='object') return;
+    const focus=cfg.focus&&typeof cfg.focus==='object'?cfg.focus:{};
+    const spent=cfg.witness&&cfg.witness.spent&&typeof cfg.witness.spent==='object'?cfg.witness.spent:{};
+    const lit=new Set(Array.isArray(cfg.lit)?cfg.lit:[]);
+    const desc=cfg.descriptions&&typeof cfg.descriptions==='object'?cfg.descriptions:{};
+    let maxF=0; for(const k in focus){ const f=+focus[k]; if(f>maxF) maxF=f; }
+    for(let x=0;x<N;x++){ let w=0;
+      const f=+focus[x]||0; if(maxF>0&&f>0) w+=0.50*(f/maxF);
+      if(lit.has(x)) w+=0.25;
+      if(f>0){ const p=Math.min(+spent[x]||0,f); w+=0.15*(p/f); }
+      if(desc[x]) w+=0.10;
+      W[x]=Math.min(1,w); } }
+
+  // the default key — the three pages' shared canon; descriptions for the origin and the crown
+  function defaultKey(){ return { name:'the default city key', version:1,
+    palette:{...pal},
+    descriptions:{ '0':'The unguarded origin — no dimension held, fully legible.', '63':'Full sovereignty — all six dimensions held; the Swordsman’s reflection of the origin.' } }; }
+
+  // ---- movement ① — derivation theater
+  const $=id=>document.getElementById(id);
+  let animT=null;
+  function loadKey(cfg, fromRemote){ if(!cfg||typeof cfg!=='object') return;
+    A=cfg; applyPal(cfg.palette); computeWeights(cfg);
+    $('keyName').innerHTML='key: <b>'+esc(cfg.name||'imported key')+'</b>'+identHtml(cfg.identity);
+    const c={...cfg}; delete c.kappa; const canon=canonicalJSON(c);
+    $('canonBox').textContent=canon;
+    $('canonMeta').textContent=new TextEncoder().encode(canon).length+' canonical bytes · keys sorted recursively · no whitespace · κ excluded';
+    $('prov').innerHTML=provHtml(cfg);
+    kappaLabel(cfg).then(k=>{ A_KAPPA=k; if(!k){ $('verdict').textContent='crypto.subtle unavailable — serve over localhost or https to derive.'; drawRing(); return; }
+      animateHash(k.slice(7), cfg.kappa);
+      drawRing(); buildCompare(); });
+    if(!fromRemote&&bc){ try{ bc.postMessage({config:cfg,src:'sigil'}); }catch(e){} } }
+  function animateHash(hex, claimed){ const el=$('hashHex'), verdict=$('verdict'); el.innerHTML=''; verdict.className='verdict'; verdict.textContent='deriving…';
+    if(animT) clearInterval(animT); let i=0;
+    const claimedHex = (typeof claimed==='string'&&claimed.startsWith('sha256:')) ? claimed.slice(7) : null;
+    animT=setInterval(()=>{ if(i>=hex.length){ clearInterval(animT); animT=null; finishVerdict(hex,claimedHex); return; }
+      const ch=hex[i], ok=claimedHex?(claimedHex[i]===ch):null;
+      const sp=document.createElement('span'); sp.className='h'+(ok===null?'':(ok?' ok':' bad')); sp.textContent=ch; el.appendChild(sp); i++; },22); }
+  function finishVerdict(hex, claimedHex){ const v=$('verdict');
+    if(!claimedHex){ v.className='verdict name'; v.innerHTML='🪬 this key carried no κ — it learns its name here: <b>sha256:'+hex.slice(0,16)+'…</b> (stamped on its next export from /star or /lattice).'; return; }
+    if(claimedHex===hex){ v.className='verdict ok'; v.innerHTML='✓ <b>κ verified</b> — the label re-derives from the content, byte for byte. The key is what it says.'; }
+    else { let d=0; for(let i=0;i<64;i++) if(claimedHex[i]!==hex[i]) d++;
+      v.className='verdict bad'; v.innerHTML='⚠ <b>κ mismatch</b> — the content does not say what the label claims ('+d+' of 64 glyphs diverge, underlined above). Either the content moved after stamping, or the label lies.'; } }
+  function identHtml(id){ if(!id||typeof id!=='object') return ''; const bits=[];
+    if(id.displayName)bits.push(esc(id.displayName)); if(id.trustTier)bits.push('⚔️ '+esc(id.trustTier));
+    return bits.length?' <span style="color:var(--dim)">· '+bits.join(' · ')+'</span>':''; }
+  function provHtml(cfg){ const rows=[];
+    rows.push('<b>'+Object.keys(cfg.descriptions||{}).length+'</b> described · <b>'+((cfg.lit&&cfg.lit.length)||0)+'</b> lit ✦ · <b>'+Object.keys(cfg.focus||{}).length+'</b> poured 🪢');
+    if(cfg.geometry&&typeof cfg.geometry==='object'){ const g=cfg.geometry, PHI=(1+Math.sqrt(5))/2,
+        sm=+g.smRatio, smTxt=Number.isFinite(sm)?(Math.abs(sm-PHI)<0.02?'φ '+sm.toFixed(3):sm.toFixed(3)):'—';
+      rows.push('shape: ε <b>'+(+g.eps||0).toFixed(3)+'</b> · m <b>'+(g.m|0)+'</b> · n <b>'+(g.n|0)+'</b> · det(Σ) <b>'+(+g.core||0).toFixed(2)+'</b> · ⚔️:🧙 <b>'+smTxt+'</b> — the ring wears it'); }
+    if(cfg.trace) rows.push('trace: <b>'+(cfg.trace.laps||0)+'</b> laps · '+(cfg.trace.seconds||0)+'s succ · tour '+(cfg.trace.tourSeconds||0)+'s');
+    if(cfg.witness) rows.push('witness: '+(cfg.witness.complete?'<b>complete ✓</b>':'partial')+' · '+(cfg.witness.at?esc(cfg.witness.at):''));
+    if(cfg.figures&&typeof cfg.figures==='object'){ const f=cfg.figures, parts=[],
+        vis=Array.isArray(f.visibility)?f.visibility.map(v=>(+v||0).toFixed(2)).join(' '):null;
+      if(Number.isFinite(+f.overlap)) parts.push('overlap <b>'+(+f.overlap).toFixed(2)+'</b>');
+      if(Number.isFinite(+f.ratio)) parts.push('⚔️:🧙 <b>'+(+f.ratio).toFixed(3)+'</b>');
+      if(vis) parts.push('visibility <b>'+vis+'</b>');
+      if(f.zkp) parts.push('⚡ <b>'+(f.zkp.verified|0)+'/'+(f.zkp.made|0)+'</b> proven');
+      rows.push('figures 📐 measured ('+esc(f.shapeCanon||'FIG-2.0')+'): '+(parts.join(' · ')||'—')); }
+    if(cfg.packets&&typeof cfg.packets==='object') rows.push('packets 🧾: <b>'+(cfg.packets.count|0)+'</b> trust-task proofs · root <b title="'+esc(String(cfg.packets.root||''))+'">'+esc(String(cfg.packets.root||'').slice(0,15))+'…</b>');
+    if(typeof cfg.prior==='string') rows.push('lineage 🔗: descends from <b title="'+esc(cfg.prior)+'">'+esc(cfg.prior.slice(0,15))+'…</b>');
+    return rows.join('<br>'); }
+
+  // ---- movement ② — the ring (succ-wheel constellation)
+  const ring=$('ring'), rctx=ring.getContext('2d');
+  function glyphAt(x){ if(!A_KAPPA) return null; return parseInt(A_KAPPA[7+x],16); }
+  // the ring WEARS the key's shape: the ε·cos(nθ) envelope of r(θ,φ)=R+ε sin(mφ)cos(nθ)
+  // (n=6 → six petals, one per dimension), ENGRAVED per vertex by the SHAPE-1.5 weight —
+  // the petals are the stance you chose; the relief on them is the work you did.
+  function ringR(base,a,x){ let r=base;
+    const g=A&&A.geometry, f=A&&A.figures;
+    if(g&&typeof g==='object'){ const eps=Math.max(0,Math.min(0.6,+g.eps||0)), n=Math.round(Math.max(1,Math.min(10,+g.n||6)));
+      let amp=0.45*eps;
+      // FIG-2.0 — measured visibility scales each dimension's petal (petal i centred at θ = i·π/3):
+      // the rosette stops being symmetric and becomes a sovereignty profile
+      if(f&&Array.isArray(f.visibility)&&f.visibility.length===6){
+        const th=a+Math.PI/2, i=((Math.round(th/(Math.PI/3))%6)+6)%6, vi=+f.visibility[i];
+        if(Number.isFinite(vi)) amp*=Math.max(0,Math.min(1,vi)); }
+      r*=(1+amp*Math.cos(n*(a+Math.PI/2))); }
+    if(typeof x==='number'&&W[x]>0) r*=(1+0.18*W[x]);
+    return r; }
+  // the perturbed space must fit the canvas: scale the base radii by the worst-case
+  // deformation (envelope peak × heaviest engraving) so petals + rune-row never clip
+  function ringMaxFactor(){ let f=1; const g=A&&A.geometry, fg=A&&A.figures;
+    if(g&&typeof g==='object'){ const eps=Math.max(0,Math.min(0.6,+g.eps||0));
+      let vmax=1;
+      if(fg&&Array.isArray(fg.visibility)&&fg.visibility.length===6){ vmax=0;
+        for(const v of fg.visibility){ const n=+v; if(Number.isFinite(n)) vmax=Math.max(vmax,Math.max(0,Math.min(1,n))); } }
+      f*=(1+0.45*eps*vmax); }
+    let mw=0; for(let x=0;x<N;x++) if(W[x]>mw) mw=W[x];
+    if(mw>0) f*=(1+0.18*mw); return f; }
+  function ringDims(w,margin){ const fit=ringMaxFactor();
+    const Rt=Math.min(w*0.465,(w/2-margin)/fit), R=Rt*(0.40/0.465);
+    return {R,Rt}; }
+  function drawRing(){ const dpr=Math.min(window.devicePixelRatio||1,2), w=ring.clientWidth||520;
+    ring.width=w*dpr; ring.height=w*dpr; rctx.setTransform(dpr,0,0,dpr,0,0); rctx.clearRect(0,0,w,w);
+    const cx=w/2, cy=w/2, {R,Rt}=ringDims(w,14);
+    // faint succ track — follows the shape envelope
+    rctx.beginPath();
+    for(let i=0;i<=192;i++){ const a=(i/192)*Math.PI*2-Math.PI/2, rr=ringR(R,a);
+      const tx=cx+rr*Math.cos(a), ty=cy+rr*Math.sin(a); i?rctx.lineTo(tx,ty):rctx.moveTo(tx,ty); }
+    rctx.closePath(); rctx.strokeStyle='rgba(191,224,255,0.14)'; rctx.lineWidth=1; rctx.stroke();
+    // FIG-2.0 ⚡ petal — measured proof activity floors the Computation petal's brightness (d₅ · petal 4)
+    const zk=A&&A.figures&&A.figures.zkp&&typeof A.figures.zkp==='object'?A.figures.zkp:null;
+    const zfloor=zk?0.30+0.55*Math.min(1,(+zk.verified||0)/Math.max(1,+zk.made||0)):0;
+    for(let x=0;x<N;x++){ const a=(x/N)*Math.PI*2-Math.PI/2, rv=ringR(R,a,x), px=cx+rv*Math.cos(a), py=cy+rv*Math.sin(a);
+      const g=glyphAt(x), t=pc(x)/BITS;
+      let inten=g===null?0.3:(0.12+0.88*g/15); const rad=g===null?2.6:(2.2+5.2*g/15);
+      if(zk&&((Math.round((x/N*2*Math.PI)/(Math.PI/3))%6)+6)%6===4) inten=Math.max(inten,zfloor);
+      // glow
+      if(g!==null&&g>0){ const gr=rctx.createRadialGradient(px,py,0,px,py,rad*3.2);
+        gr.addColorStop(0,grad(t,0.5*inten)); gr.addColorStop(1,grad(t,0));
+        rctx.fillStyle=gr; rctx.beginPath(); rctx.arc(px,py,rad*3.2,0,Math.PI*2); rctx.fill(); }
+      rctx.fillStyle=grad(t,Math.max(0.18,inten)); rctx.beginPath(); rctx.arc(px,py,rad,0,Math.PI*2); rctx.fill();
+      if(sel===x){ rctx.strokeStyle='#fff'; rctx.lineWidth=1.5; rctx.beginPath(); rctx.arc(px,py,rad+3.5,0,Math.PI*2); rctx.stroke(); }
+      if(ping===x&&performance.now()-pingT<2400){ rctx.strokeStyle=pal.sword; rctx.lineWidth=1.5; rctx.beginPath(); rctx.arc(px,py,rad+6,0,Math.PI*2); rctx.stroke(); }
+      // glyph character on the outer rune-row
+      const rg=ringR(Rt,a,x), gx=cx+rg*Math.cos(a), gy=cy+rg*Math.sin(a);
+      rctx.font='10px "Spline Sans Mono",monospace'; rctx.textAlign='center'; rctx.textBaseline='middle';
+      rctx.fillStyle=g===null?'rgba(124,134,184,0.35)':grad(t,0.35+0.65*inten);
+      rctx.fillText(g===null?'·':g.toString(16),gx,gy); }
+    // ⚡ proof-count engraving at the Computation petal's tip
+    if(zk){ const za=(4*Math.PI/3)-Math.PI/2, zr=ringR(R,za)*0.80; // inside the dot ring — never clips the fitted canvas
+      rctx.font='10px "Spline Sans Mono",monospace'; rctx.textAlign='center'; rctx.textBaseline='middle';
+      rctx.fillStyle='rgba(255,214,199,0.9)'; rctx.fillText('⚡ '+(zk.verified|0)+'/'+(zk.made|0),cx+zr*Math.cos(za),cy+zr*Math.sin(za)); }
+    // centre — name + κ short
+    rctx.textAlign='center';
+    rctx.font='italic 300 22px Fraunces,serif'; rctx.fillStyle='#e8edff';
+    rctx.fillText(A?(A.name||'city key'):'no key',cx,cy-10);
+    rctx.font='10px "Spline Sans Mono",monospace'; rctx.fillStyle='rgba(124,134,184,0.9)';
+    rctx.fillText(A_KAPPA?(A_KAPPA.slice(0,23)+'…'):'import a key to constellate',cx,cy+12);
+    $('ringCap').textContent=A_KAPPA?('κ '+A_KAPPA.slice(0,23)+'…'):''; }
+  function ringVertexAt(ev){ const r=ring.getBoundingClientRect(), w=r.width, cx=w/2, cy=w/2, {R}=ringDims(w,14);
+    const mx=ev.clientX-r.left-cx, my=ev.clientY-r.top-cy, d=Math.hypot(mx,my);
+    if(d<R*0.5||d>R*1.6) return -1;
+    let a=Math.atan2(my,mx)+Math.PI/2; if(a<0)a+=Math.PI*2;
+    return Math.round(a/(Math.PI*2)*N)%N; }
+  function inspect(x){ if(x<0){ return; } sel=x; drawRing();
+    const g=glyphAt(x), held=[],open=[];
+    for(let b=0;b<BITS;b++) ((x>>b)&1?held:open).push(DIMS[b]);
+    $('inspect').innerHTML='vertex <b>'+x+'</b> · '+b6(x)+' · stratum '+pc(x)+
+      (g===null?'':' · glyph <b>'+g.toString(16)+'</b> ('+g+'/15)')+
+      (W[x]>0?' · engraving <b>'+W[x].toFixed(2)+'</b> 🪢':'')+
+      '<br><span class="dims">holds: '+(held.length?held.join(' · '):'nothing — the unguarded origin')+'</span>'+
+      '<br>⚔️ neg '+neg(x)+' · 🧙 bnot '+bnot(x)+' · 😊 succ '+succ(x); }
+  ring.addEventListener('mousemove',ev=>{ const x=ringVertexAt(ev); if(x>=0&&x!==sel) inspect(x); });
+  ring.addEventListener('click',ev=>{ const x=ringVertexAt(ev); if(x>=0){ inspect(x); if(bc){ try{ bc.postMessage({vertex:x,src:'sigil'}); }catch(e){} } } });
+  window.addEventListener('resize',drawRing);
+
+  // sigil PNG — self-describing: the κ caption is embedded
+  $('snapBtn').addEventListener('click',()=>{ if(!A_KAPPA) return;
+    const S=1024, cv=document.createElement('canvas'); cv.width=S; cv.height=S+70; const c2=cv.getContext('2d');
+    c2.fillStyle='#060812'; c2.fillRect(0,0,S,S+70);
+    // re-render at export size — wider canvas + fit-scaled radii so the perturbed space reflects fully
+    const cx=S/2, cy=S/2, {R,Rt}=ringDims(S,34);
+    for(let x=0;x<N;x++){ const a=(x/N)*Math.PI*2-Math.PI/2, rv=ringR(R,a,x), px=cx+rv*Math.cos(a), py=cy+rv*Math.sin(a);
+      const g=parseInt(A_KAPPA[7+x],16), t=pc(x)/BITS, inten=0.12+0.88*g/15, rad=4+9*g/15;
+      if(g>0){ const gr=c2.createRadialGradient(px,py,0,px,py,rad*3.2);
+        gr.addColorStop(0,grad(t,0.5*inten)); gr.addColorStop(1,grad(t,0));
+        c2.fillStyle=gr; c2.beginPath(); c2.arc(px,py,rad*3.2,0,Math.PI*2); c2.fill(); }
+      c2.fillStyle=grad(t,Math.max(0.18,inten)); c2.beginPath(); c2.arc(px,py,rad,0,Math.PI*2); c2.fill();
+      const rg=ringR(Rt,a,x);
+      c2.font='16px monospace'; c2.textAlign='center'; c2.textBaseline='middle';
+      c2.fillStyle=grad(t,0.35+0.65*inten); c2.fillText(g.toString(16),cx+rg*Math.cos(a),cy+rg*Math.sin(a)); }
+    c2.textAlign='center'; c2.font='italic 300 40px Fraunces,serif'; c2.fillStyle='#e8edff'; c2.fillText(A.name||'city key',cx,cy-14);
+    c2.font='15px monospace'; c2.fillStyle='rgba(174,184,238,0.95)'; c2.fillText('(⚔️ ⊥ ⿻ ⊥ 🧙) 😊',cx,cy+22);
+    c2.font='13px monospace'; c2.fillStyle='rgba(124,134,184,0.95)'; c2.fillText(A_KAPPA,S/2,S+34);
+    // the image carries the key: the exact content whose κ is shown, with that κ stamped
+    const carried={...A}; delete carried.kappa; if(A_KAPPA) carried.kappa=A_KAPPA;
+    const blob=pngEmbedKey(cv.toDataURL('image/png'),carried);
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='sigil-'+(A.name||'city-key').replace(/[^a-z0-9-]+/gi,'-').toLowerCase()+'.png';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); });
+
+  // ---- movement ③ — compare
+  // each grid renders in ITS OWN key's palette — B is B's voice, not A's
+  function palOf(cfg){ const d={cool:'#141a3d',warm:'#f0eee8',sword:'#e8523a',mage:'#4dd9e8'};
+    const p=cfg&&cfg.palette&&typeof cfg.palette==='object'?cfg.palette:{};
+    return { cool:typeof p.cool==='string'?p.cool:d.cool, warm:typeof p.warm==='string'?p.warm:d.warm,
+             sword:typeof p.sword==='string'?p.sword:d.sword, mage:typeof p.mage==='string'?p.mage:d.mage }; }
+  function gradWith(p){ const C=hex2hsl(p.cool), Wm=hex2hsl(p.warm);
+    return (t,alpha)=>{ t=Math.max(0,Math.min(1,t));
+      let dh=Wm.h-C.h; if(dh>0.5)dh-=1; if(dh<-0.5)dh+=1;
+      const h=(C.h+dh*t+1)%1, s=Math.min(1,C.s+(Wm.s-C.s)*t+0.06*Math.sin(t*Math.PI)), l=Math.min(1,C.l+(Wm.l-C.l)*t+0.04*Math.sin(t*Math.PI));
+      return `hsla(${(h*360).toFixed(0)},${(s*100).toFixed(0)}%,${(l*100).toFixed(0)}%,${alpha===undefined?1:alpha})`; }; }
+  // which vertices a key has actually touched (content, not hash): lit · described · poured · proven
+  function touched(cfg){ const out=new Array(N).fill(null); if(!cfg||typeof cfg!=='object') return out;
+    const desc=cfg.descriptions||{}, focus=cfg.focus||{}, spent=(cfg.witness&&cfg.witness.spent)||{};
+    const lit=new Set(Array.isArray(cfg.lit)?cfg.lit:[]);
+    for(let x=0;x<N;x++){ const tags=[];
+      if(lit.has(x)) tags.push('✦ lit');
+      if(desc[x]) tags.push('described');
+      if(+focus[x]>0) tags.push('🪢 '+(+focus[x])+' poured');
+      if(+spent[x]>0) tags.push('proven '+(+spent[x]));
+      out[x]=tags.length?tags:null; } return out; }
+  function buildGrid8(el,kappa,cfg){ el.innerHTML=''; const G=gradWith(palOf(cfg));
+    for(let x=0;x<N;x++){ const d=document.createElement('div'); d.className='gcell'; d.dataset.v=x;
+      const g=kappa?parseInt(kappa[7+x],16):0, t=pc(x)/BITS, inten=0.10+0.90*g/15;
+      d.style.background=G(t,inten); d.textContent=kappa?g.toString(16):''; d.title='vertex '+x+' · '+b6(x);
+      el.appendChild(d); } }
+  function buildOverlap(){ const TA=touched(A), TB=touched(B), el=$('gridOv'); el.innerHTML='';
+    let both=0,onlyA=0,onlyB=0;
+    for(let x=0;x<N;x++){ const d=document.createElement('div'); const a=TA[x],b=TB[x];
+      let cls='ov-none', mark='';
+      if(a&&b){ cls='ov-both'; mark='∩'; both++; }
+      else if(a){ cls='ov-a'; mark='a'; onlyA++; }
+      else if(b){ cls='ov-b'; mark='b'; onlyB++; }
+      d.className='gcell '+cls; d.textContent=mark||x;
+      d.title='vertex '+x+' · '+b6(x)+(a?'\nA: '+a.join(' · '):'\nA: —')+(b?'\nB: '+b.join(' · '):'\nB: —');
+      el.appendChild(d); }
+    $('ovsum').innerHTML='common ground <b>'+both+'</b> of 64 · only A '+onlyA+' · only B '+onlyB+' · untouched '+(N-both-onlyA-onlyB);
+    $('ovwrap').style.display='';
+    return {both,onlyA,onlyB}; }
+  function buildCompare(){ if(!(A_KAPPA&&B_KAPPA)) return;
+    $('cgrids').style.display='';
+    $('cgnA').textContent=A.name||'key A'; $('cgnB').textContent=B.name||'key B';
+    $('kshortA').textContent=A_KAPPA; $('kshortB').textContent=B_KAPPA;
+    buildGrid8($('gridA'),A_KAPPA,A); buildGrid8($('gridB'),B_KAPPA,B);
+    const ov=buildOverlap();
+    let dv=0;
+    for(let x=0;x<N;x++){ if(A_KAPPA[7+x]!==B_KAPPA[7+x]){ dv++;
+      $('gridA').children[x].classList.add('diff'); $('gridB').children[x].classList.add('diff'); } }
+    // field-level diff of the canonical contents
+    const fields=['name','palette','descriptions','lit','identity','trace','focus','witness'];
+    const diffs=[];
+    for(const f of fields){ const a=canonicalJSON(A[f]===undefined?null:A[f]), b=canonicalJSON(B[f]===undefined?null:B[f]);
+      if(a!==b) diffs.push(f); }
+    const da=A.descriptions||{}, db=B.descriptions||{};
+    const dvs=[...new Set([...Object.keys(da),...Object.keys(db)])].filter(k=>String(da[k]||'')!==String(db[k]||''));
+    $('difflist').innerHTML = A_KAPPA===B_KAPPA
+      ? '<span class="same">✓ identical κ — identical content. One identity, twice imported.</span>'
+      : '<span class="same">common ground: <b>'+ov.both+'</b> of 64</span> — territory both keys have walked (teal ∩ above). Two identities, one shared map.'+
+        '<br>divergence: <b>'+dv+'</b> of 64 sigil glyphs (pulsed below) · fields that differ: <b>'+(diffs.length?diffs.join(' · '):'none — formatting only')+'</b>'+
+        (dvs.length?('<br>descriptions diverging at vertices: <b>'+dvs.sort((a,b)=>a-b).join(', ')+'</b>'):'')+
+        '<br><span style="color:var(--dim)">the κ does not negotiate — but the ground can still be common.</span>'; }
+
+  // ---- import wiring + the default key
+  $('impBtn').addEventListener('click',()=>$('impFile').click());
+  $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    readKeyFile(f,cfg=>loadKey(cfg,false),()=>{ $('keyName').textContent='⚠ no City Key in this file (expects key JSON or a sigil PNG)'; }); e.target.value=''; });
+  $('dfltBtn').addEventListener('click',()=>loadKey(defaultKey(),false));
+  $('vpktBtn').addEventListener('click',()=>$('vpktFile').click());
+  $('vpktFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{ const pv=$('pktVerdict'); pv.style.display='block'; pv.className='verdict'; pv.textContent='verifying…';
+      let j=null; try{ j=JSON.parse(r.result); }catch(_){ }
+      Promise.resolve(j?verifyPacketsBundle(j):'⚠ could not parse JSON.').then(html=>{ pv.innerHTML=html; }); };
+    r.readAsText(f); e.target.value=''; });
+  $('impBtn2').addEventListener('click',()=>$('impFile2').click());
+  $('impFile2').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    readKeyFile(f,cfg=>{ B=cfg; $('keyName2').innerHTML='B: <b>'+esc(B.name||'imported key')+'</b>';
+      kappaLabel(B).then(k=>{ B_KAPPA=k; buildCompare(); }); },()=>{ $('keyName2').textContent='⚠ no City Key in this file (expects key JSON or a sigil PNG)'; }); e.target.value=''; });
+
+  // ---- live link (same origin) — keys cascade in; the succ comet pings the ring
+  let bc=null; try{ bc=new BroadcastChannel('agentprivacy-succ'); }catch(e){ bc=null; }
+  if(bc) bc.onmessage=ev=>{ const d=ev&&ev.data; if(!d||d.src==='sigil')return;
+    if(d.config) loadKey(d.config,true);
+    if(typeof d.vertex==='number'){ ping=d.vertex; pingT=performance.now(); drawRing(); setTimeout(drawRing,2500); } };
+
+  drawRing();
+})();
+</script>
+</body>
+</html>

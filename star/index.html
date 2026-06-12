@@ -17,7 +17,7 @@
       radial-gradient(120% 90% at 28% 18%, rgba(43,107,255,0.10), transparent 55%),
       radial-gradient(110% 80% at 78% 86%, rgba(255,77,61,0.09), transparent 55%),
       radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%); }
-  #scene{ position:fixed; inset:0; display:block; cursor:grab; }
+  #scene{ position:fixed; inset:0; width:100%; height:100%; display:block; cursor:grab; }
   #scene:active{ cursor:grabbing; }
 
   .masthead{ position:fixed; top:26px; left:30px; z-index:5; pointer-events:none; max-width:min(46vw,470px); }
@@ -178,8 +178,11 @@
     <div class="eq">r(θ,φ) = <b>R</b> + <b>ε</b> sin(<b>m</b>φ) cos(<b>n</b>θ)</div>
     <div class="sub">⚔️ neg · 🧙 bnot · neg∘bnot = succ<br>∂M: 96 edges encode 64 vertices · 96/64 = 1.5 = P<sup>1.5</sup><br>renders V(π,t) · Φ_agent shown · Φ_data ⊥ Φ_inference off-axis · full legend on /lattice</div>
     <div class="navrow">
-      <a class="navlink navlink--ghost" href="/">↖ soulbis.com</a>
-      <a id="toLattice" class="navlink" href="/lattice">↗ The 64 · Vertex Codex</a>
+      <a class="navlink navlink--ghost" href="/">↖ home</a>
+      <a id="toLattice" class="navlink" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a>
+      <a class="navlink" href="/sigil" title="the κ derivation — the key's 64-glyph constellation">🪬 /sigil</a>
+      <a class="navlink" href="/skye" title="the night of many keys">🌌 /skye</a>
+      <a class="navlink navlink--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a>
       <button id="focusBtn" class="navlink navlink--ghost" type="button" aria-label="enter focus mode" title="enter focus mode (presentation orbit) · F">🎬</button>
       <button id="snapBtn" class="navlink navlink--ghost" type="button" aria-label="save PNG snapshot" title="save PNG snapshot of the manifold">📸</button>
     </div>
@@ -255,6 +258,8 @@
       <div class="row etoggles">
         <label class="etoggle" title="show the 64 sovereignty vertices"><input type="checkbox" id="tLattice" checked><span class="ico">💠</span><span class="lbl2">64 vertices</span></label>
         <label class="etoggle" title="show the succ cycle (the comet wheel)"><input type="checkbox" id="tSucc" checked><span class="ico">🔄</span><span class="lbl2">succ cycle</span></label>
+        <label class="etoggle" title="⚔️ neg(x) = (64−x) mod 64 — Protect, the reflection: 31 chords; 0 and 32 are its fixed points"><input type="checkbox" id="tNeg"><span class="ico">⚔️</span><span class="lbl2">neg chords</span></label>
+        <label class="etoggle" title="🧙 bnot(x) = 63−x — Project, the antipode: 32 diameters; no fixed point — the perfect mirror"><input type="checkbox" id="tBnot"><span class="ico">🧙</span><span class="lbl2">bnot mirrors</span></label>
         <label class="etoggle" title="show the swordsman info popup"><input type="checkbox" id="tInfo" checked><span class="ico">ℹ️</span><span class="lbl2">info popup</span></label>
       </div>
 
@@ -263,7 +268,7 @@
       <div class="row keybar">
         <button id="impBtn" class="keybtn">⬆ Import</button>
         <button id="expBtn" class="keybtn">⬇ Export</button>
-        <input type="file" id="impFile" accept="application/json,.json" hidden>
+        <input type="file" id="impFile" accept="application/json,.json,image/png,.png" hidden>
       </div>
       <div class="keyname" id="keyName">no key loaded</div>
       <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
@@ -298,8 +303,8 @@
   </div>
 
   <div class="toast" id="toast">snapshot saved</div>
-  <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus</div>
-  <div class="focusbadge" id="focusbadge">focus mode · tap to exit · F / Esc</div>
+  <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus · <b style="color:#ffd6c7;font-weight:500">S</b> snap 📸</div>
+  <div class="focusbadge" id="focusbadge">focus mode · S snaps 📸 · tap to exit · F / Esc</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -319,7 +324,7 @@
     alien:{cool:'#7a1fff',warm:'#00e6a0',sword:'#c9b3ff',mage:'#7dffd0'}
   };
   const DEFAULTS={ eps:0.35,m:5,n:6,core:0.60,spin:0.30,mode:'both',edgeMode:'holo',
-    showLattice:true,showSucc:true,showInfo:true,glow:true,smRatio:1.0,cellOpacity:0.20, playing:true,speed:0.12,markerF:0,
+    showLattice:true,showSucc:true,showNeg:false,showBnot:false,showInfo:true,glow:true,smRatio:1.0,cellOpacity:0.20, playing:true,speed:0.12,markerF:0,
     coolHex:'#141a3d',warmHex:'#f0eee8',swordHex:'#e8523a',mageHex:'#4dd9e8' };
   const state=Object.assign({},DEFAULTS);
   // City Key payload (v1 additive fields): achievement-lit vertices + bearer identity.
@@ -410,9 +415,14 @@
   const E_FULL=[]; for(let x=0;x<N;x++)for(let b=0;b<BITS;b++){const y=x^(1<<b);if(y>x)E_FULL.push([x,y]);}
   // holographic boundary : 96 edges = succ cycle (64) + half-turn chords x..x+32 (32) -> 3-regular, toroidal class
   const E_HOLO=[]; for(let x=0;x<N;x++)E_HOLO.push([x,(x+1)%N]); for(let x=0;x<32;x++)E_HOLO.push([x,x+32]);
-  let latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell;
+  // function portraits — the two operators drawn whole, as chord-sets:
+  // ⚔️ neg(x) = (64−x) mod 64 (Protect · reflection): 31 chords, 0 and 32 fixed
+  // 🧙 bnot(x) = 63−x (Project · antipode): 32 diameters, no fixed point
+  const E_NEG=[]; for(let x=1;x<32;x++)E_NEG.push([x,N-x]);
+  const E_BNOT=[]; for(let x=0;x<32;x++)E_BNOT.push([x,63-x]);
+  let latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL;
   function buildLattice(){
-    [latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell].forEach(o=>{if(o){latticeGroup.remove(o);if(o.geometry)o.geometry.dispose();}});
+    [latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL].forEach(o=>{if(o){latticeGroup.remove(o);if(o.geometry)o.geometry.dispose();}});
     const vp=new Float32Array(N*3),vc=new Float32Array(N*3);
     for(let x=0;x<N;x++){vp[x*3]=VERTS[x][0];vp[x*3+1]=VERTS[x][1];vp[x*3+2]=VERTS[x][2];const c=LIT.has(x)?SWORD_COL:gradient(popcount(x)/BITS);vc[x*3]=c.r;vc[x*3+1]=c.g;vc[x*3+2]=c.b;}
     const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.BufferAttribute(vp,3)); pg.setAttribute('color',new THREE.BufferAttribute(vc,3));
@@ -430,7 +440,11 @@
       new THREE.LineBasicMaterial({color:MAGE_COL.getHex(),transparent:true,opacity:0.85,blending:THREE.AdditiveBlending,depthWrite:false})); latAnti.renderOrder=7;
     latCell=new THREE.Mesh(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(6*3*3),3)),
       new THREE.MeshPhysicalMaterial({transparent:true,opacity:state.cellOpacity,side:THREE.DoubleSide,flatShading:true,roughness:0.2,metalness:0.0,emissiveIntensity:0.6,depthWrite:false})); latCell.renderOrder=6;
-    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latPoints,latMarker);
+    const monoGeom=pairs=>{ const ep=[]; for(const[x,y]of pairs)ep.push(VERTS[x][0],VERTS[x][1],VERTS[x][2],VERTS[y][0],VERTS[y][1],VERTS[y][2]);
+      const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(ep,3)); return g; };
+    latNegL=new THREE.LineSegments(monoGeom(E_NEG),new THREE.LineBasicMaterial({color:SWORD_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latNegL.renderOrder=5;
+    latBnotL=new THREE.LineSegments(monoGeom(E_BNOT),new THREE.LineBasicMaterial({color:MAGE_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latBnotL.renderOrder=5;
+    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latNegL,latBnotL,latPoints,latMarker);
     applyLattice(); refreshHighlight();
   }
   function applyLattice(){ if(!latPoints)return; const on=state.showLattice;
@@ -438,6 +452,7 @@
     latFull.visible=on&&state.edgeMode==='full';
     latHolo.visible=on&&state.edgeMode==='holo';
     latSucc.visible=on&&state.showSucc; latMarker.visible=on&&state.showSucc;
+    latNegL.visible=on&&state.showNeg; latBnotL.visible=on&&state.showBnot;
     const paused=on&&state.showSucc&&!state.playing;
     latNbr.visible=paused; latAnti.visible=paused; latCell.visible=paused;
     document.getElementById('inspector').style.display=(on&&state.showSucc&&state.showInfo)?'':'none';
@@ -519,23 +534,113 @@
     ins.neg.textContent=`${neg(x)} · ${b6(neg(x))}`; ins.bnot.textContent=`${bnot(x)} · ${b6(bnot(x))}`; ins.succ.textContent=`${succ(x)} · ${b6(succ(x))}`; updateDesc(); }
 
   const toast=gid('toast'); let toastT;
+  function showToast(msg,ms){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),ms||2200); }
   function snapshot(){ renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
-    try{ const url=renderer.domElement.toDataURL('image/png'),a=document.createElement('a'); a.href=url;a.download=`star-manifold-vertex-${b6(currentVertex())}.png`;
-      document.body.appendChild(a);a.click();a.remove(); toast.textContent='snapshot saved · '+a.download; }
-    catch(err){ toast.textContent='snapshot blocked in preview — works when deployed'; }
+    let url=null;
+    try{ url=renderer.domElement.toDataURL('image/png'); }catch(err){ showToast('snapshot blocked in preview — works when deployed'); }
     renderer.setClearColor(0x000000,0); // restore transparent for live render (page backdrop shows through)
-    toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2200); }
+    if(!url) return;
+    const name=`star-manifold-vertex-${b6(currentVertex())}.png`;
+    const fin=(href,carried)=>{ const a=document.createElement('a'); a.href=href; a.download=name;
+      document.body.appendChild(a); a.click(); a.remove();
+      if(href.startsWith('blob:')) setTimeout(()=>URL.revokeObjectURL(href),1000);
+      showToast('snapshot saved · '+name+(carried?' · carries your City Key 🗝️':'')); };
+    if(!keyLoaded){ fin(url,false); return; }
+    // a loaded key rides inside the snapshot — the picture becomes the artifact
+    const cfg=buildExportCfg();
+    kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k;
+      try{ fin(URL.createObjectURL(pngEmbedKey(url,cfg)),true); }catch(e){ fin(url,false); } }); }
 
   function resize(){const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
   window.addEventListener('resize',resize);resize();
 
   // cross-page link + City Key (palette + per-vertex descriptions)
-  let _bc=null,_bcLast=-1,_bcMute=false, DESC={}, keyName='';
+  let _bc=null,_bcLast=-1,_bcMute=false, DESC={}, keyName='', FIGURES=null, PKTS=null, DID=null,
+      PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null;
+  // PKTS / DID — trust-task fields minted at /city (packets Merkle digest · bearer did):
+  // round-tripped untouched so a walk never destroys them (content — inside the κ preimage).
+  // PRIOR_IN / LOADED_* — the κ-chain: an unchanged re-export carries its prior through
+  // (byte-identical, same κ); evolved content chains `prior` to the loaded ancestor's κ (C87).
   try{ _bc=new BroadcastChannel('agentprivacy-succ'); }catch(e){ _bc=null; }
   function broadcastVertex(x){ if(_bc&&!_bcMute&&x!==_bcLast){ _bcLast=x; try{ _bc.postMessage({vertex:x,src:'manifold'}); }catch(e){} } }
   function updateDesc(){ const el=gid('insDesc'); if(!el)return; const d=DESC[currentVertex()];
     if(d){ el.textContent=d; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
+  // ---- κ-label (UOR-ADDR · sha256 axis) — identity is content, not location.
+  // canonical form: the key's JSON with keys sorted recursively, no whitespace, the kappa field excluded.
+  // re-derived and checked on import (holospaces Law L5: verification is re-derivation).
+  function canonicalJSON(v){ if(v===null||typeof v!=='object') return JSON.stringify(v);
+    if(Array.isArray(v)) return '['+v.map(canonicalJSON).join(',')+']';
+    return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalJSON(v[k])).join(',')+'}'; }
+  function kappaLabel(obj){ if(!(window.crypto&&crypto.subtle&&crypto.subtle.digest)) return Promise.resolve(null);
+    const c={...obj}; delete c.kappa;
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalJSON(c)))
+      .then(buf=>'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''))
+      .catch(()=>null); }
+  function verifyKappa(cfg){ if(!cfg||typeof cfg.kappa!=='string') return;
+    kappaLabel(cfg).then(k=>{ if(!k) return; const el=gid('keyName'); if(!el) return;
+      el.innerHTML += k===cfg.kappa
+        ? ' <span style="color:#7fffd4" title="'+esc(cfg.kappa)+'">· κ verified</span>'
+        : ' <span style="color:var(--sword)" title="expected '+esc(k)+'">· ⚠ κ mismatch</span>'; }); }
+  // a sigil PNG from /sigil carries the full City Key in a tEXt chunk (keyword 'cityKey', base64 JSON)
+  function b2s(a){ let s=''; for(let i=0;i<a.length;i+=8192) s+=String.fromCharCode.apply(null,a.subarray(i,i+8192)); return s; }
+  function pngExtractKey(buf){ const u=new Uint8Array(buf);
+    if(u.length<20||u[0]!==0x89||u[1]!==0x50||u[2]!==0x4e||u[3]!==0x47) return null;
+    let p=8;
+    while(p+12<=u.length){ const len=((u[p]<<24)|(u[p+1]<<16)|(u[p+2]<<8)|u[p+3])>>>0;
+      const type=String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+      if(type==='tEXt'){ const data=u.subarray(p+8,p+8+len), z=data.indexOf(0);
+        if(z>0&&b2s(data.subarray(0,z))==='cityKey'){ try{
+          const bin=atob(b2s(data.subarray(z+1))), bytes=new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; } } }
+      if(type==='IEND') break; p+=12+len; }
+    return null; }
+  function readKeyFile(file,cb,onErr){ const r=new FileReader();
+    r.onload=()=>{ try{ const cfg=pngExtractKey(r.result)||JSON.parse(new TextDecoder().decode(r.result)); if(!cfg||typeof cfg!=='object')throw 0; cb(cfg); }catch(e){ onErr(); } };
+    r.readAsArrayBuffer(file); }
+  // snapshots become carriers: when a key is loaded, the manifold PNG carries it (same chunk format /sigil writes)
+  const CRCT=(()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1); t[n]=c; } return t; })();
+  function crc32(bytes){ let c=0xffffffff; for(let i=0;i<bytes.length;i++) c=CRCT[(c^bytes[i])&0xff]^(c>>>8); return (c^0xffffffff)>>>0; }
+  function pngEmbedKey(dataURL,cfg){ const bin=atob(dataURL.slice(dataURL.indexOf(',')+1));
+    const png=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) png[i]=bin.charCodeAt(i);
+    const payload=btoa(b2s(new TextEncoder().encode(JSON.stringify(cfg))));
+    const kw='cityKey', data=new Uint8Array(kw.length+1+payload.length);
+    for(let i=0;i<kw.length;i++) data[i]=kw.charCodeAt(i); data[kw.length]=0;
+    for(let i=0;i<payload.length;i++) data[kw.length+1+i]=payload.charCodeAt(i);
+    const chunk=new Uint8Array(12+data.length), dv=new DataView(chunk.buffer);
+    dv.setUint32(0,data.length); chunk[4]=0x74;chunk[5]=0x45;chunk[6]=0x58;chunk[7]=0x74; chunk.set(data,8);
+    const crcBuf=new Uint8Array(4+data.length); crcBuf.set(chunk.subarray(4,8),0); crcBuf.set(data,4);
+    dv.setUint32(8+data.length,crc32(crcBuf));
+    const iend=png.length-12; // canvas PNGs end with the 12-byte IEND chunk
+    const out=new Uint8Array(png.length+chunk.length);
+    out.set(png.subarray(0,iend),0); out.set(chunk,iend); out.set(png.subarray(iend),iend+chunk.length);
+    return new Blob([out],{type:'image/png'}); }
+  // FIG-2.0 — measured figures drive the manifold; geometry becomes a derived cache:
+  // eps = 0.6·(1−overlap) (separation depth) · core = overlap = det(Σ) (interpenetration) ·
+  // smRatio = measured ⚔️:🧙. m,n stay chosen (stance frequencies). MEASURED figures pin
+  // their parameters; UNMEASURED ones stay chosen — a packets-derived figures block carries
+  // visibility+zkp but no overlap yet, so the stance sliders keep those parameters live.
+  // Export re-derives from the figures, so the measured part can't be hand-bent.
+  function figGeo(f){ const num=v=>{ v=+v; return Number.isFinite(v)?v:null; };
+    const cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+    const ov=num(f.overlap), ra=num(f.ratio);
+    return { eps: ov===null?state.eps:+(0.6*(1-cl(ov,0,1))).toFixed(3), m:state.m, n:state.n,
+             core: ov===null?state.core:cl(ov,0.25,0.85), smRatio: ra===null?state.smRatio:cl(ra,1,2.2) }; }
   function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object')return;
+    FIGURES=(cfg.figures&&typeof cfg.figures==='object')?cfg.figures:null;
+    PKTS=(cfg.packets&&typeof cfg.packets==='object')?cfg.packets:null;
+    DID=(typeof cfg.did==='string')?cfg.did:null;
+    const geoIn=FIGURES?figGeo(FIGURES):cfg.geometry;
+    if(geoIn&&typeof geoIn==='object'){ const g=geoIn,
+        num=(v,lo,hi,d)=>{ v=+v; return Number.isFinite(v)?Math.max(lo,Math.min(hi,v)):d; };
+      state.eps=num(g.eps,0,0.6,state.eps); state.m=Math.round(num(g.m,1,10,state.m)); state.n=Math.round(num(g.n,1,10,state.n));
+      state.core=num(g.core,0.25,0.85,state.core); state.smRatio=num(g.smRatio,1,2.2,state.smRatio);
+      gid('sEps').value=state.eps; gid('vEps').textContent=state.eps.toFixed(3);
+      gid('sM').value=state.m; gid('vM').textContent=String(state.m);
+      gid('sN').value=state.n; gid('vN').textContent=String(state.n);
+      gid('sCore').value=state.core; gid('vCore').textContent=state.core.toFixed(2);
+      gid('sRatio').value=state.smRatio; gid('vRatio').textContent=(Math.abs(state.smRatio-PHI)<0.02?('φ · '+state.smRatio.toFixed(3)):state.smRatio.toFixed(3));
+      buildManifold(); buildCore(); }
     if(cfg.palette){ const p=cfg.palette; if(p.cool)state.coolHex=p.cool; if(p.warm)state.warmHex=p.warm; if(p.sword)state.swordHex=p.sword; if(p.mage)state.mageHex=p.mage;
       setPalette(); SWORD_COL.set(state.swordHex); MAGE_COL.set(state.mageHex);
       gid('cCool').value=state.coolHex; gid('cWarm').value=state.warmHex; gid('cSword').value=state.swordHex; gid('cMage').value=state.mageHex;
@@ -548,15 +653,29 @@
     buildLattice();
     exitTour(); { const kt=gid('keyTour'); if(kt){ kt.disabled=(LIT.size===0); kt.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } }
     keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='💾 save trace'; } }
-    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+identityHtml(IDENT); _lastX=-1; updateDesc();
+    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
+    PRIOR_IN=(typeof cfg.prior==='string')?cfg.prior:null;
+    { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
+    LOADED_KAPPA=null; kappaLabel(cfg).then(k=>{ LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
     if(!fromRemote&&_bc){ try{ _bc.postMessage({config:cfg,src:'manifold'}); }catch(e){} } }
-  function exportKey(){ const cfg={ name:keyName||'city key', version:1,
-      palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex}, descriptions:{...DESC} };
+  function buildExportCfg(){ const cfg={ name:keyName||'city key', version:1,
+      palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex}, descriptions:{...DESC},
+      // the shape rides in the key (field reserved in the 2026-05-27 interop, filled 2026-06-10):
+      // r(θ,φ) = R + ε sin(mφ) cos(nθ) · det(Σ) core · ⚔️:🧙 ratio (φ ↔ C1)
+      geometry: FIGURES?figGeo(FIGURES):{ eps:state.eps, m:state.m, n:state.n, core:state.core, smRatio:state.smRatio } };
     if(LIT.size) cfg.lit=[...LIT].sort((a,b)=>a-b);
     if(IDENT) cfg.identity=IDENT;
     if(TRACE_PROOF) cfg.trace=TRACE_PROOF;
-    const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}),a=document.createElement('a');
-    a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+    if(FIGURES) cfg.figures=FIGURES;            // FIG-2.0 — measured figures are content; they move the κ
+    if(PKTS) cfg.packets=PKTS;                  // trust-task packets digest — carried through, never dropped
+    if(DID) cfg.did=DID;                        // bearer did — carried through
+    const prior=(LOADED_CANON!==null && canonicalJSON(cfg)!==LOADED_CANON)?LOADED_KAPPA:PRIOR_IN;
+    if(prior) cfg.prior=prior;                  // κ-chain — the key this one evolved from (C87: the key accumulates)
+    return cfg; }
+  function exportKey(){ const cfg=buildExportCfg();
+    kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k; // the key's content identity, stamped at export
+      const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}),a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }); }
   function applyPalettePreset(p,id,fromRemote){ if(!p)return;
     if(p.cool)state.coolHex=p.cool; if(p.warm)state.warmHex=p.warm; if(p.sword)state.swordHex=p.sword; if(p.mage)state.mageHex=p.mage;
     setPalette(); SWORD_COL.set(state.swordHex); MAGE_COL.set(state.mageHex);
@@ -617,6 +736,8 @@
 
   $('tLattice').addEventListener('change',e=>{state.showLattice=e.target.checked;applyLattice();});
   $('tSucc').addEventListener('change',e=>{state.showSucc=e.target.checked;applyLattice();});
+  $('tNeg').addEventListener('change',e=>{state.showNeg=e.target.checked;applyLattice();});
+  $('tBnot').addEventListener('change',e=>{state.showBnot=e.target.checked;applyLattice();});
   $('tGlow').addEventListener('change',e=>{state.glow=e.target.checked;});
   $('tInfo').addEventListener('change',e=>{state.showInfo=e.target.checked;applyLattice();});
 
@@ -635,7 +756,7 @@
     $('sM').value=state.m;$('vM').textContent=String(state.m); $('sN').value=state.n;$('vN').textContent=String(state.n);
     $('sCore').value=state.core;$('vCore').textContent=state.core.toFixed(2);
     $('sSpin').value=state.spin;$('vSpin').textContent=state.spin.toFixed(2); $('sSpeed').value=state.speed;$('vSpeed').textContent=state.speed.toFixed(2);
-    $('tLattice').checked=state.showLattice;$('tSucc').checked=state.showSucc;$('tGlow').checked=state.glow;$('tInfo').checked=state.showInfo;
+    $('tLattice').checked=state.showLattice;$('tSucc').checked=state.showSucc;$('tNeg').checked=state.showNeg;$('tBnot').checked=state.showBnot;$('tGlow').checked=state.glow;$('tInfo').checked=state.showInfo;
     $('sRatio').value=state.smRatio;$('vRatio').textContent=state.smRatio.toFixed(3);
     $('sCell').value=state.cellOpacity;$('vCell').textContent=state.cellOpacity.toFixed(2);
     $('cCool').value=state.coolHex;$('cWarm').value=state.warmHex;$('cSword').value=state.swordHex;$('cMage').value=state.mageHex;
@@ -653,8 +774,8 @@
   $('launcher2').addEventListener('click',()=>{ $('trace').classList.remove('folded'); $('launcher2').classList.remove('show'); });
   // City Key import / export
   $('impBtn').addEventListener('click',()=>$('impFile').click());
-  $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return; const r=new FileReader();
-    r.onload=()=>{ try{ loadConfig(JSON.parse(r.result),false); }catch(err){ gid('keyName').textContent='⚠ could not parse JSON'; } }; r.readAsText(f); e.target.value=''; });
+  $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
+    readKeyFile(f,cfg=>loadConfig(cfg,false),()=>{ gid('keyName').textContent='⚠ no City Key in this file (key JSON or sigil PNG)'; }); e.target.value=''; });
   $('expBtn').addEventListener('click',exportKey);
   $('tracerSave').addEventListener('click',()=>{ if(!keyLoaded) return; TRACE_PROOF={ laps:laps, seconds:Math.round(traceSeconds), tourSeconds:Math.round(tourSeconds), savedAt:new Date().toISOString() };
     const b=$('tracerSave'); b.classList.add('on'); b.textContent='✓ trace saved · '+laps+(laps===1?' lap':' laps');
@@ -677,6 +798,7 @@
     if(focusBadge) focusBadge.classList.remove('show'); }
   document.addEventListener('keydown',e=>{ const tag=(e.target&&e.target.tagName)||''; if(tag==='INPUT'||tag==='TEXTAREA')return;
     if(e.key==='f'||e.key==='F'){ e.preventDefault(); focusMode?exitFocus():enterFocus(); }
+    else if(e.key==='s'||e.key==='S'){ e.preventDefault(); snapshot(); } // [s] snap — works in focus mode, where the 📸 buttons are hidden
     else if(e.key==='Escape'&&focusMode){ exitFocus(); } });
   document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&focusMode){ focusMode=false; document.body.classList.remove('focus'); if(focusBadge) focusBadge.classList.remove('show'); } });
   document.addEventListener('mousemove',()=>{ if(focusMode) flashBadge(1800); });
@@ -692,8 +814,8 @@
   function tourGoto(i){ const a=litArr(); if(!a.length)return; tourIdx=((i%a.length)+a.length)%a.length; setMarker(a[tourIdx]); }
   function startTourTimer(){ clearTourTimer(); tourTimer=setInterval(()=>{ const a=litArr(); if(!a.length){ exitTour(); return; } tourGoto(tourIdx+1); }, 2200); }
   function engageTour(){ const a=litArr(); if(!a.length)return; tourMode=true;
-    state.showLattice=true; state.showSucc=true; state.showInfo=true;
-    $('tLattice').checked=true; $('tSucc').checked=true; $('tInfo').checked=true;
+    state.showLattice=true; state.showSucc=true; state.showNeg=false; state.showBnot=false; state.showInfo=true;
+    $('tLattice').checked=true; $('tSucc').checked=true; $('tNeg').checked=false; $('tBnot').checked=false; $('tInfo').checked=true;
     tourIdx=0; setMarker(a[0]); setPlaying(true); // playing in tourMode → startTourTimer (see setPlaying)
     const b=$('keyTour'); b.classList.add('on'); _lastTourSec=-1; b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; }
   function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }

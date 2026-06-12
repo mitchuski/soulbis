@@ -93,3 +93,5 @@ The universe is a **loop**, not a funnel. A Sovereign passes through every domai
 ---
 
 *Chronicle written 2026-05-27 — three keys, one recursion; each pass adds weight to the proof.* `(⚔️ ⊥ ⿻ ⊥ 🧙) 😊`
+
+> **V6 regime note (2026-06-10).** The 🪢 presence economy described above is declared regime 1 at PVM V6 §15: non-transferable, non-attesting local color; not proof, not stake-weight, not an input to any admission or attestation decision. The recursion-of-proofs reading is registered as conjecture C87 (~50%, the Key as IVC accumulator). Authority: `agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md` (head C89).

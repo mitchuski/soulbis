@@ -19,8 +19,8 @@
   .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   .navgrp{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
   .navbtn{ text-decoration:none; letter-spacing:0.06em; font-size:10.5px; color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border:1px solid transparent; border-radius:8px; padding:7px 13px; transition:transform .15s, box-shadow .15s; white-space:nowrap; }
-  .navbtn[href="/"]{ background:none; border-color:var(--line); color:var(--ink); }
-  .navbtn[href="/"]:hover{ border-color:rgba(120,140,220,0.5); }
+  .navbtn[href="/"], .navbtn--ghost{ background:none; border-color:var(--line); color:var(--ink); }
+  .navbtn[href="/"]:hover, .navbtn--ghost:hover{ border-color:rgba(120,140,220,0.5); }
   .navbtn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(120,150,255,0.35); }
   .presets{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:14px; }
   .presets button{ font-family:inherit; font-size:10.5px; letter-spacing:0.02em; padding:8px 0; border-radius:8px; cursor:pointer;
@@ -74,6 +74,9 @@
     background:radial-gradient(circle at 50% 56%, rgba(255,213,170,var(--fa,0.4)) 0%, transparent var(--fr,62%)); }
   /* focus lap-count sits in the corner by the ✦ star; counts got/req, then ✓ when complete */
   .focus-badge{ position:absolute; top:2px; left:4px; font-size:8px; line-height:1; color:#ffe6c2; text-shadow:0 0 5px rgba(255,150,70,0.95); pointer-events:none; font-weight:700; letter-spacing:-0.02em; }
+  /* 🪬 κ-glyph overlay — the key's live content-name, one hex glyph per cell (bottom-right) */
+  .kg{ position:absolute; bottom:2px; right:4px; font-size:8px; line-height:1; color:#dff4ff; text-shadow:0 0 5px rgba(159,232,255,0.9); pointer-events:none; font-weight:500; }
+  #kdrift b{ color:#ffe6c2; font-weight:500; }
   /* prove-your-focus: walking discharges the debt; when the laps complete the cell LIGHTS UP (bright teal) */
   .cell.focus.proven::before{ background:radial-gradient(circle at 50% 52%, rgba(127,255,212,0.36) 0%, transparent 64%); }
   .cell.proven{ outline:1px solid rgba(127,255,212,0.5); outline-offset:1px; }
@@ -98,6 +101,14 @@
   .desc.loaded{ border-style:solid; border-color:rgba(232,82,58,0.35); color:#f3e2dc; background:rgba(232,82,58,0.07); }
   .desc .tag{ font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(124,134,184,0.8); display:block; margin-bottom:6px; }
   .desc code{ color:#cfe0ff; }
+  /* ✍️ inscription — the act: a proven blade accepts the bearer's own reading */
+  .insbox{ margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+  .insbox textarea{ width:100%; font-family:inherit; font-size:12px; line-height:1.6; color:var(--ink);
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); border-radius:8px; padding:10px 12px; resize:vertical; min-height:104px; }
+  .insbox textarea:focus{ outline:none; border-color:rgba(159,232,255,0.5); box-shadow:0 0 12px rgba(159,232,255,0.12); }
+  .insrow{ display:flex; align-items:center; gap:10px; }
+  .inscount{ margin-left:auto; font-size:10px; color:var(--dim); font-variant-numeric:tabular-nums; }
+  .inslock{ margin-top:12px; font-size:10.5px; color:rgba(124,134,184,0.85); border:1px dashed var(--line); border-radius:8px; padding:8px 11px; line-height:1.6; }
   .bitrow{ display:flex; gap:5px; margin-top:14px; }
   .bit{ flex:1; text-align:center; font-size:10px; padding:6px 0; border-radius:6px; border:1px solid var(--line); color:var(--dim); }
   .bit.on{ background:rgba(159,232,255,0.14); border-color:rgba(159,232,255,0.4); color:#dff4ff; }
@@ -127,7 +138,7 @@
 </head>
 <body>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/lattice · the lattice as manifold</span><span class="navgrp"><a class="navbtn" href="/">↖ soulbis.com</a><a class="navbtn" id="toStar" href="#">↗ open /star manifold</a></span></div>
+    <div class="eyebrow"><span>soulbis.com/lattice · the lattice as manifold</span><span class="navgrp"><a class="navbtn" href="/">↖ home</a><a class="navbtn" id="toStar" href="#" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/sigil" title="the κ derivation — the key's 64-glyph constellation">🪬 /sigil</a><a class="navbtn" href="/skye" title="the night of many keys">🌌 /skye</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
     <h1>The 64 · Vertex Codex</h1>
     <p class="lede">Every point on the sovereignty manifold is one of <b>64 states</b> of the lattice ℒ = ℤ/64ℤ — a 6-bit address across the <b>six sovereignty dimensions</b>. Each carries a <b>stratum</b>, a <b>Swordsman reflection</b> (neg), a <b>Mage antipode</b> (bnot), and a <b>successor</b> (succ = neg∘bnot). Choose an intelligence, or import a <b>City Key 🗝️</b> to colour the gems and write a description onto every node.</p>
     <div class="keyrow">
@@ -153,11 +164,14 @@
       <div class="bar">
         <button id="impBtn" class="btn">⬆ Import City Key</button>
         <button id="expBtn" class="btn">⬇ Export</button>
+        <button id="chargeBtn" class="btn" title="redacted charge pass — only the proof travels (trace + witness + κ); inscriptions, palette and identity stay home. /city charges it as readily as the full key">⚡ charge pass</button>
         <span id="keyName" class="keyname">no key loaded</span>
-        <input type="file" id="impFile" accept="application/json,.json" hidden>
+        <span id="kdrift" class="keyname"></span>
+        <input type="file" id="impFile" accept="application/json,.json,image/png,.png" hidden>
       </div>
       <div class="bar">
         <button id="walk" class="btn">▶ walk the succ cycle</button>
+        <button id="kglyphBtn" class="btn" title="light each cell with its glyph of the key's LIVE κ — walking changes content, content changes the κ, the whole grid relights">🪬 κ glyphs</button>
         <input type="range" id="wspeed" min="0.05" max="1.2" step="0.01" value="0.4" title="walk speed">
         <span class="now" id="wnow">vertex —</span>
       </div>
@@ -183,13 +197,15 @@
         <span class="lk">T∫(π) · the path</span><span class="lv">value lives on the path, not the vertex — a static vertex carries zero edge value.</span>
         <span class="lk">🪢 focus mana</span><span class="lv">poured at agentprivacy (VRC allocation) and carried in the City Key as <code>focus</code> (vertex → amount). Here it glows as an inner gold aura — heavier where you've committed more attention. The feedback between the two interfaces.</span>
         <span class="lk">off-axis</span><span class="lv">Φ<sub>v5</sub> = Φ_agent · <b>Φ_data</b> · <b>Φ_inference</b> (multiplicative — any axis → 0 collapses value). Only Φ_agent is drawn; the other two axes are off-screen.</span>
+        <span class="lk">κ · content identity</span><span class="lv">exported keys carry <code>kappa = sha256:H(canonical form)</code> — a UOR-ADDR κ-label on the sha256 axis. On import the label is <b>re-derived and checked</b>: identity is content, not location. The key is what it says, wherever it travels.</span>
+        <span class="lk">✍️ inscription</span><span class="lv">a <b>proven</b> blade — focus walked to ✓, or achievement-lit ✦ — accepts your own reading. Writing changes the content; the content drifts the κ; the sigil relights. <b>Authorship is earned by presence.</b></span>
       </div>
       <p class="legend-foot">Tags follow the V5.4 spec: <i>[proven] / [canon] / [conjecture]</i>. Full map in <code>MAPPING.md</code>; the model at <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a>.</p>
     </div>
   </details>
 
   <footer>
-    <b>City Key 🗝️</b> is a portable JSON: <code>{ name, palette:{cool,warm,sword,mage}, descriptions:{ "0":"…", … } }</code> — minted at agentprivacy /guide/achievements, import it here.
+    <b>City Key 🗝️</b> is a portable JSON: <code>{ name, palette:{cool,warm,sword,mage}, descriptions:{ "0":"…", … }, kappa:"sha256:…" }</code> — minted at agentprivacy /city, import it here (the JSON, or a <b>sigil PNG</b> from /sigil — the image carries the key). The <code>kappa</code> κ-label is its content identity, re-derived on every import.
     <b>Colour:</b> stratum 0 (000000) = full surveillance / transparency; stratum 6 (111111) = full sovereignty / privacy.
     <b>The wheel:</b> the comet is succ — it visits all 64 and returns to 0. <b>Live link:</b> on one origin, /star's marker lights the matching cell here, and importing a key here reflects its palette + descriptions into /star as the run hits each node.
   </footer>
@@ -198,6 +214,9 @@
 (function(){
   "use strict";
   const BITS=6, N=64, STRATA=[1,6,15,20,15,6,1];
+  // PVM V5.4 §12.6 — bit i (LSB-first) = dimension d(i+1)
+  const DIMS=['🛡️ Protection','🤝 Delegation','📜 Memory','🔗 Connection','⚡ Computation','💎 Value'];
+  const DIM_E=['🛡️','🤝','📜','🔗','⚡','💎'];
   const neg=x=>(N-x)%N, bnot=x=>(N-1)-x, succ=x=>(x+1)%N;
   const pc=x=>{let c=0;while(x){c+=x&1;x>>=1;}return c;};
   const b6=x=>x.toString(2).padStart(BITS,'0');
@@ -230,13 +249,14 @@
     const track=`linear-gradient(90deg, ${gradient(0)}, ${gradient(0.5)} 50%, ${gradient(1)})`;
     const sb=document.getElementById('scalebar'); if(sb) sb.style.background=track;
     document.querySelectorAll('.bar input[type=range]').forEach(r=>r.style.background=track);
-    renderPanel(); if(playing)paintComet(head); }
+    renderPanel(); if(playing)paintComet(head); refreshLiveKappa(); }
 
   // ---- descriptions (filled by an imported key) ----
   let DESC = {};
   let LIT = new Set();
   let IDENT = null;
   let TRACEC = null;
+  let GEO = null; // the manifold shape (eps·m·n·core·smRatio) — /star's field; round-tripped here untouched
   // poured focus mana (City Key `focus`: vertex → committed 🪢 amount) + prove-your-focus:
   // walking the succ cycle discharges the debt (req visits), minting a `witness` (spent mana) for the key.
   let FOCUS = {}, _maxFocus = 0, VISITED = {};
@@ -249,7 +269,7 @@
       const b=document.createElement('span'); b.className='focus-badge'; b.textContent=proven?'✓':got+'/'+req; d.appendChild(b);
     } else { d.classList.remove('focus','proven'); d.style.removeProperty('--fa'); d.style.removeProperty('--fr'); } }
   function markFocus(){ for(let x=0;x<N;x++) applyFocusCell(cellOf[x],x); }
-  function visitFocus(v){ if(!FOCUS[v])return; VISITED[v]=(VISITED[v]||0)+1; applyFocusCell(cellOf[v],v); updateFocusBar(); }
+  function visitFocus(v){ if(!FOCUS[v])return; VISITED[v]=(VISITED[v]||0)+1; applyFocusCell(cellOf[v],v); updateFocusBar(); refreshLiveKappa(); }
   function focusTotals(){ let req=0,got=0; for(const v in FOCUS){ req+=FOCUS[v]; got+=Math.min(VISITED[v]||0,FOCUS[v]); } return {req,got,p:req?got/req:0}; }
   function updateFocusBar(){ const bar=document.getElementById('focusbar'); if(!bar)return; const {req,got,p}=focusTotals();
     if(req<=0){ bar.style.display='none'; return; } bar.style.display='';
@@ -259,9 +279,47 @@
   // the witness — spent mana: the proven portion of each poured vertex, appended to the City Key on export
   function buildWitness(){ const spent={}; let any=false, complete=true;
     for(const v in FOCUS){ const got=Math.min(VISITED[v]||0,FOCUS[v]); if(got>0){ spent[v]=got; any=true; } if(got<FOCUS[v]) complete=false; }
-    return any ? { spent, complete, at:new Date().toISOString() } : null; }
+    if(!any) return null;
+    // an unchanged witness keeps its loaded timestamp — re-export stays byte-identical (κ idempotent)
+    if(WIT_IN && complete===!!WIT_IN.complete && canonicalJSON(spent)===canonicalJSON(WIT_IN.spent||{}))
+      return { spent, complete, at:WIT_IN.at };
+    return { spent, complete, at:new Date().toISOString() }; }
   const MOON = ['🌑','🌒','🌓','🌔','🌖','🌗','🌕'];
   const esc = s => String(s).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+  // ---- κ-label (UOR-ADDR · sha256 axis) — identity is content, not location.
+  // canonical form: the key's JSON with keys sorted recursively, no whitespace, the kappa field excluded.
+  // re-derived and checked on import (holospaces Law L5: verification is re-derivation).
+  function canonicalJSON(v){ if(v===null||typeof v!=='object') return JSON.stringify(v);
+    if(Array.isArray(v)) return '['+v.map(canonicalJSON).join(',')+']';
+    return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalJSON(v[k])).join(',')+'}'; }
+  function kappaLabel(obj){ if(!(window.crypto&&crypto.subtle&&crypto.subtle.digest)) return Promise.resolve(null);
+    const c={...obj}; delete c.kappa;
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalJSON(c)))
+      .then(buf=>'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''))
+      .catch(()=>null); }
+  function verifyKappa(cfg){ if(!cfg||typeof cfg.kappa!=='string') return;
+    kappaLabel(cfg).then(k=>{ if(!k) return; const el=document.getElementById('keyName'); if(!el) return;
+      el.innerHTML += k===cfg.kappa
+        ? ' <span style="color:#7fffd4" title="'+esc(cfg.kappa)+'">· κ verified</span>'
+        : ' <span style="color:var(--sword)" title="expected '+esc(k)+'">· ⚠ κ mismatch</span>'; }); }
+  // a sigil PNG from /sigil carries the full City Key in a tEXt chunk (keyword 'cityKey', base64 JSON)
+  function b2s(a){ let s=''; for(let i=0;i<a.length;i+=8192) s+=String.fromCharCode.apply(null,a.subarray(i,i+8192)); return s; }
+  function pngExtractKey(buf){ const u=new Uint8Array(buf);
+    if(u.length<20||u[0]!==0x89||u[1]!==0x50||u[2]!==0x4e||u[3]!==0x47) return null;
+    let p=8;
+    while(p+12<=u.length){ const len=((u[p]<<24)|(u[p+1]<<16)|(u[p+2]<<8)|u[p+3])>>>0;
+      const type=String.fromCharCode(u[p+4],u[p+5],u[p+6],u[p+7]);
+      if(type==='tEXt'){ const data=u.subarray(p+8,p+8+len), z=data.indexOf(0);
+        if(z>0&&b2s(data.subarray(0,z))==='cityKey'){ try{
+          const bin=atob(b2s(data.subarray(z+1))), bytes=new Uint8Array(bin.length);
+          for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+          return JSON.parse(new TextDecoder().decode(bytes)); }catch(e){ return null; } } }
+      if(type==='IEND') break; p+=12+len; }
+    return null; }
+  function readKeyFile(file,cb,onErr){ const r=new FileReader();
+    r.onload=()=>{ try{ const cfg=pngExtractKey(r.result)||JSON.parse(new TextDecoder().decode(r.result)); if(!cfg||typeof cfg!=='object')throw 0; cb(cfg); }catch(e){ onErr(); } };
+    r.readAsArrayBuffer(file); }
 
   function derivedReading(x){ const s=pc(x);
     if(x===0) return `<b>The unguarded origin.</b> No dimension held — fully legible, fully reconstructable. Stratum 0.`;
@@ -277,21 +335,31 @@
     for(const x of verts){ const d=document.createElement('div'); d.className='cell'+(x===sel?' sel':'')+(DESC[x]?' hasdesc':'')+(LIT.has(x)?' lit':'');
       d.dataset.v=x; d.style.background=gradient(pc(x)/BITS); d.textContent=x; d.title=`${x} · ${b6(x)} · stratum ${pc(x)}`;
       d.addEventListener('click',()=>{ selectVertex(x); stopWalk(); post(x); });
-      cellOf[x]=d; applyFocusCell(d,x); grid.appendChild(d); } }
+      cellOf[x]=d; applyFocusCell(d,x); grid.appendChild(d); } paintKGlyphs(); }
   function markDesc(){ for(let x=0;x<N;x++){ if(cellOf[x]){ cellOf[x].classList.toggle('hasdesc',!!DESC[x]); cellOf[x].classList.toggle('lit',LIT.has(x)); } } }
 
   function selectVertex(x){ sel=x;
     document.querySelectorAll('.cell.sel').forEach(c=>c.classList.remove('sel'));
     if(cellOf[x]) cellOf[x].classList.add('sel'); renderPanel(); }
 
+  // ✍️ the act of the codex: writing is EARNED — a blade accepts your reading once its
+  // focus is proven (walked to ✓) or it is achievement-lit. Inscription changes content;
+  // content changes the κ; the sigil relights. The key becomes bearer-co-authored.
+  function inscribeHtml(x){ if(!KEYCFG) return '';
+    const req=FOCUS[x]||0, got=Math.min(VISITED[x]||0,req), proven=req>0&&got>=req;
+    if(!(proven||LIT.has(x)))
+      return `<div class="inslock">🔏 inscription locked — prove 🪢 focus here (pour at /city · walk it on this page) or light it by achievement.</div>`;
+    return `<div class="insbox"><textarea id="insText" rows="4" maxlength="280" placeholder="your reading of this blade…">${esc(DESC[x]||'')}</textarea><div class="insrow"><button id="insBtn" class="btn" title="write your reading onto this proven blade — changes the key's content, drifts its κ">✍️ inscribe</button><span class="inscount" id="insCount"></span></div></div>`; }
   function renderPanel(){ const x=sel,s=pc(x);
-    const bits=b6(x).split('').map((c,i)=>`<div class="bit ${c==='1'?'on':''}">d${5-i}<br>${c}</div>`).join('');
+    const bits=b6(x).split('').map((c,i)=>`<div class="bit ${c==='1'?'on':''}" title="${DIMS[5-i]}">${DIM_E[5-i]}<br>${c}</div>`).join('');
+    const held=[]; for(let b=0;b<BITS;b++) if((x>>b)&1) held.push(DIMS[b]);
     const has=!!DESC[x];
     const desc = has ? `<span class="tag">from the loaded key</span>${DESC[x]}` : `<span class="tag">no description · import a key</span>${derivedReading(x)}`;
     panel.innerHTML = `
       <div class="pv">${x}</div>
       <div class="pbits">${b6(x)}</div>
       <div class="pstrat"><span class="swatch" style="color:${gradient(s/BITS)};background:${gradient(s/BITS)}"></span>stratum ${s} of 6 · ${STRATA[s]} state${STRATA[s]>1?'s':''} at this depth</div>
+      <div class="pstrat">holds: ${held.length?held.join(' · '):'nothing — fully legible'}</div>
       <div class="bitrow">${bits}</div>
       <div class="grid2">
         <span class="k">⚔️ neg (Swordsman)</span><span class="v">${neg(x)} · ${b6(neg(x))}</span>
@@ -300,7 +368,18 @@
       </div>
       <div class="reading">${derivedReading(x)}</div>
       ${FOCUS[x]?`<div class="reading" style="color:#ffe6c2;border-color:rgba(255,170,90,0.25)">🪢 <b style="color:#fff">${FOCUS[x]}</b> focus mana poured here — your committed attention on this state, carried from agentprivacy.</div>`:''}
-      <div class="desc ${has?'loaded':''}">${desc}</div>`;
+      <div class="desc ${has?'loaded':''}">${desc}</div>
+      ${inscribeHtml(x)}`;
+    const ib=document.getElementById('insBtn');
+    if(ib){ const ta=document.getElementById('insText'), cnt=document.getElementById('insCount');
+      const tick=()=>{ if(cnt) cnt.textContent=ta.value.length+'/280'; }; tick();
+      ta.addEventListener('input',tick);
+      ib.addEventListener('click',()=>{
+        const t=(ta.value||'').trim();
+        if(t) DESC[sel]=t; else delete DESC[sel];
+        markDesc(); renderPanel(); refreshLiveKappa();
+        send({config:buildExportCfg()}); // the inscription cascades live — /star and /sigil relight
+      }); }
   }
 
   // ---- the comet: succ-cycle walker ----
@@ -325,7 +404,12 @@
     document.querySelectorAll('#sort button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); order=b.dataset.s; buildGrid(); if(playing)paintComet(head); }));
 
   // ---- City Key : import / export ----
-  let keyName='';
+  let keyName='', FIGS=null, PKTS=null, DID=null, WIT_IN=null, PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null;
+  // FIGS — FIG-2.0 measured figures: /star derives shape from them; round-tripped here untouched.
+  // PKTS / DID — trust-task fields minted at /city (packets Merkle digest · bearer did):
+  // round-tripped untouched so a walk never destroys them (content — inside the κ preimage).
+  // PRIOR_IN / LOADED_* — the κ-chain: an unchanged re-export carries its prior through
+  // (byte-identical, same κ); evolved content chains `prior` to the loaded ancestor's κ (C87).
   function setKeyName(n, identity){ keyName=n||''; const el=document.getElementById('keyName');
     if(!keyName){ el.innerHTML='no key loaded'; return; }
     let extra='';
@@ -342,23 +426,74 @@
     LIT = new Set(Array.isArray(cfg.lit) ? cfg.lit.filter(n=>Number.isInteger(n)&&n>=0&&n<N) : []);
     IDENT = (cfg.identity && typeof cfg.identity==='object') ? cfg.identity : null;
     TRACEC = (cfg.trace && typeof cfg.trace==='object') ? cfg.trace : null;
+    GEO = (cfg.geometry && typeof cfg.geometry==='object') ? cfg.geometry : null;
+    FIGS = (cfg.figures && typeof cfg.figures==='object') ? cfg.figures : null;
+    PKTS = (cfg.packets && typeof cfg.packets==='object') ? cfg.packets : null;
+    DID = (typeof cfg.did==='string') ? cfg.did : null;
     setFocusData(cfg.focus);
+    WIT_IN = (cfg.witness && typeof cfg.witness==='object') ? cfg.witness : null;
     if(cfg.witness && cfg.witness.spent && typeof cfg.witness.spent==='object'){ for(const k in cfg.witness.spent){ const v=+k, amt=+cfg.witness.spent[k]; if(FOCUS[v]&&amt>0) VISITED[v]=Math.min(amt,FOCUS[v]); } }
+    PRIOR_IN = (typeof cfg.prior==='string') ? cfg.prior : null;
+    { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
+    LOADED_KAPPA=null; kappaLabel(cfg).then(k=>{ LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
     markDesc(); markFocus(); updateFocusBar();
-    setKeyName(cfg.name||'imported key', cfg.identity); renderPanel();
+    setKeyName(cfg.name||'imported key', cfg.identity); renderPanel(); verifyKappa(cfg);
+    KEYCFG=cfg; LIVEK=null; refreshLiveKappa();
     if(!fromRemote) send({config:cfg}); }
-  function exportKey(){ const cfg={ name:keyName||'city key', version:1, palette:{...pal}, descriptions:{...DESC} };
+  function buildExportCfg(){ const cfg={ name:keyName||'city key', version:1, palette:{...pal}, descriptions:{...DESC} };
     if(LIT.size) cfg.lit=[...LIT].sort((a,b)=>a-b);
     if(IDENT) cfg.identity=IDENT;
     if(TRACEC) cfg.trace=TRACEC;
+    if(GEO) cfg.geometry=GEO;
+    if(FIGS) cfg.figures=FIGS;
+    if(PKTS) cfg.packets=PKTS;  // trust-task packets digest — carried through, never dropped
+    if(DID) cfg.did=DID;        // bearer did — carried through
     if(Object.keys(FOCUS).length) cfg.focus={...FOCUS};
     const w=buildWitness(); if(w) cfg.witness=w;
-    const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}), a=document.createElement('a');
-    a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+    const prior=(LOADED_CANON!==null && canonicalJSON(cfg)!==LOADED_CANON)?LOADED_KAPPA:PRIOR_IN;
+    if(prior) cfg.prior=prior; // κ-chain — the key this one evolved from (C87: the key accumulates)
+    return cfg; }
+  // live κ — the name of the content AS IT STANDS (walking discharges focus → witness moves → κ drifts)
+  let KEYCFG=null, LIVEK=null, KGLY_ON=false, _kT=null;
+  function paintKGlyphs(){ for(let x=0;x<N;x++){ const c=cellOf[x]; if(!c) continue;
+      let s=c.querySelector('.kg');
+      if(!KGLY_ON||!LIVEK){ if(s) s.remove(); continue; }
+      const v=parseInt(LIVEK[7+x],16);
+      if(!s){ s=document.createElement('span'); s.className='kg'; c.appendChild(s); }
+      s.textContent=v.toString(16); s.style.opacity=(0.25+0.75*v/15).toFixed(2); } }
+  function refreshLiveKappa(){ if(!KEYCFG) return; clearTimeout(_kT);
+    _kT=setTimeout(()=>{ kappaLabel(buildExportCfg()).then(k=>{ if(!k) return; LIVEK=k; paintKGlyphs();
+      const el=document.getElementById('kdrift'); if(!el) return;
+      const stamped=KEYCFG.kappa;
+      if(typeof stamped==='string') el.innerHTML = stamped===k ? '' : 'κ drifting → <b>'+esc(k.slice(7,15))+'…</b> · export to mint';
+      else el.innerHTML='κ → <b>'+esc(k.slice(7,15))+'…</b> · unminted'; }); },350); }
+  function exportKey(){ const cfg=buildExportCfg();
+    kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k; // the key's content identity, stamped at export
+      const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}), a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }); }
   document.getElementById('impBtn').addEventListener('click',()=>document.getElementById('impFile').click());
   document.getElementById('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
-    const r=new FileReader(); r.onload=()=>{ try{ loadConfig(JSON.parse(r.result),false); }catch(err){ setKeyName('⚠ could not parse JSON'); } }; r.readAsText(f); e.target.value=''; });
+    readKeyFile(f,cfg=>loadConfig(cfg,false),()=>setKeyName('⚠ no City Key in this file (key JSON or sigil PNG)')); e.target.value=''; });
   document.getElementById('expBtn').addEventListener('click',exportKey);
+  // ⚡ charge pass — the redacted carrier: only the PROOF travels. {version, redacted, of, trace, witness, κ}
+  // `of` names the full key it was struck from (its would-be export κ); /city charges trace+witness
+  // without ever seeing inscriptions, palette, focus amounts or identity. Portability minus disclosure.
+  function exportChargePass(){
+    const w=buildWitness();
+    if(!TRACEC&&!w){ const el=document.getElementById('kdrift');
+      if(el){ el.textContent='nothing to charge yet — walk the manifold or prove focus first'; setTimeout(()=>{ el.textContent=''; },3000); } return; }
+    const full=buildExportCfg();
+    kappaLabel(full).then(fk=>{ const cfg={ version:1, redacted:true };
+      if(fk) cfg.of=fk;
+      if(TRACEC) cfg.trace=TRACEC;
+      if(w) cfg.witness=w;
+      kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k;
+        const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}), a=document.createElement('a');
+        a.href=URL.createObjectURL(blob); a.download='city-key-charge-pass.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }); }); }
+  document.getElementById('chargeBtn').addEventListener('click',exportChargePass);
+  document.getElementById('kglyphBtn').addEventListener('click',()=>{ const el=document.getElementById('kdrift');
+    if(!KEYCFG){ if(el){ el.textContent='import a key to light its κ glyphs'; setTimeout(()=>{ if(!KEYCFG) el.textContent=''; },2500); } return; }
+    KGLY_ON=!KGLY_ON; document.getElementById('kglyphBtn').classList.toggle('on',KGLY_ON); paintKGlyphs(); });
 
   // ---- cross-page link (same origin) ----
   let bc=null,bcMute=false; const dot=document.getElementById('linkDot'), ltx=document.getElementById('linkTxt');

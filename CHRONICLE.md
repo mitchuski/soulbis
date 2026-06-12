@@ -2,6 +2,61 @@
 
 ---
 
+## 2026-06-10 (later) — SYNC EXECUTED: the star-repo work lands back home (κ · /sigil · the carrier)
+
+The sync plan below (`CHRONICLE_AGENT_SYNC_PLAN_TO_STAR_2026-06-10.md`) was
+executed against the star repo's working tree (2026-06-10 evening state,
+post-interaction-pass):
+
+- **`star/index.html` + `lattice/index.html` replaced** with the upgraded pages
+  (byte-identical to the star repo): κ-labels stamped at export / re-derived at
+  import · geometry-in-key (the manifold shape travels and rebuilds on import)
+  · sigil-PNG import (the image carries the key) · `[S]` snap hotkey (works in
+  focus mode; snapshots embed the loaded key).
+- **`sigil/index.html` NEW** — the third projection at `/sigil`: derivation
+  theater (Law L5 in the open), the κ-constellation (64 hash glyphs, one per
+  vertex, ring wearing the stance + SHAPE-1.5 engraving), compare with per-key
+  palettes + the A ∩ B overlap lattice, PNG export that carries the key.
+- **Homepage wired, landing rules untouched**: nav gains **Sigil**; the Key
+  section's *Project* node gains `/sigil →` and names the sigil; the *Carry*
+  node names the carrier ("share the portrait, you have shared the key"); the
+  Tetrahedra Forge card gains *Derive the sigil →* and the κ line. No changes
+  to the wave field, colour law, or attribution.
+- **`swordsman/index.html` NEW** — `/swordsman`, the plain-words guide to the
+  whole system (the loop: mint → walk → prove → name → charge · the three
+  rooms · the κ in one paragraph · the colour/shape/light triad · the carrier
+  with its two honest boundaries · who holds what). Nav gains **Swordsman**;
+  the Key section intro links "How the key works →". The /sigil on-page text
+  was then trimmed hard (one-line explains; depth lives in its 📖 legend and
+  /swordsman).
+- **Verified:** `/` `/swordsman` `/star` `/lattice` `/sigil` all 200 on :7000 ·
+  all four suite pages byte-identical to source · `npm run build` OK.
+
+Deploy when ready — this commit is the prod payload. Source of truth for
+future syncs remains `C:\Users\mitch\star` (github.com/mitchuski/star).
+
+---
+
+## 2026-06-10 — `/star` + `/lattice` GRADUATE: the standalone Swordsman's Key repo (holospace · κ · the Sigil)
+
+The walkable model born on this site (2026-05-27/28, below) was **extracted into
+its own public repo — [`github.com/mitchuski/star`](https://github.com/mitchuski/star)**
+— and re-grounded as a **browser compute surface** over
+[Hologram-Technologies/holospaces](https://github.com/Hologram-Technologies/holospaces)
+(UOR-native boot layer: *identity is content, not location*). What it gained
+there: **κ-labels** on every City Key (`kappa = sha256:H(canonical form)`,
+re-derived on every import); a new third page **/sigil 🪬** (the κ rendered as a
+constellation — SHA-256 is 64 hex glyphs, one per lattice vertex); and the
+**PNG carrier** — the sigil image (and /star snapshots) carry the full City Key
+inside the picture, importable on every page and chargeable at agentprivacy
+/city. The pages on THIS site (`/star`, `/lattice`) remain as deployed
+2026-05-28 and are now the *upstream-frozen* siblings; new development happens
+in the star repo. Full record there: `CHRONICLE_THE_FIRST_HOLOSPACE_2026-06-10.md`
+· `HOLOSPACE.md` · `EXPERIENCE.md`. Decide later whether soulbis.com's routes
+redirect to (or re-sync from) the standalone deploy.
+
+---
+
 ## 2026-05-27 — `/star` + `/lattice` integration (Swordsman's Key system)
 
 > Full write-up — including the suite-wide Soulbis Swordsman Protocol and the redesign sketch — in **[`CHRONICLE_SWORDSMAN_KEY_2026-05-27.md`](./CHRONICLE_SWORDSMAN_KEY_2026-05-27.md)**.
