@@ -138,7 +138,7 @@
 </head>
 <body>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/lattice · the lattice as manifold</span><span class="navgrp"><a class="navbtn" href="/">↖ home</a><a class="navbtn" id="toStar" href="#" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/sigil" title="the κ derivation — the key's 64-glyph constellation">🪬 /sigil</a><a class="navbtn" href="/skye" title="the night of many keys">🌌 /skye</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
+    <div class="eyebrow"><span>soulbis.com/lattice · the lattice as manifold</span></div>
     <h1>The 64 · Vertex Codex</h1>
     <p class="lede">Every point on the sovereignty manifold is one of <b>64 states</b> of the lattice ℒ = ℤ/64ℤ — a 6-bit address across the <b>six sovereignty dimensions</b>. Each carries a <b>stratum</b>, a <b>Swordsman reflection</b> (neg), a <b>Mage antipode</b> (bnot), and a <b>successor</b> (succ = neg∘bnot). Choose an intelligence, or import a <b>City Key 🗝️</b> to colour the gems and write a description onto every node.</p>
     <div class="keyrow">
@@ -214,7 +214,9 @@
 (function(){
   "use strict";
   const BITS=6, N=64, STRATA=[1,6,15,20,15,6,1];
-  // PVM V5.4 §12.6 — bit i (LSB-first) = dimension d(i+1)
+  // PVM §12.6 numeric encoding (MODEL lock · unified 2026-06-12): d₁ is the HIGH bit —
+  // the vertex binary string b₅b₄b₃b₂b₁b₀ reads d₁d₂d₃d₄d₅d₆ left to right.
+  // Anchors: V38=100110=🛡️🔗⚡ (Aletheia) · V25=011001=🤝📜💎 (Lethe) · V41=101001=🛡️📜💎 (Memora)
   const DIMS=['🛡️ Protection','🤝 Delegation','📜 Memory','🔗 Connection','⚡ Computation','💎 Value'];
   const DIM_E=['🛡️','🤝','📜','🔗','⚡','💎'];
   const neg=x=>(N-x)%N, bnot=x=>(N-1)-x, succ=x=>(x+1)%N;
@@ -351,8 +353,8 @@
       return `<div class="inslock">🔏 inscription locked — prove 🪢 focus here (pour at /city · walk it on this page) or light it by achievement.</div>`;
     return `<div class="insbox"><textarea id="insText" rows="4" maxlength="280" placeholder="your reading of this blade…">${esc(DESC[x]||'')}</textarea><div class="insrow"><button id="insBtn" class="btn" title="write your reading onto this proven blade — changes the key's content, drifts its κ">✍️ inscribe</button><span class="inscount" id="insCount"></span></div></div>`; }
   function renderPanel(){ const x=sel,s=pc(x);
-    const bits=b6(x).split('').map((c,i)=>`<div class="bit ${c==='1'?'on':''}" title="${DIMS[5-i]}">${DIM_E[5-i]}<br>${c}</div>`).join('');
-    const held=[]; for(let b=0;b<BITS;b++) if((x>>b)&1) held.push(DIMS[b]);
+    const bits=b6(x).split('').map((c,i)=>`<div class="bit ${c==='1'?'on':''}" title="${DIMS[i]}">${DIM_E[i]}<br>${c}</div>`).join('');
+    const held=[]; for(let b=BITS-1;b>=0;b--) if((x>>b)&1) held.push(DIMS[5-b]); // d₁ first
     const has=!!DESC[x];
     const desc = has ? `<span class="tag">from the loaded key</span>${DESC[x]}` : `<span class="tag">no description · import a key</span>${derivedReading(x)}`;
     panel.innerHTML = `
@@ -518,10 +520,11 @@
 
   // ---- nav link to /star (clean route on soulbis.com; use 'index.html' for a flat-folder deploy) ----
   const STAR_URL = '/star';
-  document.getElementById('toStar').setAttribute('href', STAR_URL);
+  { const ts=document.getElementById('toStar'); if(ts) ts.setAttribute('href', STAR_URL); }
 
   buildGrid(); selectVertex(0); applyPalette();
 })();
 </script>
+<script src="/public/sitenav.js" defer></script>
 </body>
 </html>

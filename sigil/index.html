@@ -106,8 +106,7 @@
 </head>
 <body>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/sigil · the third projection · beneath the lattice</span>
-      <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a><a class="navbtn" href="/skye" title="the night of many keys">🌌 /skye</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
+    <div class="eyebrow"><span>soulbis.com/sigil · the third projection · beneath the lattice</span></div>
     <h1>The Sigil</h1>
     <p class="lede">Your <b>City Key 🗝️</b>, read three ways. <b>① Derive</b> — its name, the <b>κ</b> = <code>sha256:H(canonical form)</code>, recomputed from its bytes and checked, in the open. <b>② Constellate</b> — the name drawn: <b>64 hash glyphs, one per vertex</b>. <b>③ Compare</b> — two keys side by side. <b>Identity is content, not location.</b> Full grounding in the 📖 legend below.</p>
   </header>
@@ -206,7 +205,9 @@
   const pc=x=>{let c=0;while(x){c+=x&1;x>>=1;}return c;};
   const b6=x=>x.toString(2).padStart(BITS,'0');
   const esc=s=>String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-  // PVM V5.4 §12.6 — bit i (LSB-first) = dimension d(i+1)
+  // PVM §12.6 numeric encoding (MODEL lock · unified 2026-06-12): d₁ is the HIGH bit —
+  // the vertex binary string b₅b₄b₃b₂b₁b₀ reads d₁d₂d₃d₄d₅d₆ left to right.
+  // Anchors: V38=100110=🛡️🔗⚡ (Aletheia) · V25=011001=🤝📜💎 (Lethe) · V41=101001=🛡️📜💎 (Memora)
   const DIMS=['🛡️ Protection','🤝 Delegation','📜 Memory','🔗 Connection','⚡ Computation','💎 Value'];
 
   // ---- κ-label (UOR-ADDR · sha256 axis) — same canon as /star + /lattice
@@ -448,7 +449,7 @@
     return Math.round(a/(Math.PI*2)*N)%N; }
   function inspect(x){ if(x<0){ return; } sel=x; drawRing();
     const g=glyphAt(x), held=[],open=[];
-    for(let b=0;b<BITS;b++) ((x>>b)&1?held:open).push(DIMS[b]);
+    for(let b=BITS-1;b>=0;b--) ((x>>b)&1?held:open).push(DIMS[5-b]); // d₁ first
     $('inspect').innerHTML='vertex <b>'+x+'</b> · '+b6(x)+' · stratum '+pc(x)+
       (g===null?'':' · glyph <b>'+g.toString(16)+'</b> ('+g+'/15)')+
       (W[x]>0?' · engraving <b>'+W[x].toFixed(2)+'</b> 🪢':'')+
@@ -571,5 +572,6 @@
   drawRing();
 })();
 </script>
+<script src="/public/sitenav.js" defer></script>
 </body>
 </html>

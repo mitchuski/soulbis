@@ -172,21 +172,8 @@
 <body>
   <canvas id="scene"></canvas>
 
-  <div class="masthead">
-    <div class="eyebrow">agentprivacy.ai · holographic boundary · V5.4</div>
-    <h1>Star Tetrahedron<br>Manifold</h1>
-    <div class="eq">r(θ,φ) = <b>R</b> + <b>ε</b> sin(<b>m</b>φ) cos(<b>n</b>θ)</div>
-    <div class="sub">⚔️ neg · 🧙 bnot · neg∘bnot = succ<br>∂M: 96 edges encode 64 vertices · 96/64 = 1.5 = P<sup>1.5</sup><br>renders V(π,t) · Φ_agent shown · Φ_data ⊥ Φ_inference off-axis · full legend on /lattice</div>
-    <div class="navrow">
-      <a class="navlink navlink--ghost" href="/">↖ home</a>
-      <a id="toLattice" class="navlink" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a>
-      <a class="navlink" href="/sigil" title="the κ derivation — the key's 64-glyph constellation">🪬 /sigil</a>
-      <a class="navlink" href="/skye" title="the night of many keys">🌌 /skye</a>
-      <a class="navlink navlink--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a>
-      <button id="focusBtn" class="navlink navlink--ghost" type="button" aria-label="enter focus mode" title="enter focus mode (presentation orbit) · F">🎬</button>
-      <button id="snapBtn" class="navlink navlink--ghost" type="button" aria-label="save PNG snapshot" title="save PNG snapshot of the manifold">📸</button>
-    </div>
-  </div>
+  <!-- the title + navigation now live in the collapsible corner nav (public/sitenav.js);
+       /star's two page actions (focus orbit, snapshot) fold into it as buttons, wired below. -->
 
   <div class="console" id="console">
     <header id="foldBtn"><span>Lattice Console</span><div class="fold">›</div></header>
@@ -782,7 +769,7 @@
     toast.textContent='trace saved · '+laps+(laps===1?' lap · ':' laps · ')+Math.round(traceSeconds)+'s succ · tour '+fmtTime(tourSeconds)+' — export the City Key to keep it';
     toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2800); });
   // nav link to /lattice (clean route on soulbis.com; use 'codex.html' for a flat-folder deploy)
-  const LATTICE_URL='/lattice'; $('toLattice').setAttribute('href',LATTICE_URL);
+  const LATTICE_URL='/lattice'; { const tl=$('toLattice'); if(tl) tl.setAttribute('href',LATTICE_URL); }
   // single source of truth: drive the colour swatches from state so they always match the render
   $('cCool').value=state.coolHex; $('cWarm').value=state.warmHex; $('cSword').value=state.swordHex; $('cMage').value=state.mageHex;
   updateInspector(); updateTracing();
@@ -820,7 +807,18 @@
     const b=$('keyTour'); b.classList.add('on'); _lastTourSec=-1; b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; }
   function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }
   $('keyTour').addEventListener('click',()=>{ tourMode?exitTour():engageTour(); });
+
+  // the corner nav (public/sitenav.js) injects /star's two page actions; wire them once it's built.
+  document.addEventListener('sitenav:ready',()=>{
+    const fb=$('focusBtn'); if(fb) fb.addEventListener('click',()=>{ focusMode?exitFocus():enterFocus(); });
+    const sb=$('snapBtn');  if(sb) sb.addEventListener('click',snapshot);
+  });
 })();
 </script>
+<script>window.SITENAV={ actions:[
+  { id:'focusBtn', ico:'🎬', name:'focus', tag:'presentation orbit · F', title:'enter focus mode (presentation orbit) · F' },
+  { id:'snapBtn',  ico:'📸', name:'snapshot', tag:'save PNG · S', title:'save PNG snapshot of the manifold · S' }
+]};</script>
+<script src="/public/sitenav.js" defer></script>
 </body>
 </html>

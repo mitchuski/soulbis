@@ -55,8 +55,7 @@
 </head>
 <body>
 <div class="page">
-  <div class="eyebrow"><span>soulbis · the swordsman guide · how the key works</span>
-    <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star">⚔️ /star</a><a class="navbtn" href="/lattice">🧙 /lattice</a><a class="navbtn" href="/sigil">🪬 /sigil</a><a class="navbtn" href="/skye">🌌 /skye</a></span></div>
+  <div class="eyebrow"><span>soulbis · the swordsman guide · how the key works</span></div>
   <h1>The Swordsman Guide</h1>
   <p class="lede">You hold a <b>City Key 🗝️</b> — a small file, not an account — that records your standing in the City of Mages. These four rooms let you <b>walk it</b>, <b>prove it</b>, <b>turn it into a portrait that carries itself</b>, and <b>gather many under one night</b>. No server holds your identity at any step; everything below happens in your browser, checkably.</p>
 
@@ -78,6 +77,31 @@
   <p>The loop is the point: the key is a <em>claim</em> when minted and a <em>record</em> after walking. Time spent in the geometry becomes proof nobody attested to — it's just arithmetic about where you stood.</p>
   <p>Both ends now speak κ: <b>/city</b> stamps the κ at mint and re-derives it at charge — a <em>reading, never a gate</em>; a mismatch is reported, not punished. And when only the proof should travel, <b>/lattice</b> exports a <b>⚡ charge pass</b> — trace, witness and κ, nothing else. Inscriptions, palette, focus amounts and identity stay home; /city charges it exactly as it would the full key.</p>
 
+  <h2>The Game of 42 — where the standing is forged</h2>
+  <p>Before a key is minted, the standing inside it is <em>built</em> — and the <b>Game of 42</b> is how a group builds one together. It is the ceremony that fills the lattice with real work, so what the key later carries is <b>earned, not declared</b>.</p>
+  <p><b>Two spaces, one board.</b> A governance position answers two questions: <em>which axis do you serve</em>, and <em>which faculties do you bring</em>. The six axes are the six sovereignty dimensions you already met — <b>🛡️ Protection · 🤝 Delegation · 📜 Memory · 🔗 Connection · ⚡ Computation · 💎 Value</b>. The faculties are three — <b>head, heart, hands</b> — and their seven non-empty combinations are the seven <em>stations</em> of a heptad. Six axes × seven stations = <b>42</b>.</p>
+  <p><b>The heptad of seven.</b> Each axis is one heptad — seven seats, each read from the faculty it holds:</p>
+  <div class="triad">
+    <div class="tri tri--colour"><div class="tk">head · vision fish</div><p>The three head-holding seats. Hitchhiker advisors who turn a vision into the buildable questions — they read as paths before they are positions, so they arrive first.</p></div>
+    <div class="tri tri--shape"><div class="tk">hands &amp; heart · mice</div><p>The three making seats — lead, caring, and steward builders. They do the work the advisors framed; a heptad cannot seal on vision alone.</p></div>
+    <div class="tri tri--light"><div class="tk">head + heart + hands · the guide</div><p>The one centre seat holding all three faculties — the <b>keystone</b>. Only the part that holds all three can hold the whole, so the guide alone can carry a child game.</p></div>
+  </div>
+  <p><b>The keystone seals last.</b> The guide cannot even begin until the other six seats are verified — <em>“nothing seals until the keystone, and the keystone cannot be laid until the rest is true.”</em></p>
+
+  <h2>How a board seals</h2>
+  <div class="loop">  each seat walks   <b>empty → proposed → in&nbsp;progress → verified → sealed</b>
+    ⇣                a seat reaches <b>verified</b> only when a real trust task passes
+                     and its proof is κ-compressed into an edge — no advance on unproven history
+    ⇣
+  a heptad <b>locks</b>   when all seven of its seats are sealed · the flap folds shut
+    ⇣
+  the board <b>folds</b>  only when all six heptads lock — <b>p = sealed ÷ 42 → 1</b>
+                     six heptads close into the star tetrahedron you walk at <b>/star</b></div>
+  <p><b>Multiplicative collapse.</b> There is no partial seal. If any single axis is short even one seat, the whole board stays open — the <em>any-axis-zero-zeros-the-whole</em> rule, made into a gate. A standing is whole, or it is not yet a standing.</p>
+  <p><b>The seal becomes a key.</b> When the board folds, one SHA-256 over all 42 edge-labels plus the geometry becomes the <b>group seal</b> — and that seal drops straight in here as a City Key: its six axes light on <b>/star</b>, its proven seats show on <b>/lattice</b>, <b>/sigil</b> re-derives its κ (verified), and <b>/city</b> charges it for 🪢 mana. A forged game is carryable proof.</p>
+  <p><b>Many games, one sky.</b> Because every sealed game is just a key bearing a seal and a six-axis bitmask, any number of them can rise together on <b>/skye</b> — each placed by its κ, <span style="color:var(--gold)">gold threads</span> for lineage (one game forged from another), <span style="color:var(--teal)">teal threads</span> for the ground two games share, computed <em>blind</em> so the overlap shows and nothing else.</p>
+  <div class="note"><b>Where to play.</b> The full assembly engine lives at <a href="https://42.agentprivacy.ai" style="color:var(--sword)">42.agentprivacy.ai</a> — fold a board, seal it, and save the PNG. Drop that PNG on <b>/skye</b> here and the game rises as a star among the others.</div>
+
   <h2>The four rooms</h2>
   <div class="rooms">
     <a class="room" href="/star"><span class="glyph">⚔️</span><h3>/star · walk it</h3>
@@ -90,7 +114,7 @@
       <p>The bytes: watch the key's name — its κ — be recomputed from its exact content and checked against what it claims. Then see the name drawn: 64 hash glyphs on 64 vertices, your constellation. Compare two keys: shared ground in teal, divergence pulsing.</p>
       <span class="go">derive →</span></a>
     <a class="room" href="/skye"><span class="glyph">🌌</span><h3>/skye · gather it</h3>
-      <p>The night of many keys: add any number — yours, friends', your own key's ancestors — and each rises as a star placed by its κ. Gold threads are lineage (the <code>prior</code> chain); teal threads are common ground — drawn locally, or computed <em>blind</em> with a friend via a two-file 🤝 exchange that reveals the overlap and nothing else. 📸 snaps the whole night as one image carrying every risen key.</p>
+      <p>The night of many keys: add any number — yours, friends', your own key's ancestors, <b>and sealed Games of 42</b> — and each rises as a star placed by its κ. Gold threads are lineage (the <code>prior</code> chain); teal threads are common ground — drawn locally, or computed <em>blind</em> with a friend via a two-file 🤝 exchange that reveals the overlap and nothing else. 📸 snaps the whole night as one image carrying every risen key.</p>
       <span class="go">gather →</span></a>
   </div>
 
@@ -118,5 +142,6 @@
     privacymage / 0xagentprivacy
   </footer>
 </div>
+<script src="/public/sitenav.js" defer></script>
 </body>
 </html>

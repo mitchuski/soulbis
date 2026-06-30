@@ -46,6 +46,7 @@
   .inspect{ margin-top:12px; font-size:11px; line-height:1.8; color:var(--dim); min-height:40px; }
   .inspect b{ color:#ffd6c7; font-weight:500; } .inspect .k{ color:#9aa6d6; word-break:break-all; }
   .inspect .teal{ color:var(--teal); } .inspect .gold{ color:var(--gold); }
+  .inspect .gm{ color:#c9a6e9; } /* Game of 42 — violet, the ⚔️+🧙 fold (neither side alone) */
   .psigrid{ display:grid; grid-template-columns:repeat(8,1fr); gap:5px; max-width:420px; margin-top:14px; }
   .psigrid .pc{ position:relative; aspect-ratio:1; border-radius:6px; border:1px solid rgba(255,255,255,0.06);
     display:flex; align-items:center; justify-content:center; font-size:10px; color:rgba(124,134,184,0.45);
@@ -69,10 +70,9 @@
 </head>
 <body>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/skye · the fourth projection · the night of many keys</span>
-      <span class="navgrp"><a class="navbtn navbtn--ghost" href="/">↖ home</a><a class="navbtn" href="/star" title="the star-tetrahedron manifold">⚔️ /star</a><a class="navbtn" href="/lattice" title="the 64 · vertex codex">🧙 /lattice</a><a class="navbtn" href="/sigil" title="κ derivation · the constellation · compare">🪬 /sigil</a><a class="navbtn navbtn--ghost" href="/guide" title="how the key works — the plain-words guide">🗡️ /guide</a></span></div>
+    <div class="eyebrow"><span>soulbis.com/skye · the fourth projection · the night of many keys</span></div>
     <h1>The Skye</h1>
-    <p class="lede">Many keys, <b>one sky</b>. Add any number — JSON or sigil PNG — and each rises as a star: its <b>κ places it</b> (identity is content, even its place in the night), its own palette lights its 64-glyph cluster. <b>Gold threads</b> are lineage (<code>prior</code> chains); <b>teal threads</b> are common ground (shared touched vertices). Grounding in the 📖 legend.</p>
+    <p class="lede">Many keys, <b>one sky</b>. Add any number — JSON or sigil PNG — and each rises as a star: its <b>κ places it</b> (identity is content, even its place in the night), its own palette lights its 64-glyph cluster. <b>Gold threads</b> are lineage (<code>prior</code> chains); <b>teal threads</b> are common ground (shared touched vertices). A sealed <b>🎲 Game of 42</b> rises as a <b>violet hub</b> — the gathering's seal, with the keys made from it bound to it in violet. Grounding in the 📖 legend.</p>
   </header>
 
   <div class="wrap">
@@ -119,6 +119,7 @@
       <div class="legend-grid">
         <span class="lk">the placement</span><span class="lv">each star sits where its <b>re-derived κ</b> puts it — the first 16 hex glyphs become its coordinates. No curator, no order of arrival: <b>the content addresses the sky</b>. Re-import the same key anywhere and it rises in the same place.</span>
         <span class="lk">the star</span><span class="lv">a key's star is its sigil in miniature — 64 glyph points in succ order, lit by the κ's own hex intensities, coloured by the key's own palette by stratum. Every framing is a full instance: each star still <i>carries</i> everything its key carries.</span>
+        <span class="lk">🎲 the Game of 42 · the seal that binds</span><span class="lv">a sealed <b>Game of 42</b> board (six axes × seven stations folded into the star) is not another person's key — it is a <b>gathering's seal</b>. It exports a PNG carrying a City Key projection of its <b>group seal</b>; drop it here and it rises as a <b>violet hub</b> (the ⚔️+🧙 fold, neither side alone), not a peer star. Every key minted from that game names the seal as its <code>prior</code>, so each one <b>binds to the hub</b> in violet — the gathering made visible as the thing its members hold in common. Hover the hub for preset, the axes it locked (🛡️🤝📜🔗⚡💎), seal, and how many keys it binds. Only the seal, the axes and κ travel; the 42-slot interior stays home.</span>
         <span class="lk">gold threads · lineage</span><span class="lv">when one key's <code>prior</code> equals another's κ, a gold thread joins child to ancestor — the κ-chain drawn (C87: <i>the key accumulates</i>). A sky of one bearer's exports is their key's history, visible.</span>
         <span class="lk">teal threads · common ground</span><span class="lv">between every pair, the count of <b>shared touched vertices</b> (lit · described · poured · proven on both) draws as a teal thread — brighter the more ground is shared. Divergence is the default; the threads show what is <i>in common</i>.</span>
         <span class="lk">the sky shot</span><span class="lv">📸 exports the night as a PNG that <b>carries every risen key</b> — <code>{version, sky:true, keys:[…]}</code> in a <code>tEXt</code> chunk, keyword <code>citySky</code> (the single-key carrier's grammar, one rung up). Drop the shot back here and the whole night rises again; each carried key still imports individually on /star, /lattice, /sigil. One picture, a whole gathering — share it knowing it shares <i>all</i> of it.</span>
@@ -225,6 +226,14 @@
     for(let x=0;x<N;x++){ if(lit.has(x)||desc[x]||+focus[x]>0||+spent[x]>0) out.add(x); }
     return out; }
 
+  // a key may be a projected Game of 42 seal (source.kind==='game-of-42') — surface it.
+  // axes decoded in the soulbis lattice order (d₁ Protection = high bit), matching /lattice.
+  const AXE=['💎','⚡','🔗','📜','🤝','🛡️']; // bit 0..5 = Value..Protection
+  function gameOf(cfg){ const sc=cfg&&cfg.source; if(!sc||sc.kind!=='game-of-42') return null;
+    const bm=+sc.axisBitmask||0, ax=[]; for(let b=5;b>=0;b--) if((bm>>b)&1) ax.push(AXE[b]);
+    return { preset:sc.preset||'game', axes:ax.join('')||'—',
+      seal:(cfg.packets&&cfg.packets.root)||'', count:(cfg.packets&&cfg.packets.count)||0 }; }
+
   // ---- the sky
   const $=id=>document.getElementById(id);
   const sky=$('sky'), sctx=sky.getContext('2d');
@@ -240,13 +249,18 @@
   function starXY(s,w,h,k){ const M=64*(k||1); return { x:M+s.u*(w-2*M), y:M+s.v*(h-2*M) }; }
   function shared(a,b){ let n=0; for(const v of a.touched) if(b.touched.has(v)) n++; return n; }
   // one painter, two framings: the live canvas (k=1) and the 📸 sky shot (scaled up)
+  const isGameStar=s=>!!(s.cfg.source&&s.cfg.source.kind==='game-of-42'); // a gathering's seal, not a person
   function paintSky(ctx,w,h,hov,k){ k=k||1;
     // threads first — under the stars
     for(let i=0;i<STARS.length;i++) for(let j=i+1;j<STARS.length;j++){
       const A=STARS[i], B=STARS[j], a=starXY(A,w,h,k), b=starXY(B,w,h,k);
-      // gold — lineage: child's prior names ancestor's κ
+      // lineage: child's prior names ancestor's κ. If that ancestor is a Game of 42 seal,
+      // this is a BINDING — a key bound to the gathering's seal — drawn violet; otherwise
+      // ordinary κ-chain lineage, drawn gold.
       const lin=(A.cfg.prior===B.kappa)||(B.cfg.prior===A.kappa);
-      if(lin){ ctx.strokeStyle='rgba(255,230,194,0.55)'; ctx.lineWidth=1.2*k; ctx.setLineDash([5*k,4*k]);
+      const bindToGame=(A.cfg.prior===B.kappa&&isGameStar(B))||(B.cfg.prior===A.kappa&&isGameStar(A));
+      if(lin){ ctx.strokeStyle=bindToGame?'rgba(201,166,233,0.62)':'rgba(255,230,194,0.55)';
+        ctx.lineWidth=(bindToGame?1.5:1.2)*k; ctx.setLineDash([5*k,4*k]);
         ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); ctx.setLineDash([]); }
       // teal — common ground: shared touched vertices
       const n=shared(A,B);
@@ -263,6 +277,15 @@
         ctx.beginPath(); ctx.arc(x+rr*Math.cos(a),y+rr*Math.sin(a),(0.6+1.5*g/15)*k,0,Math.PI*2); ctx.fill(); }
       ctx.fillStyle=hov===i?'#ffffff':'rgba(232,237,255,0.85)';
       ctx.beginPath(); ctx.arc(x,y,1.8*k,0,Math.PI*2); ctx.fill();
+      // a Game of 42 is the gathering's SEAL — a hub, not a peer star: a bold violet double
+      // ring + a filled seal core. Keys bound to it (prior = its κ) thread in violet, above.
+      if(isGameStar(s)){ const A=hov===i?1:0.72;
+        ctx.strokeStyle='rgba(201,166,233,'+A+')'; ctx.lineWidth=1.6*k;
+        ctx.beginPath(); ctx.arc(x,y,R*0.95,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle='rgba(201,166,233,'+(A*0.5)+')'; ctx.lineWidth=0.8*k;
+        ctx.beginPath(); ctx.arc(x,y,R*1.14,0,Math.PI*2); ctx.stroke();
+        ctx.fillStyle='rgba(201,166,233,'+(hov===i?0.55:0.34)+')';
+        ctx.beginPath(); ctx.arc(x,y,3.4*k,0,Math.PI*2); ctx.fill(); }
       ctx.font='italic 300 '+(12*k)+'px Fraunces,serif'; ctx.textAlign='center'; ctx.textBaseline='top';
       ctx.fillStyle=hov===i?'#e8edff':'rgba(174,184,238,0.75)';
       ctx.fillText(s.cfg.name||'city key',x,y+R+8*k);
@@ -304,10 +327,18 @@
     if(i<0){ el.innerHTML='hover a star to read it · the sky is local — nothing leaves this page'; return; }
     const s=STARS[i], lit=Array.isArray(s.cfg.lit)?s.cfg.lit.length:0;
     const anc=STARS.find(o=>o.kappa===s.cfg.prior);
+    const gm=gameOf(s.cfg);
+    const bound=gm?STARS.filter(o=>o.cfg.prior===s.kappa).length:0; // keys this seal binds
+    const ancIsGame=!!(anc&&anc.cfg.source&&anc.cfg.source.kind==='game-of-42');
     const kin=STARS.reduce((m,o,j)=>{ if(j===i) return m; const n=shared(s,o); return n>m.n?{n,o}:m; },{n:0,o:null});
     el.innerHTML='<b>'+esc(s.cfg.name||'city key')+'</b> · <span class="k">'+esc(s.kappa.slice(0,23))+'…</span>'
+      +(gm?' · <span class="gm">🎲 Game of 42 · '+esc(gm.preset)+' · '+gm.axes+' · seal '+esc(gm.seal.slice(0,12))+'… · '+gm.count+'/42'+(bound?' · binds '+bound+' key'+(bound===1?'':'s'):' · no keys bound yet')+'</span>':'')
       +' · ✦ '+lit+' lit · '+s.touched.size+' touched'
-      +(typeof s.cfg.prior==='string'?' · <span class="gold">descends from '+esc(s.cfg.prior.slice(0,15))+'…'+(anc?' — risen here as <b>'+esc(anc.cfg.name||'city key')+'</b>':'')+'</span>':'')
+      +(typeof s.cfg.prior==='string'
+        ?(ancIsGame
+          ?' · <span class="gm">bound to 🎲 <b>'+esc(anc.cfg.name||'game of 42')+'</b></span>'
+          :' · <span class="gold">descends from '+esc(s.cfg.prior.slice(0,15))+'…'+(anc?' — risen here as <b>'+esc(anc.cfg.name||'city key')+'</b>':'')+'</span>')
+        :'')
       +(kin.o?' · <span class="teal">closest kin: <b>'+esc(kin.o.cfg.name||'city key')+'</b> (∩'+kin.n+')</span>':''); }
   // import — files or drag-drop; each file is one key (JSON or sigil PNG) or a whole sky shot
   function takeFiles(files){ [...files].forEach(f=>readSkyFile(f,o=>{
@@ -428,5 +459,6 @@
   drawSky();
 })();
 </script>
+<script src="/public/sitenav.js" defer></script>
 </body>
 </html>
