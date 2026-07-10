@@ -159,8 +159,20 @@
     .console.trace{ bottom:14px; width:252px; } .launcher--trace{ bottom:14px; }
   }
 
+  /* V6 · the moving-ceiling badge — announces the reading over the sculpture */
+  .ceilbadge{ position:fixed; top:64px; left:50%; transform:translate(-50%,-8px); z-index:8;
+    font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text,#f0eee8);
+    background:var(--glass); border:1px solid rgba(77,217,232,0.45); border-radius:999px; padding:8px 18px;
+    backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease, transform .5s ease, border-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 18px rgba(77,217,232,0.10); white-space:nowrap; }
+  .ceilbadge.show{ opacity:0.92; transform:translate(-50%,0); }
+  .ceilbadge b{ font-weight:600; }
+  .ceilbadge.warm{ border-color:rgba(224,165,38,0.6); box-shadow:0 0 22px rgba(224,165,38,0.16); }
+  .ceilbadge.breach{ border-color:rgba(232,82,58,0.75); box-shadow:0 0 26px rgba(232,82,58,0.24); animation:ceilAlarm 1.1s ease-in-out infinite; }
+  @keyframes ceilAlarm{ 0%,100%{ box-shadow:0 0 14px rgba(232,82,58,0.16);} 50%{ box-shadow:0 0 30px rgba(232,82,58,0.38);} }
+
   /* [f] focus mode — fullscreen presentation orbit: fade all chrome, keep the sculpture turning */
-  body.focus .masthead, body.focus .console, body.focus .launcher, body.focus .inspector, body.focus .hint{ opacity:0 !important; pointer-events:none !important; transition:opacity .6s ease; }
+  body.focus .masthead, body.focus .console, body.focus .launcher, body.focus .inspector, body.focus .hint, body.focus .ceilbadge{ opacity:0 !important; pointer-events:none !important; transition:opacity .6s ease; }
   body.focus #scene{ cursor:default; }
   .focusbadge{ position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:8;
     font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim);
@@ -230,7 +242,7 @@
 
   <!-- Path & Key — the runecraft-style tracing of the geometry (separate from the look console) -->
   <div class="console trace" id="trace">
-    <header id="foldBtn2"><span>Path · Key — trace</span><div class="fold">›</div></header>
+    <header id="foldBtn2"><span>Path · Key · Ceiling — the walk in time</span><div class="fold">›</div></header>
     <div class="body">
       <div class="sect">Path · T∫(π) — the dance, not the stance</div>
       <div class="row"><div class="lbl"><span class="k">marker speed</span><span class="v" id="vSpeed">0.12</span></div>
@@ -259,10 +271,27 @@
       </div>
       <div class="keyname" id="keyName">no key loaded</div>
       <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
+
+      <div class="divider"></div>
+      <div class="sect">Moving Ceiling · R(t) ⏳</div>
+      <div class="row etoggles">
+        <label class="etoggle" title="V6 · C82 — H(X) is fixed while adversarial capacity grows; the boundary holds while R(t) < 1. Reading the ceiling makes it visible: a shell closes on the boundary as R(t) → 1. Geometry untouched."><input type="checkbox" id="tCeil"><span class="ico">⏳</span><span class="lbl2">read the ceiling</span></label>
+      </div>
+      <div class="row"><div class="lbl"><span class="k">reconstructable today · R₀</span><span class="v" id="vR0">0.35</span></div>
+        <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
+      <div class="row"><div class="lbl"><span class="k">how fast reach grows · g</span><span class="v" id="vDrift">0.25</span></div>
+        <input type="range" id="sDrift" min="0.02" max="1" step="0.01" value="0.25"></div>
+      <div class="row"><div class="lbl"><span class="k">years from now · t</span><span class="v" id="vT">0.0</span></div>
+        <input type="range" id="sT" min="0" max="20" step="0.1" value="0"></div>
+      <div class="row"><label class="swatch"><input type="color" id="cCeil" value="#8b4daa"> ⏳ ceiling shell color</label></div>
+      <div class="row"><div class="lbl"><span class="k" id="ceilRead">R(t) = 0.35 · t* = 4.2y</span><span class="v" id="ceilState">off</span></div>
+        <div id="ceilBar" style="width:100%;height:4px;border-radius:2px;background:rgba(240,238,232,0.08);overflow:hidden;margin-top:4px"><div id="ceilFill" style="height:100%;width:35%;background:#4dd9e8;transition:width .2s,background .2s"></div></div></div>
+      <div id="ceilStory" style="display:none;font-size:10px;color:var(--text,#f0eee8);opacity:0.75;line-height:1.6;margin-top:7px"></div>
+      <div style="font-size:9px;color:var(--dim);line-height:1.5;margin-top:6px">C82 · ~65% · mechanism evidenced (n=2), rate unparameterized — the sliders are a what-if, not a measurement of rate. R(t) = R₀·e<sup>g·t</sup> · t* = ln(1/R₀)/g. the register wins.</div>
     </div>
   </div>
 
-  <button id="launcher2" class="launcher launcher--trace" title="open path & key panel">🛤️</button>
+  <button id="launcher2" class="launcher launcher--trace" title="open path · key · ceiling panel">🛤️</button>
 
   <div class="inspector" id="inspector">
     <div class="tracer" id="tracer" aria-hidden="true">
@@ -276,7 +305,7 @@
         <g id="tracerDotG"><circle class="tracer-dot" cx="33.5" cy="18" r="2"/></g>
         <text class="tracer-laps" id="tracerLaps" x="18" y="18" transform="rotate(90 18 18)">0</text>
       </svg>
-      <div class="tracer-label">tracing the succ cycle<br><b id="tracerV">0</b> · <span id="tracerStratum">stratum 0</span></div>
+      <div class="tracer-label">tracing the succ cycle<br><b id="tracerV">0</b> · <span id="tracerStratum">stratum 0</span><br>T∫(π) <b id="tracerVal">0.0</b></div>
     </div>
     <div class="ins-head">vertex <b id="iX">0</b> · <span class="bits" id="iBits">000000</span></div>
     <div class="ins-grid">
@@ -286,9 +315,10 @@
       <span class="k">😊 succ</span><span class="v" id="iSucc">1 · 000001</span>
     </div>
     <div class="ins-desc" id="insDesc"></div>
-    <div class="ins-foot"><b>🛤️ value lives on the path, not the vertex.</b> paused: coral = 6 dimension-toggles, cyan = antipode (bnot). boundary ∂M: 96/64 = 1.5 = P<sup>1.5</sup>.</div>
+    <div class="ins-foot"><b>🛤️ value lives on the path, not the vertex.</b> paused: coral = 6 dimension-toggles, cyan = antipode (bnot). boundary ∂M: 96/64 = 1.5 = P<sup>1.5</sup>. the boundary is dated, not eternal — it holds while R(t) &lt; 1.</div>
   </div>
 
+  <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
   <div class="toast" id="toast">snapshot saved</div>
   <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus · <b style="color:#ffd6c7;font-weight:500">S</b> snap 📸</div>
   <div class="focusbadge" id="focusbadge">focus mode · S snaps 📸 · tap to exit · F / Esc</div>
@@ -312,8 +342,17 @@
   };
   const DEFAULTS={ eps:0.35,m:5,n:6,core:0.60,spin:0.30,mode:'both',edgeMode:'holo',
     showLattice:true,showSucc:true,showNeg:false,showBnot:false,showInfo:true,glow:true,smRatio:1.0,cellOpacity:0.20, playing:true,speed:0.12,markerF:0,
+    ceilOn:false,r0:0.35,drift:0.25,tYears:0,ceilHex:'#8b4daa',
     coolHex:'#141a3d',warmHex:'#f0eee8',swordHex:'#e8523a',mageHex:'#4dd9e8' };
   const state=Object.assign({},DEFAULTS);
+  // V6 · moving-ceiling reading state — declared before tick() first runs (it reads CEIL_CUR every frame)
+  const CEIL_BASE={holo:0.6,full:0.30}, CEIL_WHITE=new THREE.Color(0xffffff), CEIL_WARM=new THREE.Color(0xe0a526), CEIL_HOT=new THREE.Color(0xe8523a);
+  const CEIL_CUR={on:false,frac:0,breach:false,opHolo:CEIL_BASE.holo,opFull:CEIL_BASE.full};
+  const CEIL_COL=new THREE.Color(0x8b4daa); // the shell's own hue (user-changeable) — the ceiling is a third thing, neither sword nor mage
+  let ceilVeil=null, ceilNet=null, traceValue=0, _lastValStr='';
+  const ceilR=()=>state.r0*Math.exp(state.drift*state.tYears);
+  const ceilTstar=()=>Math.log(1/state.r0)/state.drift;
+  const ceilShellTint=frac=>CEIL_COL.clone().lerp(CEIL_HOT,frac*frac); // shell heats in its own color, coral only near the end
   // City Key payload (v1 additive fields): achievement-lit vertices + bearer identity.
   let LIT=new Set(), IDENT=null;
   let focusMode=false, focusT=0; // [f] fullscreen presentation orbit
@@ -683,7 +722,15 @@
     coreGroup.rotation.y+=dt*0.55; coreGroup.rotation.x=0.32; latticeGroup.rotation.y-=dt*0.12;
     const mix=0.5+0.5*Math.sin(coreGroup.rotation.y*0.9), gOn=state.glow;
     coreLight.color.copy(SWORD_COL).lerp(MAGE_COL,mix); coreLight.intensity=gOn?1.2*(0.85+0.2*Math.sin(t*1.6)):0.1;
-    if(heartMesh){heartMesh.material.color.copy(SWORD_COL).lerp(MAGE_COL,mix); heartMesh.material.opacity=gOn?(0.42+0.12*Math.sin(t*1.6)):0.05;}
+    if(heartMesh){heartMesh.material.color.copy(SWORD_COL).lerp(MAGE_COL,mix); heartMesh.material.opacity=gOn?(0.42+0.12*Math.sin(t*1.6)):0.05;
+      // V6 ceiling breach — the white heart reads exposed: fast coral pulse while R(t) ≥ 1 (display only)
+      if(CEIL_CUR.on&&CEIL_CUR.breach){ heartMesh.material.color.copy(SWORD_COL); heartMesh.material.opacity=0.55+0.3*Math.sin(t*6); } }
+    // V6 ceiling — the boundary breathes while the reading is on: calm far from t*, quick near it
+    if(CEIL_CUR.on&&latHolo&&latFull){ const rate=1.2+6*CEIL_CUR.frac, br=0.85+0.15*Math.sin(t*rate);
+      latHolo.material.opacity=CEIL_CUR.opHolo*br; latFull.material.opacity=CEIL_CUR.opFull*br;
+      if(ceilNet){ ceilNet.rotation.y+=dt*0.05; ceilNet.rotation.x=0.2;
+        const shellBr=1+0.06*Math.sin(t*rate*0.7); const base=CEIL_CUR.breach?0.76:(1.12-0.32*CEIL_CUR.frac);
+        ceilVeil.scale.setScalar(base*shellBr); ceilNet.scale.setScalar(base*shellBr*1.004); } }
     const starOp = gOn ? (0.6+0.35*Math.sin(t*1.6)) : 0.12;  // stars follow the core glow (pulse + on/off)
     coreObjs.forEach(o=>{if(o.isSprite){ o.scale.setScalar((gOn?0.5:0.44)+0.12*Math.sin(t*1.6)); o.material.opacity=starOp; }});
     if(state.playing&&!tourMode&&state.showLattice&&state.showSucc){ const prevMF=state.markerF; state.markerF=(state.markerF+dt*state.speed*N)%N;
@@ -693,7 +740,12 @@
       const prog=(state.markerF%N)/N;
       const arc=gid('tracerArc'); if(arc) arc.style.strokeDashoffset=(97.39*(1-prog)).toFixed(2);
       const dg=gid('tracerDotG'); if(dg) dg.setAttribute('transform','rotate('+(prog*360).toFixed(1)+' 18 18)');
-      const v=currentVertex(), tv=gid('tracerV'); if(tv&&tv._v!==v){ tv._v=v; tv.textContent=v; const ts=gid('tracerStratum'); if(ts) ts.textContent='stratum '+popcount(v); } }
+      const v=currentVertex(), tv=gid('tracerV'); if(tv&&tv._v!==v){ tv._v=v; tv.textContent=v; const ts=gid('tracerStratum'); if(ts) ts.textContent='stratum '+popcount(v); }
+      // T∫(π) — value lives on the path: accrues per vertex walked, weighted by its stratum (popcount/6);
+      // one full lap ≈ 32. Freezes while the ceiling is breached (no value accrues past R ≥ 1). Display only —
+      // never written into the City Key.
+      if(!(CEIL_CUR.on&&CEIL_CUR.breach)) traceValue+=dt*state.speed*N*(popcount(v)/BITS);
+      const vs=traceValue.toFixed(1); if(vs!==_lastValStr){ _lastValStr=vs; const te=gid('tracerVal'); if(te){ te.textContent=vs; te.style.color=(CEIL_CUR.on&&CEIL_CUR.breach)?'#e8523a':''; } } }
     // ✦ key-tour walk timer — how long you've walked the City Key's tour (dwell time, accumulates across engagements)
     if(tourMode&&keyLoaded){ tourSeconds+=dt; const sec=Math.floor(tourSeconds); if(sec!==_lastTourSec){ _lastTourSec=sec; const b=gid('keyTour'); if(b) b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; } }
     if(latMarker&&latMarker.visible){ const x=Math.floor(state.markerF)%N,x1=(x+1)%N,fr=state.playing?(state.markerF-Math.floor(state.markerF)):0,a=VERTS[x],b=VERTS[x1];
@@ -710,6 +762,61 @@
   bind('sRatio','vRatio','smRatio',v=>(Math.abs(v-PHI)<0.02?('φ · '+v.toFixed(3)):v.toFixed(3)),buildCore);
   bind('sCell','vCell','cellOpacity',v=>v.toFixed(2),()=>{ if(latCell)latCell.material.opacity=state.cellOpacity; });
   bind('sSpin','vSpin','spin',v=>v.toFixed(2),null); bind('sSpeed','vSpeed','speed',v=>v.toFixed(2),null);
+
+  // ===== V6 · Moving Ceiling instrument (C82, illustrative) — STAR_GATES S1 proposal under review =====
+  // The reading dresses the scene, never the canon: a CEILING SHELL closes from outside the lattice
+  // (r 1.12 → 0.80 as R(t) → 1, through the boundary at breach), the ∂M edges heat white → amber →
+  // coral and breathe faster as t* nears, the heart reads exposed at breach. Geometry and κ untouched.
+  function ensureCeilShell(){ if(ceilVeil) return;
+    ceilVeil=new THREE.Mesh(new THREE.SphereGeometry(1,48,32),
+      new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.05,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));
+    ceilVeil.renderOrder=2;
+    ceilNet=new THREE.Mesh(new THREE.SphereGeometry(1,20,14),
+      new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.08,blending:THREE.AdditiveBlending,depthWrite:false,wireframe:true}));
+    ceilNet.renderOrder=2;
+    latticeGroup.add(ceilVeil,ceilNet); }
+  function applyCeiling(){
+    const on=state.ceilOn, Rt=ceilR(), ts=ceilTstar(), breach=Rt>=1, frac=Math.min(Rt,1);
+    CEIL_CUR.on=on; CEIL_CUR.frac=frac; CEIL_CUR.breach=breach;
+    const read=$('ceilRead'), st=$('ceilState'), fill=$('ceilFill'), badge=$('ceilBadge');
+    if(read) read.textContent='R(t) = '+(Rt>=10?Rt.toFixed(0):Rt.toFixed(2))+' · t* = '+ts.toFixed(1)+'y';
+    if(st){ st.textContent=on?(breach?'breached — re-key':('holds · '+Math.max(0,ts-state.tYears).toFixed(1)+'y left')):'off';
+      st.style.color=on?(breach?'#e8523a':(frac>0.75?'#e0a526':'')):''; }
+    if(fill){ fill.style.width=(frac*100).toFixed(0)+'%'; fill.style.background=breach?'#e8523a':(frac>0.75?'#e0a526':'#4dd9e8'); }
+    { const te=$('tracerVal'); if(te) te.style.color=(on&&breach)?'#e8523a':''; } // frozen value reads coral at breach
+    if(badge){ badge.classList.toggle('show',on);
+      badge.classList.toggle('warm',on&&!breach&&frac>0.75); badge.classList.toggle('breach',on&&breach);
+      badge.innerHTML=breach
+        ? '⏳ R(t) ≥ 1 · the boundary no longer holds — <b>re-key</b>'
+        : '⏳ the ceiling is moving · R(t) <b>'+Rt.toFixed(2)+'</b> · t* <b>'+ts.toFixed(1)+'y</b> · '+(frac>0.75?'closing':'the boundary holds'); }
+    // the boundary DIMS and BREATHES with health but keeps its own colors — the warning
+    // color story lives in the shell + badge alone (two objects, two readings, v4 legibility)
+    if(latHolo&&latFull){
+      latHolo.material.color.copy(CEIL_WHITE); latFull.material.color.copy(CEIL_WHITE);
+      if(!on){ CEIL_CUR.opHolo=CEIL_BASE.holo; CEIL_CUR.opFull=CEIL_BASE.full;
+        latHolo.material.opacity=CEIL_BASE.holo; latFull.material.opacity=CEIL_BASE.full; }
+      else{ const health=Math.max(0,1-Rt), op=breach?0.18:(0.35+0.65*health);
+        CEIL_CUR.opHolo=CEIL_BASE.holo*op; CEIL_CUR.opFull=CEIL_BASE.full*op;
+        latHolo.material.opacity=CEIL_CUR.opHolo; latFull.material.opacity=CEIL_CUR.opFull; } }
+    // the story line — every slider move narrates itself in plain words
+    { const story=$('ceilStory'); if(story){ story.style.display=on?'':'none';
+      if(on){ const pct=(frac*100).toFixed(0), yr=state.tYears.toFixed(1), left=Math.max(0,ts-state.tYears).toFixed(1);
+        story.innerHTML=breach
+          ? 'year '+yr+' · past t* — the two channels now cover everything H(X) holds. what the boundary sealed at year 0 is readable now. <b style="color:#e8523a">re-key.</b>'
+          : 'year '+yr+' · the adversary\'s channels reach <b>'+pct+'%</b> of what would reconstruct the First Person. the boundary holds <b>'+left+'y</b> more'+(frac>0.75?' — <b style="color:#e0a526">t* is close, re-key soon.</b>':'.'); } } }
+    ensureCeilShell();
+    ceilVeil.visible=ceilNet.visible=on;
+    if(on){ const r=breach?0.76:(1.12-0.32*frac); // the ceiling descends: 1.12 → 0.80 at R=1, inside at breach
+      const shellTint=ceilShellTint(frac);
+      ceilVeil.scale.setScalar(r); ceilNet.scale.setScalar(r*1.004);
+      ceilVeil.material.color.copy(shellTint); ceilNet.material.color.copy(shellTint);
+      ceilVeil.material.opacity=0.03+0.09*frac; ceilNet.material.opacity=0.05+0.13*frac; } }
+  bind('sR0','vR0','r0',v=>v.toFixed(2),applyCeiling);
+  bind('sDrift','vDrift','drift',v=>v.toFixed(2),applyCeiling);
+  bind('sT','vT','tYears',v=>v.toFixed(1),applyCeiling);
+  $('tCeil').addEventListener('change',e=>{state.ceilOn=e.target.checked;applyCeiling();});
+  $('cCeil').addEventListener('input',e=>{state.ceilHex=e.target.value;CEIL_COL.set(state.ceilHex);applyCeiling();});
+  applyCeiling();
 
   $('playPause').addEventListener('click',()=>setPlaying(!state.playing));
   $('stepBack').addEventListener('click',()=>stepBy(-1)); $('stepFwd').addEventListener('click',()=>stepBy(1));
@@ -753,7 +860,12 @@
     $('playPause').textContent='❚❚ Pause'; SWORD_COL.set(state.swordHex);MAGE_COL.set(state.mageHex); setPalette();
     laps=0; traceSeconds=0; tourSeconds=0; _lastTourSec=-1; TRACE_PROOF=null;
     { const tl=gid('tracerLaps'); if(tl) tl.textContent='0'; const sb=gid('tracerSave'); if(sb){ sb.classList.remove('on'); sb.disabled=!keyLoaded; sb.textContent=keyLoaded?'💾 save trace':'💾 import a City Key first'; } }
-    buildManifold();buildLattice();buildCore();updateInspector(); });
+    $('sR0').value=state.r0;$('vR0').textContent=state.r0.toFixed(2);
+    $('sDrift').value=state.drift;$('vDrift').textContent=state.drift.toFixed(2);
+    $('sT').value=state.tYears;$('vT').textContent=state.tYears.toFixed(1);
+    $('tCeil').checked=state.ceilOn; $('cCeil').value=state.ceilHex; CEIL_COL.set(state.ceilHex);
+    traceValue=0; _lastValStr=''; { const te=gid('tracerVal'); if(te){ te.textContent='0.0'; te.style.color=''; } }
+    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling(); });
 
   $('foldBtn').addEventListener('click',()=>{ $('console').classList.add('folded'); $('launcher').classList.add('show'); });
   $('launcher').addEventListener('click',()=>{ $('console').classList.remove('folded'); $('launcher').classList.remove('show'); });

@@ -27,7 +27,7 @@
   // Per-room title information — surfaced at the head of the expanded panel.
   var TITLES = {
     "/":        { eyebrow: "soulbis · the swordsman", title: "Soulbis",                  meta: "(⚔️ ⊥ ⿻ ⊥ 🧙) 😊" },
-    "/star":    { eyebrow: "holographic boundary · V5.4", title: "Star Tetrahedron Manifold", meta: "r(θ,φ) = R + ε·sin(mφ)·cos(nθ)", note: "∂M : 96 edges encode 64 vertices · 96/64 = 1.5 = P¹·⁵" },
+    "/star":    { eyebrow: "holographic boundary · V6", title: "Star Tetrahedron Manifold", meta: "r(θ,φ) = R + ε·sin(mφ)·cos(nθ)", note: "∂M : 96 edges encode 64 vertices · 96/64 = 1.5 = P¹·⁵ · the boundary holds while R(t) < 1" },
     "/lattice": { eyebrow: "the lattice as manifold",  title: "The 64 · Vertex Codex",   meta: "V(π,t) on ∂M · 96 → 64" },
     "/sigil":   { eyebrow: "the κ derivation",         title: "The Sigil",               meta: "κ = sha256: H(key)" },
     "/skye":    { eyebrow: "the night of many keys",   title: "Skye",                    meta: "lineage · common ground" },

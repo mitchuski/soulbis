@@ -88,6 +88,43 @@
   .focusbar.done .focusbar-fill{ background:linear-gradient(90deg,#7fffd4,#cfe0ff); box-shadow:0 0 10px rgba(127,255,212,0.7); }
   .focusbar.done .focusbar-txt{ color:#7fffd4; }
 
+  /* V6 · Moving Ceiling — the floodline. R(t) reads on this page as a violet flood rising through
+     the sovereignty strata; every vertex whose stratum fraction sits below R(t) is VEILED. Display only. */
+  .ceilgrp{ margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+  .ceilgrp .sect{ font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim); }
+  .ceilhead{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+  .ceiltoggle{ display:flex; align-items:center; gap:7px; font-size:10.5px; color:var(--dim); cursor:pointer; user-select:none; }
+  .ceiltoggle input{ accent-color:#8b4daa; }
+  .crow{ margin-bottom:9px; }
+  .crow .clbl{ display:flex; justify-content:space-between; align-items:baseline; font-size:10.5px; margin-bottom:4px; }
+  .crow .clbl .k{ color:var(--dim); letter-spacing:0.02em; }
+  .crow .clbl .v{ color:#ffd6c7; font-variant-numeric:tabular-nums; }
+  .crow input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:3px; border-radius:3px; outline:none;
+    background:linear-gradient(90deg,#2b6bff,#8b4daa 55%,#ff4d3d); }
+  .crow input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:#eef2ff; border:2px solid #0a0d1c; cursor:pointer; box-shadow:0 0 10px rgba(160,180,255,0.8); }
+  #ceilBar{ width:100%; height:4px; border-radius:2px; background:rgba(240,238,232,0.08); overflow:hidden; margin-top:4px; }
+  #ceilFill{ height:100%; width:35%; background:#4dd9e8; transition:width .2s, background .2s; }
+  #ceilStory{ display:none; font-size:10px; color:var(--ink); opacity:0.75; line-height:1.6; margin-top:7px; }
+  .ceilnote{ font-size:9px; color:var(--dim); line-height:1.5; margin-top:6px; }
+  /* the flood veil — a violet tide over every vertex the ceiling already reaches; veiled, not erased */
+  .cell .veil{ position:absolute; inset:0; border-radius:7px; pointer-events:none;
+    background:linear-gradient(180deg, rgba(139,77,170,0.60), rgba(139,77,170,0.38));
+    box-shadow:inset 0 0 9px rgba(139,77,170,0.55); opacity:0; transition:opacity .5s ease; }
+  .cell.veiled .veil{ opacity:1; }
+  .cell.veiled{ border-color:rgba(139,77,170,0.55); }
+
+  /* V6 · the moving-ceiling badge — announces the reading over the codex (matches /star's register) */
+  .ceilbadge{ position:fixed; top:14px; left:50%; transform:translate(-50%,-8px); z-index:8;
+    font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink);
+    background:var(--glass); border:1px solid rgba(77,217,232,0.45); border-radius:999px; padding:8px 18px;
+    backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease, transform .5s ease, border-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 18px rgba(77,217,232,0.10); white-space:nowrap; }
+  .ceilbadge.show{ opacity:0.92; transform:translate(-50%,0); }
+  .ceilbadge b{ font-weight:600; }
+  .ceilbadge.warm{ border-color:rgba(224,165,38,0.6); box-shadow:0 0 22px rgba(224,165,38,0.16); }
+  .ceilbadge.breach{ border-color:rgba(232,82,58,0.75); box-shadow:0 0 26px rgba(232,82,58,0.24); animation:ceilAlarm 1.1s ease-in-out infinite; }
+  @keyframes ceilAlarm{ 0%,100%{ box-shadow:0 0 14px rgba(232,82,58,0.16);} 50%{ box-shadow:0 0 30px rgba(232,82,58,0.38);} }
+
   .panel{ background:var(--glass); border:1px solid var(--line); border-radius:16px; padding:22px; backdrop-filter:blur(12px); position:sticky; top:32px; }
   .pv{ font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:42px; line-height:1; }
   .pbits{ font-size:15px; letter-spacing:0.18em; color:#ffd6c7; margin-top:8px; }
@@ -118,7 +155,7 @@
   .link-dot.live{ background:var(--sword); box-shadow:0 0 8px var(--sword); }
   @media (max-width:820px){ .wrap{ grid-template-columns:1fr; } .panel{ position:static; } }
 
-  /* PVM legend — geometry ↔ Privacy Value Model V5.4 (collapsible; this is the roomy page for it) */
+  /* PVM legend — geometry ↔ Privacy Value Model V6 (collapsible; this is the roomy page for it) */
   .legend{ max-width:1180px; margin:24px auto 0; background:var(--glass); border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(12px); overflow:hidden; }
   .legend>summary{ list-style:none; cursor:pointer; padding:16px 20px; font-size:12px; letter-spacing:0.06em; color:#ffd6c7; }
   .legend>summary::-webkit-details-marker{ display:none; }
@@ -177,12 +214,28 @@
       </div>
       <div class="focusbar" id="focusbar" style="display:none"><div class="focusbar-track"><div class="focusbar-fill" id="focusFill"></div></div><span class="focusbar-txt" id="focusTxt"></span></div>
       <div class="grid" id="grid"></div>
+
+      <!-- V6 · Moving Ceiling · R(t) — the floodline (display only; page-local, never broadcast) -->
+      <div class="ceilgrp" id="ceilgrp">
+        <div class="ceilhead"><span class="sect">Moving Ceiling · R(t) ⏳</span>
+          <label class="ceiltoggle" title="V6 · C82 — H(X) is fixed while adversarial capacity grows; the boundary holds while R(t) < 1. Reading the ceiling makes it visible here as a floodline: every vertex whose stratum fraction (popcount/6) sits below R(t) is veiled, bottom-up — stratum 0 floods first, V63 (111111) last. Vertex data, κ and keys untouched — display only."><input type="checkbox" id="tCeil"><span>⏳ read the ceiling</span></label></div>
+        <div class="crow"><div class="clbl"><span class="k">reconstructable today · R₀</span><span class="v" id="vR0">0.35</span></div>
+          <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
+        <div class="crow"><div class="clbl"><span class="k">how fast reach grows · g</span><span class="v" id="vDrift">0.25</span></div>
+          <input type="range" id="sDrift" min="0.02" max="1" step="0.01" value="0.25"></div>
+        <div class="crow"><div class="clbl"><span class="k">years from now · t</span><span class="v" id="vT">0.0</span></div>
+          <input type="range" id="sT" min="0" max="20" step="0.1" value="0"></div>
+        <div class="crow"><div class="clbl"><span class="k" id="ceilRead">R(t) = 0.35 · t* = 4.2y</span><span class="v" id="ceilState">off</span></div>
+          <div id="ceilBar"><div id="ceilFill"></div></div></div>
+        <div id="ceilStory"></div>
+        <div class="ceilnote">C82 · ~65% · mechanism evidenced (n=2), rate unparameterized — the sliders are a what-if, not a measurement of rate. R(t) = R₀·e<sup>g·t</sup> · t* = ln(1/R₀)/g. the register wins.</div>
+      </div>
     </div>
     <div class="panel" id="panel"></div>
   </div>
 
   <details class="legend">
-    <summary>📖 The legend — geometry ↔ Privacy Value Model V5.4</summary>
+    <summary>📖 The legend — geometry ↔ Privacy Value Model V6</summary>
     <div class="legend-body">
       <p class="legend-eq">This renders <b>V(π,t)</b> = P<sup>1.5</sup> · C · Q · S · … · <b>Φ_agent</b>(Σ) · … · <b>T∫(π)</b> — a holographic field on the 96-edge boundary ∂M. The codex shows the lattice ℒ and the path; the 3D <a href="/star">/star manifold</a> shows the agent axis and the boundary.</p>
       <div class="legend-grid">
@@ -200,9 +253,11 @@
         <span class="lk">κ · content identity</span><span class="lv">exported keys carry <code>kappa = sha256:H(canonical form)</code> — a UOR-ADDR κ-label on the sha256 axis. On import the label is <b>re-derived and checked</b>: identity is content, not location. The key is what it says, wherever it travels.</span>
         <span class="lk">✍️ inscription</span><span class="lv">a <b>proven</b> blade — focus walked to ✓, or achievement-lit ✦ — accepts your own reading. Writing changes the content; the content drifts the κ; the sigil relights. <b>Authorship is earned by presence.</b></span>
       </div>
-      <p class="legend-foot">Tags follow the V5.4 spec: <i>[proven] / [canon] / [conjecture]</i>. Full map in <code>MAPPING.md</code>; the model at <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a>.</p>
+      <p class="legend-foot">Tags follow the V5.4 spec: <i>[proven] / [canon] / [conjecture]</i>; conjecture authority now lives in the V6 register — when prose and register disagree, the register wins. Full map in <code>MAPPING.md</code>; the model at <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a>.</p>
     </div>
   </details>
+
+  <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
 
   <footer>
     <b>City Key 🗝️</b> is a portable JSON: <code>{ name, palette:{cool,warm,sword,mage}, descriptions:{ "0":"…", … }, kappa:"sha256:…" }</code> — minted at agentprivacy /city, import it here (the JSON, or a <b>sigil PNG</b> from /sigil — the image carries the key). The <code>kappa</code> κ-label is its content identity, re-derived on every import.
@@ -522,7 +577,58 @@
   const STAR_URL = '/star';
   { const ts=document.getElementById('toStar'); if(ts) ts.setAttribute('href', STAR_URL); }
 
-  buildGrid(); selectVertex(0); applyPalette();
+  // ===== V6 · Moving Ceiling instrument (C82, illustrative) — the lattice's own idiom: THE FLOODLINE =====
+  // Same reading as /star (R(t) = R₀·e^(g·t), t* = ln(1/R₀)/g), rendered in this page's terms: a violet
+  // flood rising through the sovereignty strata. A vertex sits at stratum popcount/6 (0 = full transparency
+  // … 6 = full sovereignty); when the reading is on, every vertex whose stratum fraction < R(t) is VEILED —
+  // covered by the ceiling — bottom-up: stratum 0 floods first, V63 (111111) last. At breach (R ≥ 1)
+  // everything is veiled. Display only: vertex data, κ, keys and the /star link are untouched, and the
+  // ceiling state stays page-local (deliberately NOT sent over the BroadcastChannel — prototype rule).
+  const CEIL={ on:false, r0:0.35, drift:0.25, tYears:0 };
+  const ceilR=()=>CEIL.r0*Math.exp(CEIL.drift*CEIL.tYears);
+  const ceilTstar=()=>Math.log(1/CEIL.r0)/CEIL.drift;
+  function ensureVeil(c){ let v=c.querySelector('.veil');
+    if(!v){ v=document.createElement('span'); v.className='veil'; c.appendChild(v); } return v; }
+  function paintFlood(){ const on=CEIL.on, Rt=ceilR(), breach=Rt>=1;
+    for(let x=0;x<N;x++){ const c=cellOf[x]; if(!c) continue;
+      const veiled=on&&(breach||pc(x)/BITS<Rt);
+      if(veiled) ensureVeil(c); // the veil overlay is minted lazily — an untouched grid carries no extra nodes
+      c.classList.toggle('veiled',veiled); } }
+  function applyCeiling(){
+    const on=CEIL.on, Rt=ceilR(), ts=ceilTstar(), breach=Rt>=1, frac=Math.min(Rt,1);
+    // the waterline: the highest stratum the flood covers, and how many vertices that reaches
+    let topS=-1, reach=0;
+    for(let s=0;s<=BITS;s++){ if(breach||s/BITS<Rt){ topS=s; reach+=STRATA[s]; } }
+    const read=document.getElementById('ceilRead'), st=document.getElementById('ceilState'),
+          fill=document.getElementById('ceilFill'), badge=document.getElementById('ceilBadge'),
+          story=document.getElementById('ceilStory');
+    if(read) read.textContent='R(t) = '+(Rt>=10?Rt.toFixed(0):Rt.toFixed(2))+' · t* = '+ts.toFixed(1)+'y';
+    if(st){ st.textContent=on?(breach?'breached — re-key':('holds · '+Math.max(0,ts-CEIL.tYears).toFixed(1)+'y left')):'off';
+      st.style.color=on?(breach?'#e8523a':(frac>0.75?'#e0a526':'')):''; }
+    if(fill){ fill.style.width=(frac*100).toFixed(0)+'%'; fill.style.background=breach?'#e8523a':(frac>0.75?'#e0a526':'#4dd9e8'); }
+    if(badge){ badge.classList.toggle('show',on);
+      badge.classList.toggle('warm',on&&!breach&&frac>0.75); badge.classList.toggle('breach',on&&breach);
+      badge.innerHTML=breach
+        ? '⏳ R(t) ≥ 1 · the boundary no longer holds — <b>64/64</b> within reach · <b>re-key</b>'
+        : '⏳ the ceiling is moving · R(t) <b>'+Rt.toFixed(2)+'</b> · t* <b>'+ts.toFixed(1)+'y</b> · <b>'+reach+'</b>/64 within reach'; }
+    // the story line — every slider move narrates itself in plain words
+    if(story){ story.style.display=on?'':'none';
+      if(on){ const yr=CEIL.tYears.toFixed(1), left=Math.max(0,ts-CEIL.tYears).toFixed(1);
+        story.innerHTML=breach
+          ? 'year '+yr+' · past t* — the flood is over every stratum: all <b>64</b> within reach. what the boundary sealed at year 0 is readable now. <b style="color:#e8523a">re-key.</b>'
+          : 'year '+yr+' · the flood covers stratum ≤ <b>'+topS+'</b> — <b>'+reach+'</b> of 64 vertices within reach · the boundary holds <b>'+left+'y</b> more'+(frac>0.75?' — <b style="color:#e0a526">t* is close, re-key soon.</b>':'.'); } }
+    paintFlood(); }
+  function bindCeil(sl,la,key,fmt){ const el=document.getElementById(sl), lab=document.getElementById(la);
+    el.addEventListener('input',()=>{ CEIL[key]=parseFloat(el.value); lab.textContent=fmt(CEIL[key]); applyCeiling(); }); }
+  bindCeil('sR0','vR0','r0',v=>v.toFixed(2));
+  bindCeil('sDrift','vDrift','drift',v=>v.toFixed(2));
+  bindCeil('sT','vT','tYears',v=>v.toFixed(1));
+  document.getElementById('tCeil').addEventListener('change',e=>{ CEIL.on=e.target.checked; applyCeiling(); });
+  // re-sorting rebuilds the cells — re-lay the flood after the grid stands again
+  // (this listener is added after the sort handler above, so it runs once buildGrid is done)
+  document.querySelectorAll('#sort button').forEach(b=>b.addEventListener('click',paintFlood));
+
+  buildGrid(); selectVertex(0); applyPalette(); applyCeiling();
 })();
 </script>
 <script src="/public/sitenav.js" defer></script>

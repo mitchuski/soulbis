@@ -65,6 +65,27 @@
   .glyphscale{ flex:1; height:8px; border-radius:5px; border:1px solid var(--line);
     background:linear-gradient(90deg, rgba(20,26,61,0.2), #9fc0ff 55%, #fff); }
 
+  /* movement ② — the moving-ceiling reading (V6 · C82): the sigil is dated, not eternal */
+  .ceilctl{ border-top:1px solid var(--line); margin-top:14px; padding-top:14px; }
+  .ceiltoggle{ display:flex; align-items:center; gap:8px; font-size:11px; color:#aeb8ee; cursor:pointer; margin-bottom:4px; }
+  .ceiltoggle input{ accent-color:#8b4daa; }
+  .ceilctl .crow{ margin-top:9px; }
+  .ceilctl .lbl{ display:flex; justify-content:space-between; gap:10px; font-size:10.5px; letter-spacing:0.03em; }
+  .ceilctl .lbl .k{ color:var(--dim); } .ceilctl .lbl .v{ color:#ffd6c7; }
+  .ceilctl input[type=range]{ width:100%; accent-color:#8b4daa; margin-top:2px; }
+
+  /* V6 · the moving-ceiling badge — announces the reading over the page (.ceilbadge from /star) */
+  .ceilbadge{ position:fixed; top:18px; left:50%; transform:translate(-50%,-8px); z-index:8;
+    font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink);
+    background:var(--glass); border:1px solid rgba(139,77,170,0.55); border-radius:999px; padding:8px 18px;
+    backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease, transform .5s ease, border-color .4s ease, box-shadow .4s ease;
+    box-shadow:0 0 18px rgba(139,77,170,0.14); white-space:nowrap; }
+  .ceilbadge.show{ opacity:0.92; transform:translate(-50%,0); }
+  .ceilbadge b{ font-weight:600; }
+  .ceilbadge.warm{ border-color:rgba(224,165,38,0.6); box-shadow:0 0 22px rgba(224,165,38,0.16); }
+  .ceilbadge.breach{ border-color:rgba(232,82,58,0.75); box-shadow:0 0 26px rgba(232,82,58,0.24); animation:ceilAlarm 1.1s ease-in-out infinite; }
+  @keyframes ceilAlarm{ 0%,100%{ box-shadow:0 0 14px rgba(232,82,58,0.16);} 50%{ box-shadow:0 0 30px rgba(232,82,58,0.38);} }
+
   /* movement 3 — compare */
   .compare{ max-width:1180px; margin:26px auto 0; }
   .cgrids{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:14px; }
@@ -144,6 +165,20 @@
         <button id="snapBtn" class="btn" title="the image carries the full City Key in a PNG tEXt chunk — import it on /star, /lattice, or here and the key unfolds back out">📸 export sigil PNG · carries the key</button>
         <span class="keyname" id="ringCap"></span>
       </div>
+      <div class="ceilctl">
+        <div class="sect" style="margin-bottom:10px">Moving Ceiling · R(t) ⏳</div>
+        <label class="ceiltoggle" title="V6 · C82 — the sigil is a reading stamped at a date; adversarial reach grows while the content stands still. The reading holds while R(t) < 1. Reading the ceiling draws a closing ring over the constellation — display only: κ derivation, canonical form, and glyph mapping untouched."><input type="checkbox" id="tCeil"><span>⏳ read the ceiling — the reading has a shelf life</span></label>
+        <div class="crow"><div class="lbl"><span class="k">reconstructable today · R₀</span><span class="v" id="vR0">0.35</span></div>
+          <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
+        <div class="crow"><div class="lbl"><span class="k">how fast reach grows · g</span><span class="v" id="vDrift">0.25</span></div>
+          <input type="range" id="sDrift" min="0.02" max="1" step="0.01" value="0.25"></div>
+        <div class="crow"><div class="lbl"><span class="k">years from now · t</span><span class="v" id="vT">0.0</span></div>
+          <input type="range" id="sT" min="0" max="20" step="0.1" value="0"></div>
+        <div class="crow"><div class="lbl"><span class="k" id="ceilRead">R(t) = 0.35 · t* = 4.2y</span><span class="v" id="ceilState">off</span></div>
+          <div id="ceilBar" style="width:100%;height:4px;border-radius:2px;background:rgba(232,237,255,0.08);overflow:hidden;margin-top:4px"><div id="ceilFill" style="height:100%;width:35%;background:#8b4daa;transition:width .2s,background .2s"></div></div></div>
+        <div id="ceilStory" style="display:none;font-size:10.5px;color:#aeb8ee;line-height:1.7;margin-top:8px"></div>
+        <div style="font-size:9px;color:var(--dim);line-height:1.5;margin-top:6px">C82 · ~65% · mechanism evidenced (n=2), rate unparameterized — the sliders are a what-if, not a measurement of rate. R(t) = R₀·e<sup>g·t</sup> · t* = ln(1/R₀)/g. the register wins.</div>
+      </div>
     </div>
   </div>
 
@@ -189,9 +224,11 @@
         <span class="lk">the lineage · prior</span><span class="lv">an <i>evolved</i> export stamps <code>prior</code> = the κ of the key it grew from — keys form a hash chain (C87: <i>the key accumulates</i>). An unchanged re-export keeps its prior and its κ unchanged: lineage marks evolution, not circulation.</span>
         <span class="lk">vocabulary</span><span class="lv"><b>glyph</b> — one hex character at one vertex · <b>rune-row</b> — the 64 in succ order · <b>sigil</b> — the whole lighting, the key's face. (The City's runes keep their own register; the sigil is the Swordsman's seal.)</span>
       </div>
-      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V5.4 / V6) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
+      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V6 · V5.4 lineage) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
     </div>
   </details>
+
+  <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
 
   <footer>
     <b>The sigil PNG carries the key</b> — the full City Key JSON rides inside the image (PNG <code>tEXt</code> chunk, keyword <code>cityKey</code>), with the κ caption visible in the pixels. Share the picture and you have shared the key; import it on /star, /lattice, or here and it unfolds back out. <b>Live link:</b> on one origin, a key imported on any page cascades to the others over <code>BroadcastChannel('agentprivacy-succ')</code>; the succ comet's vertex pings the ring. <b>Older keys</b> carry no κ — they derive one here: the key learns its name.
@@ -305,6 +342,19 @@
   // ---- state: slot A (the sigil) + slot B (comparison)
   let A=null, A_KAPPA=null, B=null, B_KAPPA=null, sel=-1, ping=-1, pingT=0;
 
+  // ---- V6 · moving-ceiling reading state (C82, illustrative) — declared BEFORE drawRing ever
+  // runs (the draw path reads CEIL every frame while the reading is on; TDZ-safe by construction).
+  // The sigil is a key's face, a reading stamped at a date; the ceiling gives that reading a
+  // shelf life. Display only: the closing ring is drawn OVER the constellation — κ derivation,
+  // canonical form, glyph mapping and the packets conformance vector are untouched.
+  const CEIL={ on:false, r0:0.35, g:0.25, t:0 };            // R(t) = R₀·e^(g·t) · t* = ln(1/R₀)/g
+  const ceilR=()=>CEIL.r0*Math.exp(CEIL.g*CEIL.t);
+  const ceilTstar=()=>Math.log(1/CEIL.r0)/CEIL.g;
+  const CEIL_VIOLET=[0x8b,0x4d,0xaa], CEIL_CORAL=[0xe8,0x52,0x3a]; // violet ring, coral only near the end
+  const ceilTint=(frac,alpha)=>{ const m=frac*frac,
+      c=CEIL_VIOLET.map((v,i)=>Math.round(v+(CEIL_CORAL[i]-v)*m));
+    return 'rgba('+c[0]+','+c[1]+','+c[2]+','+alpha.toFixed(3)+')'; };
+
   // ---- SHAPE-1.5 · the compression shape (see PLAN_KEY_EVOLUTION_MEASURED_GEOMETRY_2026-06-10.md)
   // w(x) = min(1, 0.50·focus_x/max(focus) + 0.25·[lit] + 0.15·proven_x/focus_x + 0.10·[described])
   // Pure function of canonical key content — same key (JSON or carried in a sigil PNG) ⇒ same shape, everywhere.
@@ -407,6 +457,10 @@
   function drawRing(){ const dpr=Math.min(window.devicePixelRatio||1,2), w=ring.clientWidth||520;
     ring.width=w*dpr; ring.height=w*dpr; rctx.setTransform(dpr,0,0,dpr,0,0); rctx.clearRect(0,0,w,w);
     const cx=w/2, cy=w/2, {R,Rt}=ringDims(w,14);
+    // past t* the reading no longer covers the content: the constellation dims to ~35% —
+    // the sigil reads as expired. Display only; the glyphs underneath are unchanged.
+    const ceilExpired=CEIL.on&&ceilR()>=1;
+    if(ceilExpired) rctx.globalAlpha=0.35;
     // faint succ track — follows the shape envelope
     rctx.beginPath();
     for(let i=0;i<=192;i++){ const a=(i/192)*Math.PI*2-Math.PI/2, rr=ringR(R,a);
@@ -435,13 +489,27 @@
     if(zk){ const za=(4*Math.PI/3)-Math.PI/2, zr=ringR(R,za)*0.80; // inside the dot ring — never clips the fitted canvas
       rctx.font='10px "Spline Sans Mono",monospace'; rctx.textAlign='center'; rctx.textBaseline='middle';
       rctx.fillStyle='rgba(255,214,199,0.9)'; rctx.fillText('⚡ '+(zk.verified|0)+'/'+(zk.made|0),cx+zr*Math.cos(za),cy+zr*Math.sin(za)); }
+    if(ceilExpired) rctx.globalAlpha=1; // the centre name + the ceiling ring stay legible
     // centre — name + κ short
     rctx.textAlign='center';
     rctx.font='italic 300 22px Fraunces,serif'; rctx.fillStyle='#e8edff';
     rctx.fillText(A?(A.name||'city key'):'no key',cx,cy-10);
     rctx.font='10px "Spline Sans Mono",monospace'; rctx.fillStyle='rgba(124,134,184,0.9)';
     rctx.fillText(A_KAPPA?(A_KAPPA.slice(0,23)+'…'):'import a key to constellate',cx,cy+12);
-    $('ringCap').textContent=A_KAPPA?('κ '+A_KAPPA.slice(0,23)+'…'):''; }
+    $('ringCap').textContent=A_KAPPA?('κ '+A_KAPPA.slice(0,23)+'…'):'';
+    // V6 · the closing ring (C82) — the ceiling drawn OVER the constellation, display only.
+    // A violet circle outside the 64-glyph rune-row contracts toward it as R(t) → 1, breathing
+    // slow when t* is far and faster as it nears (/star's breathing); at breach it passes
+    // inside the glyph radius — the reading no longer contains the reach.
+    if(CEIL.on){ const Rv=ceilR(), breach=Rv>=1, frac=Math.min(Rv,1);
+      const rGly=Rt*ringMaxFactor();                      // outermost rune-row extent (fit-scaled)
+      const now=performance.now()/1000, rate=1.2+6*frac;  // breath quickens as t* nears
+      const br=0.85+0.15*Math.sin(now*rate);
+      const rr=(breach?rGly*0.88:(w/2-4)+((rGly+3)-(w/2-4))*frac)*(1+0.010*Math.sin(now*rate*0.7));
+      rctx.beginPath(); rctx.arc(cx,cy,rr,0,Math.PI*2);
+      rctx.strokeStyle=ceilTint(frac,(0.10+0.16*frac)*br); rctx.lineWidth=7; rctx.stroke();   // soft halo
+      rctx.beginPath(); rctx.arc(cx,cy,rr,0,Math.PI*2);
+      rctx.strokeStyle=ceilTint(frac,(0.45+0.40*frac)*br); rctx.lineWidth=1.4; rctx.stroke(); } }
   function ringVertexAt(ev){ const r=ring.getBoundingClientRect(), w=r.width, cx=w/2, cy=w/2, {R}=ringDims(w,14);
     const mx=ev.clientX-r.left-cx, my=ev.clientY-r.top-cy, d=Math.hypot(mx,my);
     if(d<R*0.5||d>R*1.6) return -1;
@@ -483,6 +551,45 @@
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
     a.download='sigil-'+(A.name||'city-key').replace(/[^a-z0-9-]+/gi,'-').toLowerCase()+'.png';
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); });
+
+  // ===== V6 · Moving Ceiling instrument (C82, illustrative) — same model as /star's reading.
+  // The ring is display: it never touches the κ derivation, the canonical form, the glyph
+  // mapping, the exported PNG, or any key content. The page stays draw-on-demand; a lightweight
+  // rAF loop runs ONLY while the reading is on (for the breathing) and hands the last frame
+  // back to the static drawRing when it's switched off.
+  let ceilRAF=0;
+  function ceilFrame(){ if(!CEIL.on){ ceilRAF=0; drawRing(); return; } drawRing(); ceilRAF=requestAnimationFrame(ceilFrame); }
+  function applyCeiling(){
+    const on=CEIL.on, Rv=ceilR(), ts=ceilTstar(), breach=Rv>=1, frac=Math.min(Rv,1);
+    $('vR0').textContent=CEIL.r0.toFixed(2); $('vDrift').textContent=CEIL.g.toFixed(2); $('vT').textContent=CEIL.t.toFixed(1);
+    $('ceilRead').textContent='R(t) = '+(Rv>=10?Rv.toFixed(0):Rv.toFixed(2))+' · t* = '+ts.toFixed(1)+'y';
+    const st=$('ceilState');
+    st.textContent=on?(breach?'expired — re-key':('holds · '+Math.max(0,ts-CEIL.t).toFixed(1)+'y left')):'off';
+    st.style.color=on?(breach?'#e8523a':(frac>0.75?'#e0a526':'')):'';
+    const fill=$('ceilFill'); fill.style.width=(frac*100).toFixed(0)+'%';
+    fill.style.background=breach?'#e8523a':(frac>0.75?'#e0a526':'#8b4daa');
+    // the story line — every slider move narrates itself in plain words
+    const story=$('ceilStory'); story.style.display=on?'':'none';
+    if(on){ const yr=CEIL.t.toFixed(1), left=Math.max(0,ts-CEIL.t).toFixed(1), pct=(frac*100).toFixed(0);
+      story.innerHTML=breach
+        ? 'year '+yr+' · past t* — <b style="color:#e8523a">this sigil&rsquo;s guarantee has expired. re-key.</b> the constellation still shows the reading; the date no longer covers it.'
+        : (frac>0.75
+          ? 'year '+yr+' · R(t) at <b>'+pct+'%</b> — <b style="color:#e0a526">t* is close — re-derive, re-key soon.</b>'
+          : 'year '+yr+' · the reading holds <b>'+left+'y</b> more — the sigil is dated, not eternal.'); }
+    const badge=$('ceilBadge');
+    badge.classList.toggle('show',on);
+    badge.classList.toggle('warm',on&&!breach&&frac>0.75); badge.classList.toggle('breach',on&&breach);
+    badge.innerHTML=breach
+      ? '⏳ R(t) ≥ 1 · this sigil&rsquo;s guarantee has expired — <b>re-key</b>'
+      : '⏳ the sigil is dated · R(t) <b>'+Rv.toFixed(2)+'</b> · t* <b>'+ts.toFixed(1)+'y</b> · '+(frac>0.75?'closing':'the reading holds');
+    if(on&&!ceilRAF) ceilRAF=requestAnimationFrame(ceilFrame); // breathe only while the reading is on
+    if(!on) drawRing(); // restore the static, draw-on-demand constellation
+  }
+  $('tCeil').addEventListener('change',e=>{ CEIL.on=e.target.checked; applyCeiling(); });
+  $('sR0').addEventListener('input',e=>{ CEIL.r0=parseFloat(e.target.value); applyCeiling(); });
+  $('sDrift').addEventListener('input',e=>{ CEIL.g=parseFloat(e.target.value); applyCeiling(); });
+  $('sT').addEventListener('input',e=>{ CEIL.t=parseFloat(e.target.value); applyCeiling(); });
+  applyCeiling();
 
   // ---- movement ③ — compare
   // each grid renders in ITS OWN key's palette — B is B's voice, not A's
