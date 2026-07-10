@@ -110,4 +110,27 @@ answering his actual words:
 The boundary was always dated. Now the rooms say so out loud, and you can
 watch the date approach and choose to re-key before it arrives.
 
+## Postscript — the epistemics pass (same day, after the push)
+
+The First Person asked whether the breach visual makes sense. The audit
+found the grammar faithful (the shell-to-boundary gap IS the capacity
+deficit; the boundary is fixed because H(X) is fixed; the sigil's expiry is
+C82 with no stretch) and two corrections owed, both applied:
+
+- **The breach overstated.** At R ≥ 1 the model says reconstruction is no
+  longer information-theoretically impossible — not that it has happened.
+  The star and lattice story lines said "what the boundary sealed at year 0
+  is readable now"; they now say "nothing in the mathematics prevents
+  reading what the boundary sealed at year 0." The sigil already spoke
+  correctly ("this sigil's guarantee has expired").
+- **The freeze understated.** V6's sharpest point is retroactive: breach
+  exposes the past walk, not just the future. The T∫(π) value no longer
+  merely freezes at breach — it visibly DRAINS (half-life ~1.5s) while
+  R ≥ 1, the accrued reading claimed by the ceiling. Scrub back below t*
+  and accrual resumes from what remains.
+
+Known liberty, kept and labeled: the lattice flood's per-stratum ordering
+(popcount/6 < R(t)) is an illustrative interpolation — the register's R(t)
+is a global ratio, not a per-vertex one.
+
 (⚔️⊥⿻⊥🧙)😊

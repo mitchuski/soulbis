@@ -615,7 +615,7 @@
     if(story){ story.style.display=on?'':'none';
       if(on){ const yr=CEIL.tYears.toFixed(1), left=Math.max(0,ts-CEIL.tYears).toFixed(1);
         story.innerHTML=breach
-          ? 'year '+yr+' · past t* — the flood is over every stratum: all <b>64</b> within reach. what the boundary sealed at year 0 is readable now. <b style="color:#e8523a">re-key.</b>'
+          ? 'year '+yr+' · past t* — the flood is over every stratum: all <b>64</b> within reach. nothing in the mathematics prevents reading what the boundary sealed at year 0. <b style="color:#e8523a">re-key.</b>'
           : 'year '+yr+' · the flood covers stratum ≤ <b>'+topS+'</b> — <b>'+reach+'</b> of 64 vertices within reach · the boundary holds <b>'+left+'y</b> more'+(frac>0.75?' — <b style="color:#e0a526">t* is close, re-key soon.</b>':'.'); } }
     paintFlood(); }
   function bindCeil(sl,la,key,fmt){ const el=document.getElementById(sl), lab=document.getElementById(la);

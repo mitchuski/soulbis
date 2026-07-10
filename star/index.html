@@ -742,9 +742,11 @@
       const dg=gid('tracerDotG'); if(dg) dg.setAttribute('transform','rotate('+(prog*360).toFixed(1)+' 18 18)');
       const v=currentVertex(), tv=gid('tracerV'); if(tv&&tv._v!==v){ tv._v=v; tv.textContent=v; const ts=gid('tracerStratum'); if(ts) ts.textContent='stratum '+popcount(v); }
       // T∫(π) — value lives on the path: accrues per vertex walked, weighted by its stratum (popcount/6);
-      // one full lap ≈ 32. Freezes while the ceiling is breached (no value accrues past R ≥ 1). Display only —
-      // never written into the City Key.
-      if(!(CEIL_CUR.on&&CEIL_CUR.breach)) traceValue+=dt*state.speed*N*(popcount(v)/BITS);
+      // one full lap ≈ 32. Past the ceiling (R ≥ 1) the accrued value DRAINS — V6's breach is retroactive:
+      // what the walk sealed is exposed too, not just the future (half-life ~1.5s while breached). Display
+      // only — never written into the City Key.
+      if(CEIL_CUR.on&&CEIL_CUR.breach) traceValue*=Math.pow(0.5,dt/1.5);
+      else traceValue+=dt*state.speed*N*(popcount(v)/BITS);
       const vs=traceValue.toFixed(1); if(vs!==_lastValStr){ _lastValStr=vs; const te=gid('tracerVal'); if(te){ te.textContent=vs; te.style.color=(CEIL_CUR.on&&CEIL_CUR.breach)?'#e8523a':''; } } }
     // ✦ key-tour walk timer — how long you've walked the City Key's tour (dwell time, accumulates across engagements)
     if(tourMode&&keyLoaded){ tourSeconds+=dt; const sec=Math.floor(tourSeconds); if(sec!==_lastTourSec){ _lastTourSec=sec; const b=gid('keyTour'); if(b) b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; } }
@@ -802,7 +804,7 @@
     { const story=$('ceilStory'); if(story){ story.style.display=on?'':'none';
       if(on){ const pct=(frac*100).toFixed(0), yr=state.tYears.toFixed(1), left=Math.max(0,ts-state.tYears).toFixed(1);
         story.innerHTML=breach
-          ? 'year '+yr+' · past t* — the two channels now cover everything H(X) holds. what the boundary sealed at year 0 is readable now. <b style="color:#e8523a">re-key.</b>'
+          ? 'year '+yr+' · past t* — the two channels now cover everything H(X) holds. nothing in the mathematics prevents reading what the boundary sealed at year 0. <b style="color:#e8523a">re-key.</b>'
           : 'year '+yr+' · the adversary\'s channels reach <b>'+pct+'%</b> of what would reconstruct the First Person. the boundary holds <b>'+left+'y</b> more'+(frac>0.75?' — <b style="color:#e0a526">t* is close, re-key soon.</b>':'.'); } } }
     ensureCeilShell();
     ceilVeil.visible=ceilNet.visible=on;
