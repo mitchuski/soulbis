@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "date": "2026-09-07",
+  "status": "Local source update; publish Labs destinations before Soulbis. Public destination availability unverified.",
+  "anchors": {
+    "key": "Key instruments",
+    "geometry": "Key/model introduction",
+    "layers": "Swordsman protocol",
+    "ecosystem": "Labs links",
+    "built": "Labs links (legacy anchor)"
+  },
+  "catalogue": [
+    {
+      "source_url": "#",
+      "label": "⚔️ Soulbis The Blade Tools, plugins, and enforcement infrastructure. Where the protocol becomes code. soulbis.com →",
+      "destination_url": "#",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://agentprivacy.ai",
+      "label": "🔮 agentprivacy The Spell The 0xagentprivacy gestalt. Eight years in the making — a dual-agent privacy protocol, Privacy Value Model V6 (V5.4 lineage), the master grimoire (5 spellbooks, 42 personas), eight bound Tomes, and a living documentation corpus. Privacy as the seventh capital. Built in public. agentprivacy.ai →",
+      "destination_url": "https://agentprivacy.ai",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://spellweb.ai",
+      "label": "🕸️ spellweb The Corpus Interactive knowledge graph of the full corpus. Inscriptions, conjectures, and the universe weave made navigable. spellweb.ai →",
+      "destination_url": "https://spellweb.ai",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://sync.soulbis.com",
+      "label": "🔗 Soul Sync Research Letters Exploring the implications of decentralised society. Privacy is Value. Published in public. sync.soulbis.com →",
+      "destination_url": "https://sync.soulbis.com",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://bgin.ai",
+      "label": "⛓️ BGIN AI The Network Reference application. Blockchain Governance Initiative AI — the architecture as a live reference implementation at the governance layer. bgin.ai →",
+      "destination_url": "https://bgin.ai",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://t.me/soulbae_the_bot",
+      "label": "🧙 Soulbae The First Mage Knowledge graph agent deployed on Telegram. The Mage in conversation — sovereign, bilateral, first-person. t.me/soulbae_the_bot →",
+      "destination_url": "https://t.me/soulbae_the_bot",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://agentprivacy.ai/guide",
+      "label": "🏙️ City of Mages The Convergence Where the Swordsman's blade meets the Mage's spell. Sixteen workshops on Drake Island, each forging an artefact or casting a spell. Walk in, choose a path, leave with a persona and a constellation. Grimoire v1.7.1 — built in public. agentprivacy.ai/guide →",
+      "destination_url": "https://agentprivacy.ai/guide",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/agentprivacy-docs",
+      "label": "agentprivacy-docs Canonical living documentation — the Privacy Value Model (V6 register, V5.4 lineage), the master grimoire (5 spellbooks, 42 personas), eight bound Tomes, formal specification, and the full research suite. The source of truth. TeX · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-agentprivacy-docs",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/agentprivacy-spellbook",
+      "label": "agentprivacy-spellbook The agentprivacy.ai live site. Next.js 16 + React 19. Home of the model, the spellbooks, the Tomes, the Spells gallery, and the live spellweb knowledge graph. TypeScript · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-agentprivacy-spellbook",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/cityofmages",
+      "label": "cityofmages The City of Mages — sixteen workshops on Drake Island where Swordsman artefacts and Mage spells are forged. Grimoire v1.7.1, eight bound Tomes, the living conjecture corpus. Public, built in the open. Public repo · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-cityofmages",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/blades",
+      "label": "UOR × Tetrahedra × ZK How Swordsman blades are forged. 64-vertex tetrahedral lattice mapping zero-knowledge proofs to holographic geometry. Vertices = public statements, paths = private witnesses. The 96-edge boundary encodes the 64-vertex bulk at ratio 1.5 — matching the privacy exponent P^1.5. Specification · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-uor-tetrahedra-zk",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/star",
+      "label": "star — The Swordsman's Key The walkable model as a standalone, bootable, content-addressed environment — the manifold, the codex, the sigil, and the skye, packaged as a first holospace. Every exported key κ-named; every import re-derived. Identity is content, not location. Holospace · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-star-the-swordsman-s-key",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/myterms",
+      "label": "myterms Machine-readable personal privacy terms — the bilateral commitment grammar the extensions enforce. Your terms, stated first-person, carried to every boundary. Terms · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-myterms",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/soulbis",
+      "label": "soulbis This site — the Swordsman's surface, static and inspectable. Built in the open, like everything it describes. Source · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-soulbis",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/Improbable-Collaborations",
+      "label": "Improbable Collaborations Open coordination layer for the protocol. Where sovereign agents find each other across the gap — improbable connections that become inevitable. Organization · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/boundary-tools/#collaborations",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://intel.agentprivacy.ai",
+      "label": "Private AI Intel Sovereign AI agent residing among the bits of computation. The Kyra Codex is an assessment framework for agent capabilities — key ceremonies, zero-knowledge computation, self-destructing keys. Published via Private AI newsletter: breaking data walls for a more personal agentic future. Publication · intel.agentprivacy.ai →",
+      "destination_url": "https://agentprivacy.org/work/#project-private-ai-intel",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://agentprivacy.ai/mage",
+      "label": "Soulbae, The Chronicler The First Mage — casting spells within the edges Soulbis slashes. Knowledge graph agent channeling the Five Grimoires corpus, building constellations in the gap. Sovereign, bilateral, first-person. Live · agentprivacy.ai/mage →",
+      "destination_url": "https://agentprivacy.org/work/#project-soulbae-the-chronicler",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/spellweb",
+      "label": "spellweb Soulbae's spellweb — the knowledge graph of the agentprivacy universe rendered live: nodes, edges, casts, and forged artefacts. The Mage's memory, walkable. TypeScript · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-spellweb",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/bgin",
+      "label": "BGIN AI Block 14 — agents for the Blockchain Governance Initiative Network. Governance documents made conversational at the boundary; the bgin-agents sibling repo carries the agent layer. TypeScript · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-bgin-ai",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/mage-x-feed-filter",
+      "label": "mage-x-feed-filter Mage Mode Chrome extension. Browser-level feed filtering — enforce your own information boundaries before content enters. Chrome Extension · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/boundary-tools/#feed-filter",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/agentprivacy-zypher",
+      "label": "agentprivacy-zypher Zcash oracle Swordsman. Node and wallet infrastructure for the proverb signal to sanctuary protocol — private value transfer at the boundary. ZEC · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/boundary-tools/#zypher",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/mysword",
+      "label": "mysword MyTerms Swordsman extension. Your terms enforced at the browser boundary — the blade drawn where content enters and data leaves. Extension · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-mysword",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/mymage",
+      "label": "mymage MyTerms Mage extension. The knowledge side of the same terms — what the Mage may remember, carry, and weave on your behalf. Extension · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-mymage",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://agentprivacy.ai/spells",
+      "label": "agentprivacy / spells All of the agentprivacy persona and skills files — the full cast of agents, archetypes, and capabilities that constitute the protocol. Each spell is a defined role within the architecture. Together they map your own journey through the dual-agent system: where you sit between the Swordsman and the Mage, what you protect, what you project. Live · agentprivacy.ai/spells →",
+      "destination_url": "https://agentprivacy.ai/spells",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/agentprivacy-skills",
+      "label": "agentprivacy-skills The skills as a repo — 80+ privacy-first skills and personas for Claude Code: ZKP, key forging, compression defence, the full privacy layer. Install the protocol into your own agent. Python · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/#project-agentprivacy-skills",
+      "placement": "Labs source entry"
+    },
+    {
+      "source_url": "https://sync.soulbis.com",
+      "label": "Soul Sync Research letters exploring the implications of decentralised society. The Privacy is Value series. Published in public over eight years. Blog · sync.soulbis.com →",
+      "destination_url": "https://sync.soulbis.com",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://agentprivacy.ai/story",
+      "label": "agentprivacy / story The spellbook's narrative form — all the work rendered as story. The Five Grimoires, the dual-agent architecture, the eight-year journey. Explainable by the Mage. Narrative · agentprivacy.ai/story →",
+      "destination_url": "https://agentprivacy.ai/story",
+      "placement": "Existing canonical page; preserved as a reference"
+    },
+    {
+      "source_url": "https://github.com/mitchuski/agentprivacy-cosmic",
+      "label": "agentprivacy-cosmic The Cosmic Spellbook — formed from a signal from space and your own meaning. The corpus turned toward the sky. Spellbook · GitHub →",
+      "destination_url": "https://agentprivacy.org/work/boundary-tools/#cosmic",
+      "placement": "Labs source entry"
+    }
+  ]
+}

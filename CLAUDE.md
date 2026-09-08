@@ -4,6 +4,16 @@ This file gives you, as an AI coding assistant, the full context needed to work 
 
 ---
 
+## Landing page ownership — updated 7 September 2026
+
+Current direction: the Star is a geometric representation of you or your agent from your permitted perspective on the trust graph, and the central VTA artefact system for agents; the City Key carries versioned agent state and evidence references, and the browser extension connects authenticated identity. The live VTA/state binding remains integration work. Do not frame the home, guide or instruments around Game of 42, vision fish, mice or heptad learning roles. Preserve compatibility with existing artefacts without making their legacy learning narrative the current user journey. Do not change Star geometry to implement this editorial direction. Across the instruments: Star explores perspective, Lattice reads the 64 states, Sigil identifies a version of the record, and Skye compares loaded records and relationships. Shared reading-room prose styles live in public/rooms.css; preserve canvas palettes, geometry and data contracts. κ identifies contents, not a person or an access grant.
+
+The home now introduces Soulbis as privacymage’s expression of the boundary maker agent and leads to the Star and City Key. Keep /star, /lattice, /sigil, /skye and /guide directly reachable. The old Built and Ecosystem inventories are retired from this landing page by the user’s direction. Their source links and successors are recorded in `docs/landing-routing.json`.
+
+Labs at agentprivacy.org owns the portfolio, applied research, services and funding. Link to its relevant work or ecosystem page instead of adding repositories here. The model, ceremony, narrative and source corpus remain at their existing canonical pages. The guidance below about adding Built entries or Ecosystem nodes describes the prior layout and must not restore those sections.
+
+A City Key is a content-addressed carrier, distinct from a private signing key or permission grant. The Star-to-VTA scoped perspective remains integration work; do not describe it as a deployed global trust graph. Preserve the existing instrument implementations and their independent local changes.
+
 ## What Soulbis is
 
 Soulbis is the **Swordsman layer** of the 0xagentprivacy dual-agent architecture. It ships tools — plugins, enforcement mechanisms, open-source code — that make the privacy guarantees defined in [agentprivacy.ai](https://agentprivacy.ai) real at the boundary.

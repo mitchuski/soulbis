@@ -1,7 +1,7 @@
 /* sitenav.js — the collapsible corner nav for the Swordsman's Key rooms.
    One component, lives top-left on every experience page (/star /lattice /sigil /skye /guide).
-   Collapsed: a small column of emoji buttons. Expanded (hover, or click to pin): the emoji
-   open into word descriptions, with the current room's title information at the top.
+   Collapsed: just the corner orb. Click or tap to open the rooms and page actions;
+   click again or press Escape to minimise.
 
    A page may set, before this script loads:
      window.SITENAV = {
@@ -17,21 +17,21 @@
 
   // The rooms of the key — the canonical loop. ico = the small emoji button; tag = the word.
   var ROOMS = [
-    { p: "/",        ico: "⌂",  name: "home",     tag: "the surface" },
-    { p: "/star",    ico: "⚔️", name: "/star",    tag: "walk it" },
-    { p: "/lattice", ico: "🧙", name: "/lattice", tag: "prove it" },
-    { p: "/sigil",   ico: "🪬", name: "/sigil",   tag: "name it" },
-    { p: "/skye",    ico: "🌌", name: "/skye",    tag: "gather it" },
-    { p: "/guide",   ico: "🗡️", name: "/guide",   tag: "how it works · the Game of 42" }
+    { p: "/",        ico: "⌂",  name: "home",     tag: "where the key lives" },
+    { p: "/star",    ico: "⚔️", name: "/star",    tag: "explore your perspective" },
+    { p: "/lattice", ico: "🧙", name: "/lattice", tag: "read the 64 states" },
+    { p: "/sigil",   ico: "🪬", name: "/sigil",   tag: "recognise the record" },
+    { p: "/skye",    ico: "🌌", name: "/skye",    tag: "compare relationships" },
+    { p: "/guide",   ico: "🗡️", name: "/guide",   tag: "key · identity · perspective" }
   ];
   // Per-room title information — surfaced at the head of the expanded panel.
   var TITLES = {
     "/":        { eyebrow: "soulbis · the swordsman", title: "Soulbis",                  meta: "(⚔️ ⊥ ⿻ ⊥ 🧙) 😊" },
-    "/star":    { eyebrow: "holographic boundary · V6", title: "Star Tetrahedron Manifold", meta: "r(θ,φ) = R + ε·sin(mφ)·cos(nθ)", note: "∂M : 96 edges encode 64 vertices · 96/64 = 1.5 = P¹·⁵ · the boundary holds while R(t) < 1" },
+    "/star":    { eyebrow: "your agent perspective", title: "The Star", meta: "City Key · geometric representation", note: "Explore a loaded record. VTA identity and the permitted City view are being connected." },
     "/lattice": { eyebrow: "the lattice as manifold",  title: "The 64 · Vertex Codex",   meta: "V(π,t) on ∂M · 96 → 64" },
     "/sigil":   { eyebrow: "the κ derivation",         title: "The Sigil",               meta: "κ = sha256: H(key)" },
     "/skye":    { eyebrow: "the night of many keys",   title: "Skye",                    meta: "lineage · common ground" },
-    "/guide":   { eyebrow: "how the key works",        title: "The Swordsman Guide",     meta: "walk · prove · name · gather" }
+    "/guide":   { eyebrow: "how the key works",        title: "The Swordsman Guide",     meta: "carry · connect · participate" }
   };
 
   function currentPath() {
@@ -57,6 +57,11 @@
       "-webkit-backdrop-filter:blur(14px) saturate(1.1);box-shadow:0 18px 48px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);" +
       "transition:width .34s cubic-bezier(.2,.8,.2,1);overflow:hidden;}" +
     "#snav[data-open='true'] .snav-panel{width:248px;}" +
+    "#snav .snav-content{display:flex;flex-direction:column;gap:5px;}#snav .snav-content[hidden]{display:none;}" +
+    "#snav[data-open='false'] .snav-panel{padding:3px;border-radius:50%;gap:0;}" +
+    "#snav[data-open='false'] .snav-toggle{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%;}" +
+    "#snav[data-open='false'] .snav-tlabel,#snav[data-open='false'] .snav-chev{display:none;}" +
+    "#snav .snav-toggle{min-height:44px;}#snav .snav-toggle:focus-visible{outline:2px solid var(--snav-mage);outline-offset:-2px;}" +
     "#snav .snav-toggle{display:flex;align-items:center;gap:9px;width:100%;padding:5px 6px;border:none;background:none;" +
       "cursor:pointer;color:var(--snav-ink);font-family:inherit;border-radius:9px;}" +
     "#snav .snav-toggle:hover{background:rgba(120,140,220,0.10);}" +
@@ -102,8 +107,8 @@
   aside.dataset.open = "false";
 
   var html = "<div class='snav-panel'>";
-  html += "<button class='snav-toggle' type='button' aria-expanded='false' aria-label='Open navigation'>" +
-            "<span class='snav-orb'></span><span class='snav-tlabel'>rooms of the key</span><span class='snav-chev'>›</span></button>";
+  html += "<button class='snav-toggle' type='button' aria-expanded='false' aria-controls='snav-content' aria-label='Open navigation'>" +
+            "<span class='snav-orb'></span><span class='snav-tlabel'>rooms of the key</span><span class='snav-chev'>›</span></button><div class='snav-content' id='snav-content' hidden>";
   if (T) {
     html += "<div class='snav-card'>";
     if (T.eyebrow) html += "<div class='snav-eyebrow'>" + esc(T.eyebrow) + "</div>";
@@ -128,25 +133,32 @@
     });
     html += "</div>";
   }
-  html += "</div>";
+  html += "</div></div>";
   aside.innerHTML = html;
 
   function build() {
     document.body.appendChild(aside);
 
-    var pinned = false, hovering = false;
+    var open = false;
     var toggle = aside.querySelector(".snav-toggle");
-    var fine = window.matchMedia && window.matchMedia("(pointer:fine)").matches;
+    var content = aside.querySelector(".snav-content");
 
     function sync() {
-      var open = pinned || (hovering && fine);
       aside.dataset.open = open ? "true" : "false";
+      content.hidden = !open;
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Minimise navigation" : "Open navigation");
+      toggle.title = open ? "Minimise navigation" : "Open navigation";
     }
-    toggle.addEventListener("click", function () { pinned = !pinned; sync(); });
-    aside.addEventListener("mouseenter", function () { hovering = true; sync(); });
-    aside.addEventListener("mouseleave", function () { hovering = false; sync(); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && pinned) { pinned = false; sync(); } });
+    toggle.addEventListener("click", function () { open = !open; sync(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && open) {
+        var hadFocus = aside.contains(document.activeElement);
+        open = false; sync();
+        if (hadFocus) toggle.focus();
+      }
+    });
+    sync();
 
     // let the host page wire any folded-in action buttons now that they exist in the DOM
     document.dispatchEvent(new Event("sitenav:ready"));

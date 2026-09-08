@@ -1,147 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Swordsman Guide · soulbis.com/guide</title>
-<meta name="description" content="The Swordsman's guide to the City Key: what it is, how the walk earns proof, how the κ names it, and how the sigil carries it.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>The Star Guide · your perspective in Mages City · Soulbis</title>
+<meta name="description" content="The Star is a geometric expression of you or your agent. Explore how the City Key, VTA browser connection and Mages City bring your perspective into view.">
 <link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
 <link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=DM+Sans:wght@300;400;500&amp;family=JetBrains+Mono:wght@300;400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/public/rooms.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
-  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16); --glass:rgba(10,13,28,0.62);
-    --sword:#e8523a; --mage:#4dd9e8; --teal:#7fffd4; --gold:#ffe6c2; }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{ min-height:100vh; font-family:'Spline Sans Mono',monospace; color:var(--ink);
-    background:radial-gradient(120% 90% at 28% 14%, rgba(31,84,214,0.12), transparent 55%),
-      radial-gradient(110% 80% at 80% 88%, rgba(255,69,51,0.10), transparent 55%),
-      radial-gradient(140% 140% at 50% 50%, #060812 0%, #04050b 60%, #020308 100%);
-    padding:40px clamp(16px,5vw,72px) 64px; }
-  .page{ max-width:880px; margin:0 auto; }
-  .eyebrow{ font-size:11px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .navgrp{ display:flex; gap:8px; flex-wrap:wrap; }
-  .navbtn{ text-decoration:none; letter-spacing:0.06em; font-size:10.5px; color:#04050b; background:linear-gradient(120deg,#9fc0ff,#ffb9a6); border:1px solid transparent; border-radius:8px; padding:7px 13px; transition:transform .15s; white-space:nowrap; }
-  .navbtn--ghost{ background:none; border-color:var(--line); color:var(--ink); }
-  .navbtn:hover{ transform:translateY(-1px); }
-  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(30px,5vw,54px); line-height:1.06; padding-bottom:0.12em; letter-spacing:-0.01em;
-    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#ffb9a6); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .lede{ margin-top:14px; font-size:13.5px; line-height:1.75; color:#aeb8ee; }
-  .lede b{ color:#ffd6c7; font-weight:500; }
-  h2{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:24px; color:#dbe6ff; margin:38px 0 12px; }
-  p, li{ font-size:12.5px; line-height:1.8; color:#cdd6f5; }
-  p+p{ margin-top:10px; }
-  b{ color:#ffd6c7; font-weight:500; } code{ color:#cfe0ff; font-size:11.5px; } em{ color:#bfeef5; font-style:normal; }
-  .loop{ background:var(--glass); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:16px 0;
-    font-size:11.5px; line-height:2; color:#cdd6f5; overflow-x:auto; white-space:pre; backdrop-filter:blur(10px); }
-  .rooms{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:16px 0; }
-  @media (max-width:720px){ .rooms{ grid-template-columns:1fr; } }
-  .room{ display:block; text-decoration:none; color:var(--ink); background:var(--glass); border:1px solid var(--line); border-radius:14px; padding:18px 16px; transition:transform .18s, border-color .18s; }
-  .room:hover{ transform:translateY(-2px); border-color:rgba(120,140,220,0.5); }
-  .room .glyph{ font-size:22px; }
-  .room h3{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:19px; margin:8px 0 6px; color:#ffd6c7; }
-  .room p{ font-size:11px; line-height:1.65; color:var(--dim); }
-  .room .go{ display:inline-block; margin-top:10px; font-size:10px; letter-spacing:0.06em; color:#9fc0ff; }
-  .triad{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
-  @media (max-width:720px){ .triad{ grid-template-columns:1fr; } }
-  .tri{ background:var(--glass); border:1px solid var(--line); border-radius:12px; padding:14px 15px; }
-  .tri .tk{ font-size:10px; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px; }
-  .tri p{ font-size:11px; line-height:1.7; color:#aeb8ee; }
-  .tri--colour .tk{ color:var(--mage); } .tri--shape .tk{ color:var(--gold); } .tri--light .tk{ color:var(--teal); }
-  .note{ border:1px dashed var(--line); border-radius:10px; padding:12px 15px; margin:14px 0; font-size:11.5px; line-height:1.7; color:var(--dim); }
-  .note b{ color:#aeb8ee; }
-  footer{ margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:10.5px; color:rgba(124,134,184,0.75); line-height:1.9; }
-  footer a{ color:var(--sword); text-decoration:none; }
-  .inscription{ font-size:13px; letter-spacing:0.1em; color:#cdd6f5; }
+:root{color-scheme:dark;--bg:#080c20;--ink:#f0eee8;--text:#dde2ed;--muted:#bcc5d6;--line:#30384d;--coral:#f1a293;--cyan:#4dd9e8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:400 18px/1.75 'DM Sans',sans-serif}
+a{color:var(--ink);text-underline-offset:5px;text-decoration-thickness:1px}a:hover{color:var(--cyan)}a:focus-visible,summary:focus-visible{outline:2px solid var(--cyan);outline-offset:5px}
+.skip-link{position:absolute;top:-100px;left:20px;padding:12px;background:var(--ink);color:var(--bg);z-index:10}.skip-link:focus{top:12px}
+.page{max-width:1100px;padding:30px 32px 0;margin:auto}.rooms-nav{margin-bottom:0}
+.hero{padding:64px 0 42px;max-width:850px}.eyebrow{font-size:14px;color:var(--coral);letter-spacing:.04em;margin:0 0 18px}
+h1{font:400 clamp(48px,7vw,80px)/1.02 'Cormorant Garamond',Georgia,serif;letter-spacing:-.02em;color:var(--ink);margin:0 0 26px}h1 em{font-weight:400;font-style:normal;color:#c1c8ef}
+h2{font:400 clamp(32px,4vw,42px)/1.12 'Cormorant Garamond',Georgia,serif;color:var(--ink);margin:0 0 22px}
+h3{font:500 18px/1.5 'DM Sans',sans-serif;color:var(--ink);margin:0 0 8px}p{margin:0 0 18px;max-width:67ch}strong{font-weight:500;color:var(--ink)}
+.hero .lead{font-size:21px;line-height:1.65;max-width:58ch}.actions{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;margin-top:28px}.button{display:inline-block;padding:12px 20px;border:1px solid #8192ac;text-decoration:none;font-size:16px}
+.contents{display:flex;flex-wrap:wrap;gap:12px 26px;border-block:1px solid var(--line);padding:20px 0;font-size:16px}.contents a{text-decoration:none}
+section{display:grid;grid-template-columns:190px minmax(0,1fr);gap:40px;padding:44px 0;border-bottom:1px solid var(--line)}.section-label{font-size:14px;line-height:1.7;color:var(--muted);padding-top:6px}.section-label span{display:block;color:var(--coral);margin-bottom:6px}section .body{max-width:730px;min-width:0}
+[id]{scroll-margin-top:28px}.steps{list-style:none;counter-reset:step;margin:26px 0;padding:0}.steps li{counter-increment:step;display:grid;grid-template-columns:28px 1fr;gap:14px;margin-top:22px}.steps li:before{content:counter(step,decimal-leading-zero);font-size:14px;color:var(--coral);padding-top:3px}.steps strong{display:block}
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:22px 32px;margin:26px 0}.route{border-top:1px solid var(--line);padding-top:16px}.route a{font:400 28px 'Cormorant Garamond',Georgia,serif}.route p{font-size:17px;margin:10px 0 0}
+details{margin:22px 0;border-left:2px solid var(--line);padding-left:18px}summary{cursor:pointer;color:var(--ink);font-size:17px;font-weight:500}details p{font-size:17px;margin:16px 0 0}.status{border-left:2px solid var(--coral);padding-left:18px;font-size:17px}
+.sources{list-style:none;margin:24px 0 0;padding:0}.sources li+li{margin-top:16px}.sources span{display:block;font-size:16px;color:var(--muted);margin-top:3px}
+footer{max-width:1100px;margin:0 auto;padding:36px 32px 48px;border:0}.footer-logo{font:400 32px 'Cormorant Garamond',Georgia,serif;margin-bottom:14px}footer p{font-size:16px}.footer-links{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:15px;margin:24px 0}.attribution{color:var(--muted);font-size:14px}.inscription{font-size:20px}
+@media(max-width:760px){.page{padding:24px 22px 0}.hero{padding:44px 0 30px}section{grid-template-columns:1fr;gap:16px;padding:32px 0}.section-label span{display:inline;margin-right:12px}.routes{gap:22px}footer{padding-inline:22px}}
+@media(max-width:480px){.routes{grid-template-columns:1fr}.hero .lead{font-size:20px}}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 </style>
 </head>
-<body>
-<div class="page">
-  <div class="eyebrow"><span>soulbis · the swordsman guide · how the key works</span></div>
-  <h1>The Swordsman Guide</h1>
-  <p class="lede">You hold a <b>City Key 🗝️</b> — a small file, not an account — that records your standing in the City of Mages. These four rooms let you <b>walk it</b>, <b>prove it</b>, <b>turn it into a portrait that carries itself</b>, and <b>gather many under one night</b>. No server holds your identity at any step; everything below happens in your browser, checkably.</p>
+<body><a class="skip-link" href="#guide">Skip to guide</a><div class="page"><nav class="rooms-nav" aria-label="Soulbis"><a class="rooms-brand" href="/">Soulbis</a><div class="rooms-links"><a href="/star">Star</a><a href="/lattice">Lattice</a><a href="/sigil">Sigil</a><a href="/skye">Skye</a><a href="/guide" aria-current="page">Guide</a></div></nav>
+<main id="guide">
+  <header class="hero">
+    <p class="eyebrow">Soulbis · the Swordsman guide</p>
+    <h1>Your perspective<br><em>in the City.</em></h1>
+    <p class="lead">The Star is a geometric expression of you or your agent: a way to see your place on the trust graph, from your own perspective.</p>
+    <p>The City Key carries the record. The VTA connects the identity. The Star brings the permitted view into form.</p>
+    <div class="actions"><a class="button" href="/star">Enter the Star →</a><a href="#browser-extension">Explore the browser connection ↓</a></div>
+  </header>
+  <nav class="contents" aria-label="In this guide"><a href="#perspective">Your perspective</a><a href="#key">The City Key</a><a href="#browser-extension">The connection</a><a href="#rooms">The instruments</a><a href="#readiness">Mages City</a></nav>
 
-  <h2>The key, in one paragraph</h2>
-  <p>Every meaningful thing you do in the City — a workshop entered, a ceremony walked, attention genuinely staked — lands somewhere specific: one of <b>64 states</b>, each a six-bit address across the six sovereignty dimensions (<b>🛡️ Protection · 🤝 Delegation · 📜 Memory · 🔗 Connection · ⚡ Computation · 💎 Value</b>). Your key is the compressed record of where you've stood and what you've done there: a palette you chose, vertices you've lit, descriptions you've earned, focus you've poured, laps you've walked. A whole standing, a few kilobytes, yours as a file.</p>
-  <p>In the Swordsman's register each state is a <b>blade</b>, and the tiers cut the strata: <b>Null</b> (stratum 0 — total exposure, one state) · <b>Light</b> (1–2) · <b>Heavy</b> (3–4) · <b>Dragon</b> (5–6 — full sovereignty, the mathematical closure). The ceremony's trust tiers (<em>blade → light → heavy → dragon</em>) climb the same strata; vertex 63, all six dimensions held, is the full blade.</p>
+  <section id="perspective">
+    <div class="section-label"><span>01</span>A place to look from</div>
+    <div class="body"><h2>The graph begins with a perspective.</h2>
+      <p>You and your agent encounter different knowledge, people and work. The Star is where that particular view takes shape: what you have learned, the artefacts you carry, the promises you make and the relationships you can see.</p>
+      <p>Its geometry comes from the agentprivacy model. As the VTA connection develops, approved records will populate that geometry with their sources, versions and evidence.</p>
+      <p>A view belongs to an observer. Another agent may see something different. Shared ground invites a closer look; trust comes from the relationship and its evidence. What is outside your view remains unknown.</p>
+    </div>
+  </section>
 
-  <h2>The loop</h2>
-  <div class="loop">  mint 🗝️  at <b>agentprivacy.ai/city</b>        your standing, exported as the key · κ stamped
-    ⇣
-  walk ⚔️  at <b>/star</b>                       follow the path · laps and dwell accrue as trace
-    ⇣
-  prove 🧙  at <b>/lattice</b>                   walk each focused vertex its weight → witness minted
-    ⇣
-  name 🪬  at <b>/sigil</b>                      the κ derived in the open · the sigil drawn · 📸 the portrait
-    ⇣
-  charge 🗝️ back at <b>/city</b>                 the proof banks 🪢 mana · κ re-derived on arrival
-</div>
-  <p>The loop is the point: the key is a <em>claim</em> when minted and a <em>record</em> after walking. Time spent in the geometry becomes proof nobody attested to — it's just arithmetic about where you stood.</p>
-  <p>Both ends now speak κ: <b>/city</b> stamps the κ at mint and re-derives it at charge — a <em>reading, never a gate</em>; a mismatch is reported, not punished. And when only the proof should travel, <b>/lattice</b> exports a <b>⚡ charge pass</b> — trace, witness and κ, nothing else. Inscriptions, palette, focus amounts and identity stay home; /city charges it exactly as it would the full key.</p>
+  <section id="key">
+    <div class="section-label"><span>02</span>A record to carry</div>
+    <div class="body"><h2>One City Key. A continuing expression.</h2>
+      <p>The City Key is the portable artefact at the centre of these instruments. It carries a version of your agent’s record: appearance, descriptions, activity and references to evidence. In Mages City, this is the key through which that expression continues.</p>
+      <p>Its fingerprint, <strong>κ</strong>, identifies the contents of a particular version. A new record can carry a reference to the version it grew from, leaving a lineage you can inspect.</p>
+      <p>The key file and the private signing key have different jobs. Copying a City Key carries its contents; control of the agent identity is established through the VTA.</p>
+    </div>
+  </section>
 
-  <h2>The Game of 42 — where the standing is forged</h2>
-  <p>Before a key is minted, the standing inside it is <em>built</em> — and the <b>Game of 42</b> is how a group builds one together. It is the ceremony that fills the lattice with real work, so what the key later carries is <b>earned, not declared</b>.</p>
-  <p><b>Two spaces, one board.</b> A governance position answers two questions: <em>which axis do you serve</em>, and <em>which faculties do you bring</em>. The six axes are the six sovereignty dimensions you already met — <b>🛡️ Protection · 🤝 Delegation · 📜 Memory · 🔗 Connection · ⚡ Computation · 💎 Value</b>. The faculties are three — <b>head, heart, hands</b> — and their seven non-empty combinations are the seven <em>stations</em> of a heptad. Six axes × seven stations = <b>42</b>.</p>
-  <p><b>The heptad of seven.</b> Each axis is one heptad — seven seats, each read from the faculty it holds:</p>
-  <div class="triad">
-    <div class="tri tri--colour"><div class="tk">head · vision fish</div><p>The three head-holding seats. Hitchhiker advisors who turn a vision into the buildable questions — they read as paths before they are positions, so they arrive first.</p></div>
-    <div class="tri tri--shape"><div class="tk">hands &amp; heart · mice</div><p>The three making seats — lead, caring, and steward builders. They do the work the advisors framed; a heptad cannot seal on vision alone.</p></div>
-    <div class="tri tri--light"><div class="tk">head + heart + hands · the guide</div><p>The one centre seat holding all three faculties — the <b>keystone</b>. Only the part that holds all three can hold the whole, so the guide alone can carry a child game.</p></div>
-  </div>
-  <p><b>The keystone seals last.</b> The guide cannot even begin until the other six seats are verified — <em>“nothing seals until the keystone, and the keystone cannot be laid until the rest is true.”</em></p>
+  <section id="vertex-pathways">
+    <div class="section-label"><span>02a</span>Knowledge becomes a chosen reading</div>
+    <div class="body"><h2>What does a vertex carry?</h2>
+      <p>A vertex is a place to attach meaning: a pathway through the corpus, an artefact made along the way, or a promise about how that work may be used. Its position helps you navigate; the linked source and evidence explain the claim.</p>
+      <ol class="steps"><li><div><strong>Trace a pathway.</strong>Keep the source, its version, the method and the correction that changed your understanding.</div></li><li><div><strong>Keep the artefact and its terms.</strong>A proposed binding connects the vertex to an exact artefact reference, a promise-graph record and the applicable MyTerms agreement. The private evidence stays in its permitted space.</div></li><li><div><strong>Choose an expression.</strong>The sigil is the first compact visual expression. A fingerprint identifies selected content; separately verified signatures establish who signed a particular statement.</div></li></ol>
+      <details><summary>Stored meaning and readable geometry</summary><p>The Star can organise selected artefacts, references and commitments. A reference points to a record; a hash identifies chosen content; neither stores the missing evidence by itself.</p><p>A shape may be derived from a versioned reading of that evidence, customised by its owner, or derived with explicit overrides. A programmatic reader needs the mode, inputs and mapping version to tell those apart and reproduce a derived result. Appearance expresses a perspective; authority still depends on the underlying evidence and permissions.</p><p>This is the next integration layer. The Star Key test reader currently shows illustrative artwork, not a computed geometry.</p></details><details><summary>Overlap and convergence</summary><p>Two keys may touch the same vertex while referring to different sources or meanings. Use overlap to discover a possible shared pathway, then compare artefact versions, provenance, promises and terms. Convergence is a finding to inspect, not an automatic trust score or permission grant.</p></details>
+      <details><summary>From a runtime trace to a reusable promise</summary><p>A knowledge graph can preserve the route; a promise graph can state the commitments. Replaying a runtime also requires pinned inputs, code and tools, an execution environment, bounded permissions and a way to check its output. Agent-generated or external-service steps are not deterministic merely because their trace is recorded.</p><p>The Star Key integration is being designed to carry these references at a vertex. The current browser reader filters them out; it does not yet resolve agreements, verify signatures or execute a runtime.</p></details>
+      <p><a href="/sigil">Explore the sigil →</a> · <a href="/skye">Compare overlap in Skye →</a> · <a href="/star-experiment/">Test Star Key →</a></p>
+      <p class="status">A Sigil portrait can embed the full City Key. A hash does not conceal guessable content or verify a DID signature. Choose what the exported artefact carries before sharing it.</p>
+    </div>
+  </section>
 
-  <h2>How a board seals</h2>
-  <div class="loop">  each seat walks   <b>empty → proposed → in&nbsp;progress → verified → sealed</b>
-    ⇣                a seat reaches <b>verified</b> only when a real trust task passes
-                     and its proof is κ-compressed into an edge — no advance on unproven history
-    ⇣
-  a heptad <b>locks</b>   when all seven of its seats are sealed · the flap folds shut
-    ⇣
-  the board <b>folds</b>  only when all six heptads lock — <b>p = sealed ÷ 42 → 1</b>
-                     six heptads close into the star tetrahedron you walk at <b>/star</b></div>
-  <p><b>Multiplicative collapse.</b> There is no partial seal. If any single axis is short even one seat, the whole board stays open — the <em>any-axis-zero-zeros-the-whole</em> rule, made into a gate. A standing is whole, or it is not yet a standing.</p>
-  <p><b>The seal becomes a key.</b> When the board folds, one SHA-256 over all 42 edge-labels plus the geometry becomes the <b>group seal</b> — and that seal drops straight in here as a City Key: its six axes light on <b>/star</b>, its proven seats show on <b>/lattice</b>, <b>/sigil</b> re-derives its κ (verified), and <b>/city</b> charges it for 🪢 mana. A forged game is carryable proof.</p>
-  <p><b>Many games, one sky.</b> Because every sealed game is just a key bearing a seal and a six-axis bitmask, any number of them can rise together on <b>/skye</b> — each placed by its κ, <span style="color:var(--gold)">gold threads</span> for lineage (one game forged from another), <span style="color:var(--teal)">teal threads</span> for the ground two games share, computed <em>blind</em> so the overlap shows and nothing else.</p>
-  <div class="note"><b>Where to play.</b> The full assembly engine lives at <a href="https://42.agentprivacy.ai" style="color:var(--sword)">42.agentprivacy.ai</a> — fold a board, seal it, and save the PNG. Drop that PNG on <b>/skye</b> here and the game rises as a star among the others.</div>
+  <section id="browser-extension">
+    <div class="section-label"><span>03</span>Identity meets expression</div>
+    <div class="body"><h2>The City Key, in your browser.</h2>
+      <p>The browser extension is the expression of the VTA we are bringing into this experience: connecting who is signed in, which City Key they are using and whose perspective the Star displays.</p>
+      <ol class="steps" id="journey">
+        <li><div><strong>Connect an identity.</strong>Use the VTA connection to establish the agent acting for this visit, then select its City Key.</div></li>
+        <li><div><strong>Choose what comes into view.</strong>Bring the permitted part of the agent’s record into the Star. Private context stays within its agreed boundaries.</div></li>
+        <li><div><strong>Carry the encounter forward.</strong>Keep approved activity and evidence with their sources, ready to inform the next version of the record.</div></li>
+      </ol>
+      <p><a href="/star-experiment/">Try Star Key · inspect a local City Key →</a></p>
+      <p class="status" id="openvtc"><strong>Being connected.</strong> OpenVTC provides the browser identity foundation. Binding it to the selected City Key, scoped Star view and agent-state updates is integration work underway.</p>
+    </div>
+  </section>
 
-  <h2>The four rooms</h2>
-  <div class="rooms">
-    <a class="room" href="/star"><span class="glyph">⚔️</span><h3>/star · walk it</h3>
-      <p>The 3D boundary: the star-tetrahedron core inside the 64-vertex lattice. Import your key, set your <em>stance</em> on the console (the manifold's shape — it travels in the key), play the succ cycle, walk your lit vertices, save the trace. <b>F</b> for the cinematic orbit · <b>S</b> snaps a portrait that carries your key.</p>
-      <span class="go">walk →</span></a>
-    <a class="room" href="/lattice"><span class="glyph">🧙</span><h3>/lattice · prove it</h3>
-      <p>The flat codex: all 64 states, each openable — its stratum, its six bits, its reflections. Focus you poured at /city glows gold here; walking the cycle discharges it, vertex by vertex, until the witness is minted: <em>focus claimed, then made real by presence.</em></p>
-      <span class="go">prove →</span></a>
-    <a class="room" href="/sigil"><span class="glyph">🪬</span><h3>/sigil · name it</h3>
-      <p>The bytes: watch the key's name — its κ — be recomputed from its exact content and checked against what it claims. Then see the name drawn: 64 hash glyphs on 64 vertices, your constellation. Compare two keys: shared ground in teal, divergence pulsing.</p>
-      <span class="go">derive →</span></a>
-    <a class="room" href="/skye"><span class="glyph">🌌</span><h3>/skye · gather it</h3>
-      <p>The night of many keys: add any number — yours, friends', your own key's ancestors, <b>and sealed Games of 42</b> — and each rises as a star placed by its κ. Gold threads are lineage (the <code>prior</code> chain); teal threads are common ground — drawn locally, or computed <em>blind</em> with a friend via a two-file 🤝 exchange that reveals the overlap and nothing else. 📸 snaps the whole night as one image carrying every risen key.</p>
-      <span class="go">gather →</span></a>
-  </div>
+  <section id="boundaries">
+    <div class="section-label"><span>04</span>The Swordsman’s part</div>
+    <div class="body"><h2>Choose what crosses the boundary.</h2>
+      <p>Soulbis is privacymage’s expression of the boundary maker agent. The Swordsman protects what you keep; the Mage works with what you choose to project.</p>
+      <p>That boundary follows the encounter: which identity is acting, for whom, what it may reveal and what it may do. City services check the permission for each action. The Star makes the resulting perspective legible.</p>
+    </div>
+  </section>
 
-  <h2>The κ — the name that can't be given, only earned</h2>
-  <p>Hash the key's exact bytes and you get its <b>κ-label</b>: <code>kappa = "sha256:" + H(canonical form)</code>. This is a <b>fingerprint, not a transformation</b> — your key's content is untouched; the κ is one extra line, derived <em>from</em> the content. Delete it and the key still works. Recompute it and you get the same answer back if — and only if — nothing changed. Every import, on every page, re-derives it and shows <em style="color:var(--teal)">κ verified</em> or <em style="color:var(--sword)">⚠ κ mismatch</em>. The rule underneath: <b>identity is content, not location</b> — a key is what it says, wherever it travels, and nobody has to take its word for it.</p>
+  <section id="rooms">
+    <div class="section-label"><span>05</span>Four ways to read the key</div>
+    <div class="body"><h2>Explore the record today.</h2>
+      <p>The instruments already work with imported City Keys. Each gives you a different reading of the same artefact.</p>
+      <div class="routes">
+        <div class="route"><a href="/star">Star →</a><p>Explore the record through the model’s geometry. Follow its path and tune its expression.</p></div>
+        <div class="route"><a href="/lattice">Lattice →</a><p>Read the 64 states, their descriptions and the activity carried by the key.</p></div>
+        <div class="route"><a href="/sigil">Sigil →</a><p>Check the content fingerprint, compare records and carry a version as a portrait.</p></div>
+        <div class="route"><a href="/skye">Skye →</a><p>Bring records together. Inspect their lineage and shared touched vertices.</p></div>
+      </div>
+      <details><summary>Keep a trace from the Star</summary><p>Import a key, walk it, then choose <strong>Attach trace to key</strong> and <strong>Download key</strong>. Lap and time counters stay in page memory until you save them. Attach again to include later tracing. This is a local record, not yet a VTA activity receipt.</p></details>
+      <details><summary>Know what a portrait carries</summary><p>A Star or Sigil portrait can contain the City Key itself. A Skye export contains the loaded keys. Sharing the image shares those records. Open rooms on this site can also synchronise imported keys and selected vertices.</p></details>
+    </div>
+  </section>
 
-  <h2>The sigil — three layers, three sources</h2>
-  <div class="triad">
-    <div class="tri tri--colour"><div class="tk">colour · chosen</div><p>Your palette — the four gems you picked. Expression. Two bearers can share it; you can change yours tomorrow. <b>The voice.</b></p></div>
-    <div class="tri tri--shape"><div class="tk">shape · chosen + earned</div><p>The manifold parameters ride in your key: six petals, one per dimension — your <em>stance</em> — engraved vertex by vertex with the work you actually did (focus, lit, witness, inscription). And once the City measures your <em>figures</em>, the shape stops being chosen: it's read. <b>The posture.</b></p></div>
-    <div class="tri tri--light"><div class="tk">light · derived</div><p>Which vertices glow comes from the κ. You cannot choose it or fake it; it moves only when your content moves — and then it moves everywhere (~60 of 64 glyphs on one edit). <b>The fact.</b></p></div>
-  </div>
-  <p>A forged sigil doesn't fail quietly in a log somewhere. It <em>looks wrong</em> — in your own colours, on your own shape.</p>
-
-  <h2>The portrait carries the key</h2>
-  <p>Export the sigil (or snap /star with your key loaded) and the <b>entire key rides inside the image</b> — in a standard, labelled PNG metadata chunk, with the κ caption visible in the pixels. Every image viewer shows the constellation; every room here (and /city's charge) reads the chunk and gets your key back <b>byte-for-byte</b>. Zoom in, crop, snap mid-orbit — any framing is the full record, because what you framed and what you carry are different layers of the same file.</p>
-  <div class="note"><b>Two honest boundaries.</b> ① It's the <b>exported file</b> that carries — an OS screenshot is pixels only. Platforms that recompress images (most chat apps, inline) strip the hidden layer; send the PNG <em>as a file</em> and it carries; even stripped, the visible κ caption still names the key. ② The carrier is <b>portability, not secrecy</b> — the full key is inside, extractable by anyone holding the file. Share a sigil exactly as deliberately as you'd share the key itself.</div>
-
-  <h2>Who holds what (and who holds nothing)</h2>
-  <p>The architecture is two agents and a gap. The <b>⚔️ Swordsman</b> was forged and then <em>forgot</em> — his private key burned at the ceremony, by design: he guards the boundary precisely because he can't be made to reveal what he was never told. The <b>🧙 Mage</b> remembers — the graph, the deeds, the library; at <b>spellweb</b> the key itself now equips her graph, and her export rides back out as the same κ-stamped file, round-tripping to every room here. The key carries what he may not hold and what she must not lose; importing it anywhere re-equips <em>both</em>, separately. And the <b>First Person 😊</b> — you — are never in the file. What travels is everything <em>around</em> the gap. The gap survives every round trip because it was never encoded.</p>
-
-  <footer>
-    <span class="inscription">(⚔️ ⊥ ⿻ ⊥ 🧙) 😊</span> — The Swordsman guards the gap. The gap is the proof.<br>
-    deeper: <a href="https://github.com/mitchuski/star">github.com/mitchuski/star</a> (the source + the full write-ups) · <a href="https://agentprivacy.ai/model">agentprivacy.ai/model</a> (the mathematics) · <a href="https://agentprivacy.ai/city">agentprivacy.ai/city</a> (mint + charge) · <a href="https://spellweb.ai">spellweb.ai</a> (the Mage's graph — the key equips there too)<br>
-    privacymage / 0xagentprivacy
-  </footer>
-</div>
-<script src="/public/sitenav.js" defer></script>
-</body>
+  <section id="readiness">
+    <div class="section-label"><span>06</span>A shared City</div>
+    <div class="body"><h2>Carry your knowledge.<br>Choose what to reveal.</h2>
+      <p>Mages City is the shared knowledge community taking shape around this work. Bring a question, learn from a source, make an artefact or contribute a correction. Keep the work connected to its maker and the path it came from.</p>
+      <p>The City brings participants together. Soulbis gives your key a place to live and your perspective a form you can explore. Labs follows the builds, research and source work behind both.</p>
+      <div class="actions"><a class="button" href="https://mages.city/">Explore Mages City ↗</a><a href="https://agentprivacy.org/work/">Follow the work at Labs ↗</a></div>
+      <details id="sources"><summary>Sources behind the guide</summary><ul class="sources">
+        <li><a href="https://agentprivacy.ai/model">The agentprivacy model ↗</a><span>The meaning and mathematical grounding of the geometry.</span></li>
+        <li><a href="https://github.com/OpenVTC/vta-browser-plugin#readme">OpenVTC browser identity work ↗</a><span>The upstream VTA browser connection.</span></li>
+        <li><a href="https://agentprivacy.org/ecosystem/#myterms">Personal terms and agreements ↗</a><span>The agreement layer behind the Swordsman’s boundaries.</span></li>
+        <li><a href="https://agentprivacy.org/work/boundary-tools/">Instrument sources at Labs ↗</a><span>The implementation references for these rooms.</span></li>
+      </ul></details>
+    </div>
+  </section>
+</main>
+</div><footer><div class="footer-logo">Soulbis</div><p class="inscription">(⚔️ ⊥ ⿻ ⊥ 🧙) 😊</p><p>The Swordsman guards the gap. The gap is the proof.</p><div class="footer-links"><a href="/">Where the key lives</a><a href="/star">Enter the Star</a><a href="https://agentprivacy.org/work/">Labs · builds &amp; research</a><a href="https://sync.soulbis.com">Soul Sync</a><a href="mailto:mage@agentprivacy.ai">Contact</a></div><p class="attribution">privacymage / 0xagentprivacy · © 2026</p></footer></body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Skye · the night of many keys · soulbis.com/skye</title>
+<title>The Skye · relationships in view · Soulbis</title>
 <link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
 <link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
 <style>
@@ -67,12 +67,15 @@
   footer{ max-width:1180px; margin:30px auto 0; font-size:10.5px; color:rgba(124,134,184,0.7); line-height:1.7; }
   footer b{ color:#aeb8ee; font-weight:500; } footer code{ color:#aeb8ee; }
 </style>
+<link rel="stylesheet" href="/public/rooms.css">
 </head>
 <body>
+  <nav class="rooms-nav" aria-label="Soulbis"><a class="rooms-brand" href="/">Soulbis</a><div class="rooms-links"><a href="/star">Star</a><a href="/lattice">Lattice</a><a href="/sigil">Sigil</a><a href="/skye" aria-current="page">Skye</a><a href="/guide">Guide</a></div></nav>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/skye · the fourth projection · the night of many keys</span></div>
+    <div class="eyebrow"><span>The Skye · relationships in view</span></div>
     <h1>The Skye</h1>
-    <p class="lede">Many keys, <b>one sky</b>. Add any number — JSON or sigil PNG — and each rises as a star: its <b>κ places it</b> (identity is content, even its place in the night), its own palette lights its 64-glyph cluster. <b>Gold threads</b> are lineage (<code>prior</code> chains); <b>teal threads</b> are common ground (shared touched vertices). A sealed <b>🎲 Game of 42</b> rises as a <b>violet hub</b> — the gathering's seal, with the keys made from it bound to it in violet. Grounding in the 📖 legend.</p>
+    <p class="lede">Bring several agent artefacts into <b>one sky</b>. Each City Key becomes a star. Gold threads follow recorded lineage; teal threads show shared touched vertices. Explore the relationships present in the records you choose to load.</p>
+    <p class="room-context">This is a local comparison of those records. The connected City view is being built around your permitted perspective on the trust graph. <a href="/guide#perspective">Whose perspective are you seeing? →</a></p>
   </header>
 
   <div class="wrap">
@@ -93,8 +96,8 @@
     </div>
 
     <div class="card" style="margin-top:26px">
-      <div class="sect">🤝 Common ground — zero knowledge (DH-PSI)</div>
-      <p class="explain">Learn what two keys share — and <b>only</b> that. Keys never travel: only <b>blinded points</b> do, as two small files exchanged however you already exchange sigils. No server.</p>
+      <div class="sect">🤝 Common ground · private set intersection experiment</div>
+      <p class="explain">Compare selected vertex sets using exchanged files of blinded points instead of sending the full keys. This DH-PSI experiment explores shared ground; it is separate from VTA sign-in and City permission checks.</p>
       <div class="bar">
         <button id="psiKeyBtn" class="btn">⬆ Your key</button>
         <span id="psiKeyName" class="keyname">no key entered</span>
@@ -108,7 +111,7 @@
         <button id="psiImpBtn" class="btn">⬆ Import exchange file</button>
         <input type="file" id="psiInFile" accept="application/json,.json" hidden>
       </div>
-      <div class="inspect" id="psiOut">initiator: enter your key → ① export a challenge, send the file · responder: enter your key → import their challenge, send back the answer · initiator: import the answer — the common ground appears, and nothing else does</div>
+      <div class="inspect" id="psiOut">initiator: enter your key → ① export a challenge, send the file · responder: enter your key → import their challenge, send back the answer · initiator: import the answer — the shared selected vertices appear</div>
       <div class="psigrid" id="psiGrid" style="display:none"></div>
     </div>
   </div>
@@ -119,19 +122,17 @@
       <div class="legend-grid">
         <span class="lk">the placement</span><span class="lv">each star sits where its <b>re-derived κ</b> puts it — the first 16 hex glyphs become its coordinates. No curator, no order of arrival: <b>the content addresses the sky</b>. Re-import the same key anywhere and it rises in the same place.</span>
         <span class="lk">the star</span><span class="lv">a key's star is its sigil in miniature — 64 glyph points in succ order, lit by the κ's own hex intensities, coloured by the key's own palette by stratum. Every framing is a full instance: each star still <i>carries</i> everything its key carries.</span>
-        <span class="lk">🎲 the Game of 42 · the seal that binds</span><span class="lv">a sealed <b>Game of 42</b> board (six axes × seven stations folded into the star) is not another person's key — it is a <b>gathering's seal</b>. It exports a PNG carrying a City Key projection of its <b>group seal</b>; drop it here and it rises as a <b>violet hub</b> (the ⚔️+🧙 fold, neither side alone), not a peer star. Every key minted from that game names the seal as its <code>prior</code>, so each one <b>binds to the hub</b> in violet — the gathering made visible as the thing its members hold in common. Hover the hub for preset, the axes it locked (🛡️🤝📜🔗⚡💎), seal, and how many keys it binds. Only the seal, the axes and κ travel; the 42-slot interior stays home.</span>
+        <span class="lk">Group artefacts · legacy imports</span><span class="lv">Older group-seal files remain readable as violet hubs, with links to records that name them as an ancestor. This preserves existing artefacts. Their declared lineage does not establish VTA identity, verified membership or permission to act.</span>
         <span class="lk">gold threads · lineage</span><span class="lv">when one key's <code>prior</code> equals another's κ, a gold thread joins child to ancestor — the κ-chain drawn (C87: <i>the key accumulates</i>). A sky of one bearer's exports is their key's history, visible.</span>
         <span class="lk">teal threads · common ground</span><span class="lv">between every pair, the count of <b>shared touched vertices</b> (lit · described · poured · proven on both) draws as a teal thread — brighter the more ground is shared. Divergence is the default; the threads show what is <i>in common</i>.</span>
         <span class="lk">the sky shot</span><span class="lv">📸 exports the night as a PNG that <b>carries every risen key</b> — <code>{version, sky:true, keys:[…]}</code> in a <code>tEXt</code> chunk, keyword <code>citySky</code> (the single-key carrier's grammar, one rung up). Drop the shot back here and the whole night rises again; each carried key still imports individually on /star, /lattice, /sigil. One picture, a whole gathering — share it knowing it shares <i>all</i> of it.</span>
-        <span class="lk">the boundary</span><span class="lv">reading full keys (or a sky shot) learns full contents — this is the <i>plaintext</i> sky, local to this browser. The zero-knowledge alternative is 🤝 <b>common ground</b> below: blinded intersection (DH-PSI) — learn the common ground and <b>only</b> the common ground.</span>
+        <span class="lk">the boundary</span><span class="lv">reading full keys (or a sky shot) learns full contents — this is the <i>plaintext</i> sky, local to this browser. The <b>common ground</b> experiment uses blinded set intersection (DH-PSI) to compare selected vertices without exchanging full keys. It does not authenticate the declared sets or verify a City entitlement.</span>
       </div>
-      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V6 · V5.4 lineage) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
+      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V6 · V5.4 lineage) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · instrument sources: <a href="https://agentprivacy.org/work/boundary-tools/">Labs</a>.</p>
     </div>
   </details>
 
-  <footer>
-    <b>The sky is local.</b> Keys you add are read in this browser and drawn; nothing is uploaded anywhere. A sigil PNG dropped here unfolds its carried key exactly as it does on /star, /lattice and /sigil; a 📸 sky shot dropped here raises its whole night again. Keys without a κ derive one on arrival — they learn their name, then their place.
-  </footer>
+  <footer><p>The sky is assembled in your browser from the files you add. <b>A sky shot contains every loaded key.</b> Share it only when you intend to share those records together.</p><p>Lineage and overlap describe the loaded contents. Their trust meaning depends on the evidence and the observer’s context.</p><div class="room-footer-links"><a href="/guide">Read the Star guide →</a><a href="https://mages.city/">Explore Mages City ↗</a><a href="https://agentprivacy.org/work/boundary-tools/">Labs · instrument sources ↗</a></div></footer>
 
 <script>
 (function(){
@@ -332,11 +333,11 @@
     const ancIsGame=!!(anc&&anc.cfg.source&&anc.cfg.source.kind==='game-of-42');
     const kin=STARS.reduce((m,o,j)=>{ if(j===i) return m; const n=shared(s,o); return n>m.n?{n,o}:m; },{n:0,o:null});
     el.innerHTML='<b>'+esc(s.cfg.name||'city key')+'</b> · <span class="k">'+esc(s.kappa.slice(0,23))+'…</span>'
-      +(gm?' · <span class="gm">🎲 Game of 42 · '+esc(gm.preset)+' · '+gm.axes+' · seal '+esc(gm.seal.slice(0,12))+'… · '+gm.count+'/42'+(bound?' · binds '+bound+' key'+(bound===1?'':'s'):' · no keys bound yet')+'</span>':'')
+      +(gm?' · <span class="gm">Group artefact · '+esc(gm.preset)+' · '+gm.axes+' · seal '+esc(gm.seal.slice(0,12))+'…'+(bound?' · binds '+bound+' key'+(bound===1?'':'s'):' · no keys bound yet')+'</span>':'')
       +' · ✦ '+lit+' lit · '+s.touched.size+' touched'
       +(typeof s.cfg.prior==='string'
         ?(ancIsGame
-          ?' · <span class="gm">bound to 🎲 <b>'+esc(anc.cfg.name||'game of 42')+'</b></span>'
+          ?' · <span class="gm">linked to group artefact <b>'+esc(anc.cfg.name||'group artefact')+'</b></span>'
           :' · <span class="gold">descends from '+esc(s.cfg.prior.slice(0,15))+'…'+(anc?' — risen here as <b>'+esc(anc.cfg.name||'city key')+'</b>':'')+'</span>')
         :'')
       +(kin.o?' · <span class="teal">closest kin: <b>'+esc(kin.o.cfg.name||'city key')+'</b> (∩'+kin.n+')</span>':''); }
@@ -459,6 +460,6 @@
   drawSky();
 })();
 </script>
-<script src="/public/sitenav.js" defer></script>
+
 </body>
 </html>

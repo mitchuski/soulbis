@@ -1,10 +1,12 @@
 # Soulbis
 
-**The Swordsman builds.**
+**Where the key lives.**
 
-Soulbis is the enforcement layer of the [0xagentprivacy](https://agentprivacy.ai) architecture. Where agentprivacy.ai holds the gestalt — the Mage, the protocol, the Five Grimoires — Soulbis ships the tools that make privacy real at the boundary. Code as commitment.
+Soulbis is privacymage’s expression of the boundary maker agent: the Swordsman in the agentprivacy dual-agent architecture. This site introduces that role and holds the Star, Lattice, Sigil, Skye and key guide.
 
-→ [agentprivacy.ai](https://agentprivacy.ai) · [spellweb.ai](https://spellweb.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [bgin.ai](https://bgin.ai)
+[Enter the Star](https://soulbis.com/star) · [Key guide](https://soulbis.com/guide) · [Labs builds and research](https://agentprivacy.org/work/) · [The model](https://agentprivacy.ai/model)
+
+The portfolio, applied research, services and funding belong at agentprivacy.org. Retired landing catalogue links and their exact successors are recorded in `docs/landing-routing.json`; existing tool routes and home anchors remain available. Publish and check the Labs destinations before shipping the new outward links. This local update does not establish a live VTA connection or a permission grant from a City Key.
 
 ---
 

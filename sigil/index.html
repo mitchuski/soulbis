@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Sigil · κ derivation · soulbis.com/sigil</title>
+<title>The Sigil · recognise the record · Soulbis</title>
 <link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
 <link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
 <style>
@@ -124,18 +124,21 @@
   footer{ max-width:1180px; margin:30px auto 0; font-size:10.5px; color:rgba(124,134,184,0.7); line-height:1.7; }
   footer b{ color:#aeb8ee; font-weight:500; } footer code{ color:#aeb8ee; }
 </style>
+<link rel="stylesheet" href="/public/rooms.css">
 </head>
 <body>
+  <nav class="rooms-nav" aria-label="Soulbis"><a class="rooms-brand" href="/">Soulbis</a><div class="rooms-links"><a href="/star">Star</a><a href="/lattice">Lattice</a><a href="/sigil" aria-current="page">Sigil</a><a href="/skye">Skye</a><a href="/guide">Guide</a></div></nav>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/sigil · the third projection · beneath the lattice</span></div>
+    <div class="eyebrow"><span>The Sigil · recognise the record</span></div>
     <h1>The Sigil</h1>
-    <p class="lede">Your <b>City Key 🗝️</b>, read three ways. <b>① Derive</b> — its name, the <b>κ</b> = <code>sha256:H(canonical form)</code>, recomputed from its bytes and checked, in the open. <b>② Constellate</b> — the name drawn: <b>64 hash glyphs, one per vertex</b>. <b>③ Compare</b> — two keys side by side. <b>Identity is content, not location.</b> Full grounding in the 📖 legend below.</p>
+    <p class="lede">Give a version of your City Key a recognisable face. <b>Derive its fingerprint</b>, see that fingerprint as a constellation, then compare it with another record. The portrait carries the key as well as its appearance.</p>
+    <p class="room-context">The fingerprint, κ, identifies the key’s contents. The VTA connection establishes who controls the agent identity. <a href="/guide#browser-extension">How the key and sign-in fit together →</a></p>
   </header>
 
   <div class="wrap">
     <div class="card">
-      <div class="sect">① Derive — verification is re-derivation</div>
-      <p class="explain">The key's exact bytes, then their SHA-256 typed out against the stamped κ. <b>Teal</b> = it is what it says · <b>coral</b> = it isn't · no κ yet = the key learns its name here.</p>
+      <div class="sect">① Derive · check the content fingerprint</div>
+      <p class="explain">The page hashes the key’s canonical contents and compares the result with its recorded κ. Teal means they match; coral means they differ. A key without a fingerprint receives one here.</p>
       <div class="bar">
         <button id="impBtn" class="btn">⬆ Import City Key</button>
         <button id="dfltBtn" class="btn">🗝️ the default key</button>
@@ -146,7 +149,7 @@
       <div class="canon" id="canonBox">the canonical form will appear here — keys sorted recursively, no whitespace, the κ field excluded from its own preimage.</div>
       <div class="canon-meta" style="margin-top:10px">↓ SHA-256</div>
       <div class="hashrow" id="hashRow"><span class="axis">sha256:</span><span class="h" id="hashHex"></span></div>
-      <div class="verdict" id="verdict">Law L5: a κ-label is never trusted, only re-derived. Import a key to watch its name be earned.</div>
+      <div class="verdict" id="verdict">Import a key to recompute its fingerprint and inspect the record.</div>
       <div class="prov" id="prov"></div>
       <div class="bar" style="margin-top:10px">
         <button id="vpktBtn" class="btn" title="load a spellweb.bearer.packets bundle (⬇ proof packets, from agentprivacy /runecraft) — each packet's proof re-derives (Law L5) and the Merkle root is matched against this key's packets digest">🧾 verify packets bundle</button>
@@ -156,8 +159,8 @@
     </div>
 
     <div class="card">
-      <div class="sect">② Constellate — the κ as a lighting of the 64</div>
-      <p class="explain"><b>Colour</b> = your palette (chosen) · <b>shape</b> = your stance + earned relief (carried) · <b>light</b> = the hash (derived — one edit moves ~60 of 64 glyphs). Click a vertex to read it. 📸 exports a PNG that <i>carries the key</i>.</p>
+      <div class="sect">② Constellate · a portrait of this record</div>
+      <p class="explain">Colour comes from the palette; shape comes from the key’s geometry and recorded fields; light comes from its fingerprint. Select a vertex to read it. Exporting a portrait also includes the key.</p>
       <div class="ringwrap"><canvas id="ring"></canvas></div>
       <div class="glyphbar"><span>glyph 0 · dark</span><div class="glyphscale"></div><span>glyph f · full</span></div>
       <div class="inspect" id="inspect">hover or click the ring — each vertex shows its glyph, its six named dimensions, and its ⚔️ neg / 🧙 bnot / 😊 succ.</div>
@@ -183,8 +186,8 @@
   </div>
 
   <div class="compare card">
-    <div class="sect">③ Compare — two contents, two identities</div>
-    <p class="explain">Between two bearers the κs will <i>always</i> differ — that's identity working, not news. <b>The discovery is the common ground</b>: the ∩ lattice leads — vertices both keys have walked (lit · described · poured · proven). Drop a second key (JSON or sigil PNG) into B. Below the ∩: each sigil in its own palette (the pulse = identity divergence), then the exact diverging fields. <i>Today, compare reads both keys in full; the designed next rung discovers the ∩ with zero knowledge — learn what's shared, reveal nothing else.</i></p>
+    <div class="sect">③ Compare · find shared ground</div>
+    <p class="explain">Load a second key to see shared touched vertices, the two portraits and the fields that differ. Identical contents produce the same fingerprint, whoever holds the file. This comparison reads both records in full; overlap alone does not establish trust.</p>
     <div class="bar">
       <button id="impBtn2" class="btn">⬆ import a second key</button>
       <input type="file" id="impFile2" accept="application/json,.json,image/png,.png" hidden>
@@ -216,23 +219,21 @@
         <span class="lk">the six dimensions</span><span class="lv">each vertex is a 6-bit posture across <b>d₁ 🛡️ Protection · d₂ 🤝 Delegation · d₃ 📜 Memory · d₄ 🔗 Connection · d₅ ⚡ Computation · d₆ 💎 Value</b> (PVM V5.4 §12.6; vertex 63 = 111111 = full sovereignty).</span>
         <span class="lk">C85 · the bridge</span><span class="lv">the dimensions pair onto the three-axis gate Φ<sub>v5</sub>: <b>Protection+Delegation → Σ (Φ_agent)</b> · <b>Memory+Value → Δ (Φ_data)</b> · <b>Connection+Computation → Γ (Φ_inference)</b> — the lattice and the equation are one geometry <i>[conjecture]</i>.</span>
         <span class="lk">κ-label · Law L5</span><span class="lv"><code>sha256:H(canonical form)</code> — a UOR-ADDR content address; the sha256 axis is canon upstream. Never trusted, always <b>re-derived</b>: movement ① is the law performed.</span>
-        <span class="lk">the sigil</span><span class="lv">glyph intensity 0→f lights each vertex; colour follows the key's own palette by stratum. The sigil is always drawn from the <b>re-derived</b> κ — the content's true name — never from the stamped claim. Change one description and the whole constellation reshapes — <b>the key is its content</b>.</span>
+        <span class="lk">the sigil</span><span class="lv">glyph intensity 0→f lights each vertex; colour follows the key's own palette by stratum. The sigil is always drawn from the <b>re-derived</b> κ — the content fingerprint — never from the stamped claim. Change one description and the whole constellation reshapes — <b>the key is its content</b>.</span>
         <span class="lk">the carrier</span><span class="lv">the exported PNG holds the full City Key (base64 JSON in a PNG <code>tEXt</code> chunk, keyword <code>cityKey</code>) with its κ stamped. Import the <i>image</i> on /star, /lattice, or here — the key unfolds back out, and movement ① re-derives its κ from what the image carried.</span>
         <span class="lk">the shape</span><span class="lv">the second chosen layer: the key's <code>geometry</code> field carries the manifold parameters from /star's Lattice Console (ε · m · n · det(Σ) · ⚔️:🧙 — reserved in the 2026-05-27 interop, filled 2026-06-10). The ring here <b>wears</b> the ε·cos(nθ) envelope of r(θ,φ) — at n = 6, six petals, one per dimension. Shape is content: change it and the κ — and the whole sigil — relight.</span>
         <span class="lk">the engraving · SHAPE-1.5</span><span class="lv">the petals are the stance you <i>chose</i>; the relief on them is the work you <i>did</i>. Each vertex's radius is raised by its compression weight — w(x) = 0.50·focus + 0.25·lit + 0.15·witness-proven + 0.10·described — a <b>pure function of the key's content</b>, so the same key (JSON, or carried in anyone's sigil PNG) makes the <b>same shape everywhere</b>. The evolution path (measured figures: agent overlap → det(Σ), visibility ratios → petal amplitudes, zkp → the ⚡ petal) is the plan doc <code>PLAN_KEY_EVOLUTION_MEASURED_GEOMETRY_2026-06-10.md</code>.</span>
-        <span class="lk">the figures · FIG-2.0</span><span class="lv">when a key carries a measured <code>figures</code> block (agent-data <b>overlap</b> · ⚔️:🧙 <b>ratio</b> · per-dimension <b>visibility</b> · <b>zkp</b> counts), shape stops being chosen: /star derives the manifold from it (ε = 0.6·(1−overlap) · det(Σ) = overlap), each dimension's petal here scales by its visibility ratio, and proof activity floors the ⚡ petal. Figures are content — they move the κ.</span>
+        <span class="lk">the figures · FIG-2.0</span><span class="lv">when a key carries a <code>figures</code> block (agent-data <b>overlap</b> · ⚔️:🧙 <b>ratio</b> · per-dimension <b>visibility</b> · <b>zkp</b> counts), shape stops being chosen: /star derives the manifold from it (ε = 0.6·(1−overlap) · det(Σ) = overlap), each dimension's petal here scales by its visibility ratio, and proof activity floors the ⚡ petal. Figures are carried content — they move the κ. Rendering them does not independently verify their source or measurement.</span>
         <span class="lk">the lineage · prior</span><span class="lv">an <i>evolved</i> export stamps <code>prior</code> = the κ of the key it grew from — keys form a hash chain (C87: <i>the key accumulates</i>). An unchanged re-export keeps its prior and its κ unchanged: lineage marks evolution, not circulation.</span>
         <span class="lk">vocabulary</span><span class="lv"><b>glyph</b> — one hex character at one vertex · <b>rune-row</b> — the 64 in succ order · <b>sigil</b> — the whole lighting, the key's face. (The City's runes keep their own register; the sigil is the Swordsman's seal.)</span>
       </div>
-      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V6 · V5.4 lineage) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · this repo's seam: <code>HOLOSPACE.md</code>.</p>
+      <p style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6">Model: <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a> (PVM V6 · V5.4 lineage) · substrate: <a href="https://github.com/Hologram-Technologies/holospaces" target="_blank" rel="noopener noreferrer">holospaces</a> · instrument sources: <a href="https://agentprivacy.org/work/boundary-tools/">Labs</a>.</p>
     </div>
   </details>
 
   <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
 
-  <footer>
-    <b>The sigil PNG carries the key</b> — the full City Key JSON rides inside the image (PNG <code>tEXt</code> chunk, keyword <code>cityKey</code>), with the κ caption visible in the pixels. Share the picture and you have shared the key; import it on /star, /lattice, or here and it unfolds back out. <b>Live link:</b> on one origin, a key imported on any page cascades to the others over <code>BroadcastChannel('agentprivacy-succ')</code>; the succ comet's vertex pings the ring. <b>Older keys</b> carry no κ — they derive one here: the key learns its name.
-  </footer>
+  <footer><p><b>A sigil PNG contains the full exported City Key.</b> Sharing the image shares that record. Import it into Star, Lattice or Sigil to read it again.</p><p>Keys can sync between open rooms on this site. A matching κ checks content consistency; it does not establish the bearer’s identity or permission to act.</p><div class="room-footer-links"><a href="/guide">Read the Star guide →</a><a href="https://mages.city/">Explore Mages City ↗</a><a href="https://agentprivacy.org/work/boundary-tools/">Labs · instrument sources ↗</a></div></footer>
 
 <script>
 (function(){
@@ -679,6 +680,6 @@
   drawRing();
 })();
 </script>
-<script src="/public/sitenav.js" defer></script>
+
 </body>
 </html>

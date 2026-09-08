@@ -179,6 +179,57 @@
     background:var(--glass); border:1px solid var(--line); border-radius:999px; padding:7px 16px;
     backdrop-filter:blur(9px); opacity:0; pointer-events:none; transition:opacity .5s ease; }
   .focusbadge.show{ opacity:0.78; pointer-events:auto; cursor:pointer; }
+
+  /* Panel refinement; sculpture and model controls retain their original values. */
+  .console{width:320px;--dim:#aeb8d2;--line:rgba(180,194,224,.22);background:rgba(8,12,32,.92)}
+  .console header span{font-size:12px;letter-spacing:.1em;color:#f0eee8}.console header{min-height:46px}
+  .console .lbl,.console .swatch,.console .keybtn,.console .playback #playPause,.console .keyname{font-size:12px}
+  .console .sect{font-size:12px;letter-spacing:.09em;color:#aeb8d2}.console .seg button,.console .presets button,.console .reset{font-size:12px;min-height:32px}
+  .console .etoggle .lbl2{font-size:11px}.console .etoggle input{display:block;position:absolute;opacity:0;width:1px;height:1px}
+  .console .etoggle:focus-within{outline:2px solid #4dd9e8;outline-offset:3px}
+  .console input[type=range]{height:6px}.console input[type=range]::-webkit-slider-thumb{width:18px;height:18px}
+  .panel-help{font-size:12px;line-height:1.65;color:#aeb8d2;margin:10px 0 14px}.panel-help b{color:#f0eee8;font-weight:500}
+  .panel-details{border-top:1px solid var(--line);padding:12px 0}.panel-details summary{font-size:12px;color:#f0eee8;cursor:pointer;line-height:1.7}.panel-details[open] summary{margin-bottom:14px}
+  .panel-link{font-size:12px;color:#4dd9e8;text-underline-offset:4px}.trace-status{font-size:12px;line-height:1.6;color:#f0eee8;margin-top:10px}
+  .launcher{width:46px;height:46px;padding:0;gap:0}
+  button:focus-visible,input:focus-visible,summary:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:2px solid #4dd9e8;outline-offset:3px}
+  @media(max-width:760px){.console{width:min(320px,calc(100vw - 28px));top:74px;max-height:calc(75dvh - 88px)}.console.trace{width:min(320px,calc(100vw - 28px));top:auto;bottom:74px}.console .body{max-height:calc(75dvh - 140px)}.launcher{top:14px;right:14px}.launcher--trace{top:auto;bottom:14px}}
+  .panel-minimise{font:12px 'Spline Sans Mono',monospace;color:#f0eee8;border:1px solid var(--line);background:transparent;border-radius:6px;padding:7px 8px;min-height:34px;cursor:pointer}
+  .touch-actions{display:none}
+  .overlay-minimise{display:none}
+  @media(max-width:760px){.inspector{padding-right:44px}.overlay-minimise{display:block;position:absolute;right:4px;top:4px;width:36px;height:36px;border:0;background:transparent;color:#f0eee8;font-size:22px;cursor:pointer}}
+  .console{display:flex;flex-direction:column;overflow:clip}.console .etoggle{position:relative}.console .etoggle input{left:50%;top:50%;margin:0}.console .body{overscroll-behavior:contain;scrollbar-gutter:stable}.console header{flex:0 0 auto}.console .body{flex:1 1 auto;min-height:0;max-height:none}.console.folded{display:none}
+  @media(max-width:760px),(hover:none){.touch-actions{position:fixed;left:14px;bottom:14px;z-index:10;display:flex;gap:6px}.touch-actions button{font:12px 'Spline Sans Mono',monospace;color:#f0eee8;background:rgba(8,12,32,.94);border:1px solid rgba(180,194,224,.3);border-radius:8px;min-height:44px;padding:8px 10px;cursor:pointer}.panel-minimise{min-height:44px}.inspector{bottom:74px}.hint{display:none}body.focus .touch-actions{opacity:.85}.focusbadge{bottom:74px;max-width:calc(100vw - 28px);text-align:center;line-height:1.7;letter-spacing:.06em}}
+
+  /* One corner control for the trace readout and presentation actions. */
+  .view-controls{position:fixed;left:24px;bottom:24px;z-index:10}
+  .view-controls>summary{display:flex;align-items:center;justify-content:center;width:46px;height:46px;list-style:none;cursor:pointer;border-radius:14px;border:1px solid rgba(180,194,224,.3);background:rgba(8,12,32,.94);font-size:21px}
+  .view-controls>summary::-webkit-details-marker{display:none}
+  .view-options{position:absolute;bottom:58px;left:0;width:min(300px,calc(100vw - 28px));max-height:calc(100dvh - 150px);overflow:auto;padding:12px;background:rgba(8,12,32,.96);border:1px solid rgba(180,194,224,.3);border-radius:14px}
+  .view-buttons{display:flex;gap:6px;flex-wrap:wrap}.view-buttons button{flex:1;font:12px 'Spline Sans Mono',monospace;color:#f0eee8;border:1px solid rgba(180,194,224,.3);background:transparent;border-radius:8px;min-height:44px;padding:8px;cursor:pointer;white-space:nowrap}
+  .view-buttons button[aria-pressed=true]{border-color:#4dd9e8}
+  .view-controls .inspector{position:relative;inset:auto;width:100%;margin-top:12px;padding-right:36px;box-sizing:border-box}
+  .view-controls .overlay-minimise{display:block;position:absolute;right:4px;top:4px;width:30px;height:30px;border:0;background:transparent;color:#f0eee8;font-size:22px;cursor:pointer}
+  .core-controls{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.core-controls .core-title{font:12px 'Spline Sans Mono',monospace;letter-spacing:.08em;color:#f0eee8;text-transform:uppercase}.core-controls .core-status{font:12px/1.55 'Spline Sans Mono',monospace;color:#aeb8d2;margin:7px 0}.core-controls button{font:12px 'Spline Sans Mono',monospace;color:#f0eee8;background:transparent;border:1px solid rgba(180,194,224,.3);border-radius:7px;min-height:36px;padding:7px 10px;cursor:pointer}.core-controls button+button{margin-left:6px}.core-controls button:disabled{opacity:.45;cursor:not-allowed}.core-controls input{display:none}
+  body.focus .view-controls{display:none}
+  @media(max-width:760px){.view-controls{left:14px;bottom:14px}}
+  .core-controls .core-preview{display:block;width:172px;height:172px;margin:4px auto;border:0;padding:0;background:none;border-radius:50%;cursor:pointer}.core-preview canvas{display:block;width:100%;height:100%}.core-controls .core-status,.core-horizon{text-align:center}.core-horizon{font:11px/1.6 'Spline Sans Mono',monospace;color:#b7b6d8;margin:0 0 14px}.core-actions{display:flex;flex-wrap:wrap;gap:6px}.core-controls .core-actions button{margin:0;flex:1;min-height:40px}.core-controls .panel-help{margin-bottom:0}
+  .core-controls input[type=range]{display:block;width:100%;margin:12px 0}
+  .console header{padding:0}.console .panel-heading{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;padding:14px 16px;border:0;background:none;color:#f0eee8;cursor:pointer;text-align:left}.console .panel-heading:hover{background:rgba(180,194,224,.07)}
+  /* The section heading is the control, with the same touch target in each panel. */
+  .console .panel-details{margin:0;padding:0;border-top:1px solid var(--line)}
+  .console .panel-details>summary{padding:13px 2px;min-height:46px;box-sizing:border-box;margin:0;font-size:12px;line-height:20px;user-select:none}
+  .console .panel-details>summary:hover{color:#4dd9e8}
+  .console .panel-details[open]{padding-bottom:14px}
+  .console .panel-details[open]>summary{margin-bottom:8px}
+  #resetSection{margin-top:14px}#resetSection>summary{color:#aeb8d2}
+  #resetDialog{width:min(400px,calc(100vw - 48px));box-sizing:border-box;padding:24px;border:1px solid var(--line);border-radius:14px;background:#101527;color:#f0eee8;box-shadow:0 24px 80px #0009}
+  #resetDialog::backdrop{background:rgba(4,7,17,.7);backdrop-filter:blur(4px)}
+  #resetDialog h2{font:20px 'DM Sans',sans-serif;margin:0 0 12px}
+  #resetDialog p{font:14px/1.65 'DM Sans',sans-serif;color:#b9c2d7}
+  .reset-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  .reset-actions button{flex:1;min-height:44px;padding:10px;border:1px solid #8292b8;border-radius:8px;background:transparent;color:#f0eee8;cursor:pointer;font:12px 'Spline Sans Mono',monospace}
+  #confirmReset{color:#f0b4a7;border-color:#a96a60}
 </style>
 </head>
 <body>
@@ -188,23 +239,38 @@
        /star's two page actions (focus orbit, snapshot) fold into it as buttons, wired below. -->
 
   <div class="console" id="console">
-    <header id="foldBtn"><span>Lattice Console</span><div class="fold">›</div></header>
-    <div class="body">
-      <div class="row"><div class="lbl"><span class="k">ε · separation depth</span><span class="v" id="vEps">0.350</span></div>
+    <header><button id="foldBtn" class="panel-heading" type="button" aria-expanded="true" aria-controls="appearanceBody" aria-label="Customise · collapse panel"><span>Customise</span><span aria-hidden="true">⌃</span></button></header>
+    <div class="body" id="appearanceBody">
+      <p class="panel-help">Tune the view, then download a key to carry your changes.</p>
+      <details class="panel-details core-controls" id="coreDetails">
+        <summary>Core artefact · the held heart</summary>
+        <button id="corePreviewButton" type="button" class="core-preview" aria-label="Reveal the core artefact"><canvas id="corePreview" width="512" height="512" aria-hidden="true"></canvas></button>
+        <p class="core-status" id="coreStatus" aria-live="polite">The held heart · reveal to look inside</p>
+        <p class="core-horizon" id="coreHorizon">Ceiling off · no live assessment</p>
+        <div class="row"><div class="lbl"><label class="k" for="coreVisibility">Core visibility · chosen reveal</label><output class="v" id="coreVisibilityValue" for="coreVisibility">60%</output></div><input id="coreVisibility" type="range" min="0" max="100" step="1" value="60"></div>
+        <p class="panel-help">Visibility changes the light on your image; it stays whole inside the orb. With the ceiling enabled, the surrounding veil follows that choice smoothly.</p>
+        <input id="coreFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        <div class="core-actions"><button type="button" id="coreChoose">Choose image</button><button type="button" id="coreUnlock" aria-pressed="false">Reveal core</button><button type="button" id="coreClear" disabled>Clear</button></div>
+        <p class="panel-help">A local visual cover, not encryption or VTA sign-in. Download your key to keep the image and visibility. With a loaded key, Portrait also embeds them in the PNG. The embedded image remains readable even when this view is covered.</p>
+        <div class="row etoggles"><label class="etoggle" title="dual-agent core glow"><input type="checkbox" id="tGlow" checked><span class="ico">🔮</span><span class="lbl2">surrounding glow</span></label></div>
+      </details>
+      <details class="panel-details"><summary>Shape &amp; stance</summary>
+      <p class="panel-help">For a key with measured figures, these sliders preview a variation; export re-derives its measured shape.</p>
+      <div class="row"><div class="lbl"><label class="k" for="sEps">ε · separation depth</label><span class="v" id="vEps">0.350</span></div>
         <input type="range" id="sEps" min="0" max="0.6" step="0.005" value="0.35"></div>
-      <div class="row"><div class="lbl"><span class="k">m · longitudinal mode</span><span class="v" id="vM">5</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sM">m · longitudinal mode</label><span class="v" id="vM">5</span></div>
         <input type="range" id="sM" min="1" max="10" step="1" value="5"></div>
-      <div class="row"><div class="lbl"><span class="k">n · azimuthal (= bits)</span><span class="v" id="vN">6</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sN">n · azimuthal (= bits)</label><span class="v" id="vN">6</span></div>
         <input type="range" id="sN" min="1" max="10" step="1" value="6"></div>
-      <div class="row"><div class="lbl"><span class="k">core scale · det(Σ)</span><span class="v" id="vCore">0.60</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sCore">core scale · det(Σ)</label><span class="v" id="vCore">0.60</span></div>
         <input type="range" id="sCore" min="0.25" max="0.85" step="0.01" value="0.60"></div>
-      <div class="row"><div class="lbl"><span class="k">⚔️:🧙 Swordsman : Mage</span><span class="v" id="vRatio">1.000</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sRatio">⚔️:🧙 Swordsman : Mage</label><span class="v" id="vRatio">1.000</span></div>
         <input type="range" id="sRatio" min="1" max="2.2" step="0.001" value="1"></div>
-      <div class="row"><div class="lbl"><span class="k">orbit rotation</span><span class="v" id="vSpin">0.30</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sSpin">orbit rotation</label><span class="v" id="vSpin">0.30</span></div>
         <input type="range" id="sSpin" min="0" max="1" step="0.01" value="0.3"></div>
 
-      <div class="divider"></div>
-      <div class="sect">Layers</div>
+      </details>
+      <details class="panel-details"><summary>Layers</summary>
       <div class="row"><div class="lbl"><span class="k">manifold</span><span class="v"></span></div>
         <div class="seg" id="mode">
           <button data-m="both" class="on">Both</button><button data-m="surface">Surface</button><button data-m="wire">Wire</button>
@@ -213,14 +279,12 @@
         <div class="seg" id="edgeMode">
           <button data-e="holo" class="on">∂M · 96</button><button data-e="full">Q₆ · 192</button><button data-e="off">off</button>
         </div></div>
-      <div class="row etoggles">
-        <label class="etoggle" title="dual-agent core glow"><input type="checkbox" id="tGlow" checked><span class="ico">🔮</span><span class="lbl2">core glow</span></label>
-      </div>
-      <div class="row"><div class="lbl"><span class="k">highlight surface · opacity</span><span class="v" id="vCell">0.20</span></div>
+
+      <div class="row"><div class="lbl"><label class="k" for="sCell">highlight surface · opacity</label><span class="v" id="vCell">0.20</span></div>
         <input type="range" id="sCell" min="0" max="0.6" step="0.01" value="0.20"></div>
 
-      <div class="divider"></div>
-      <div class="sect">Palette</div>
+      </details>
+      <details class="panel-details"><summary>Palette</summary>
       <div class="palette">
         <label class="swatch"><input type="color" id="cCool" value="#141a3d"> cool</label>
         <label class="swatch"><input type="color" id="cWarm" value="#f0eee8"> warm</label>
@@ -234,66 +298,111 @@
         <button data-p="alien">👽 Alien</button>
       </div>
 
-      <button class="reset" id="reset">Reset all</button>
+      </details>
+      <details class="panel-details" id="resetSection"><summary>Reset…</summary>
+        <p class="panel-help">Restore the default view and clear this page’s trace counters and attached trace. Your imported key identity and core image stay.</p>
+        <button type="button" class="reset" id="reset">Review reset…</button>
+      </details>
     </div>
   </div>
 
-  <button id="launcher" class="launcher" title="open lattice console">🎛️</button>
+  <button id="launcher" class="launcher" title="Open customisation panel" aria-label="Open customisation panel" aria-controls="console" aria-expanded="false"><span aria-hidden="true">🎛️</span></button>
 
   <!-- Path & Key — the runecraft-style tracing of the geometry (separate from the look console) -->
   <div class="console trace" id="trace">
-    <header id="foldBtn2"><span>Path · Key · Ceiling — the walk in time</span><div class="fold">›</div></header>
-    <div class="body">
-      <div class="sect">Path · T∫(π) — the dance, not the stance</div>
-      <div class="row"><div class="lbl"><span class="k">marker speed</span><span class="v" id="vSpeed">0.12</span></div>
-        <input type="range" id="sSpeed" min="0.01" max="0.5" step="0.005" value="0.12"></div>
-      <div class="row playback">
-        <button id="playPause">❚❚ Pause</button>
-        <button class="step" id="stepBack" title="previous vertex">◀</button>
-        <button class="step" id="stepFwd" title="next vertex (succ)">▶</button>
-        <button id="snap" title="save PNG snapshot">📸</button>
-      </div>
-      <button id="tracerSave" class="keybtn keybtn--full" disabled title="import a City Key, trace the manifold, then stamp the laps + presence into it">💾 import a City Key first</button>
-      <div class="row etoggles">
-        <label class="etoggle" title="show the 64 sovereignty vertices"><input type="checkbox" id="tLattice" checked><span class="ico">💠</span><span class="lbl2">64 vertices</span></label>
-        <label class="etoggle" title="show the succ cycle (the comet wheel)"><input type="checkbox" id="tSucc" checked><span class="ico">🔄</span><span class="lbl2">succ cycle</span></label>
-        <label class="etoggle" title="⚔️ neg(x) = (64−x) mod 64 — Protect, the reflection: 31 chords; 0 and 32 are its fixed points"><input type="checkbox" id="tNeg"><span class="ico">⚔️</span><span class="lbl2">neg chords</span></label>
-        <label class="etoggle" title="🧙 bnot(x) = 63−x — Project, the antipode: 32 diameters; no fixed point — the perfect mirror"><input type="checkbox" id="tBnot"><span class="ico">🧙</span><span class="lbl2">bnot mirrors</span></label>
-        <label class="etoggle" title="show the swordsman info popup"><input type="checkbox" id="tInfo" checked><span class="ico">ℹ️</span><span class="lbl2">info popup</span></label>
-      </div>
-
-      <div class="divider"></div>
-      <div class="sect">City Key 🗝️</div>
+    <header><button id="foldBtn2" class="panel-heading" type="button" aria-expanded="true" aria-controls="traceBody" aria-label="City Key and Trace · collapse panel"><span>City Key · Trace</span><span aria-hidden="true">⌃</span></button></header>
+    <div class="body" id="traceBody">
+      <details class="panel-details" open><summary>City Key</summary>
       <div class="row keybar">
-        <button id="impBtn" class="keybtn">⬆ Import</button>
-        <button id="expBtn" class="keybtn">⬇ Export</button>
+        <button id="impBtn" class="keybtn">Import key</button>
+        <button id="expBtn" class="keybtn">Download key</button>
         <input type="file" id="impFile" accept="application/json,.json,image/png,.png" hidden>
       </div>
       <div class="keyname" id="keyName">no key loaded</div>
       <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
 
-      <div class="divider"></div>
+      <p class="panel-help">Import a City Key JSON or a key-carrying PNG. This record is the starting point for your agent’s perspective. <a href="/guide#perspective">Read the Star →</a></p>
+      </details>
+      <details class="panel-details"><summary>Runtime receipts</summary>
+        <p class="panel-help">Carry original credentials from your runtime. The City service verifies the agent, task and evidence before awarding runtime mana. The Star’s animation and local counters do not issue credentials.</p>
+        <button type="button" class="keybtn keybtn--full" id="receiptImport">Attach runtime receipts</button>
+        <input type="file" id="receiptFile" accept=".json,application/json" hidden>
+        <p class="panel-help" id="receiptStatus" role="status">No runtime receipts attached.</p>
+        <p class="panel-help">Import a JSON array of original credential strings or objects (up to 32). Attached receipts are unverified and travel in key JSON and key-carrying PNGs. Download the key to keep them.</p>
+        <a class="panel-link" href="https://agentprivacy.ai/city" target="_blank" rel="noopener noreferrer">Take your key to City verification →</a>
+      </details>
+      <details class="panel-details"><summary>Record the walk</summary>
+      <div class="row"><div class="lbl"><label class="k" for="sSpeed">marker speed</label><span class="v" id="vSpeed">0.12</span></div>
+        <input type="range" id="sSpeed" min="0.01" max="0.5" step="0.005" value="0.12"></div>
+      <div class="row playback">
+        <button id="playPause">❚❚ Pause</button>
+        <button class="step" id="stepBack" title="previous vertex">◀</button>
+        <button class="step" id="stepFwd" title="next vertex (succ)">▶</button>
+        <button id="snap" title="Download a PNG portrait; it carries the loaded key and its attached trace" aria-label="Download PNG portrait">📸</button>
+      </div>
+      <button id="tracerSave" class="keybtn keybtn--full" disabled title="Attach current lap and time counters to the key in this page; download the key to keep them">Import a key to record</button>
+      <p class="trace-status" id="traceStatus">Demo view · import a City Key to record.</p>
+      <p class="panel-help" id="traceStorage">No trace attached. Attach, then download to keep it.</p>
+      <details class="panel-details"><summary>Where does the trace go?</summary>
+        <p class="panel-help">Lap and time counters stay in this page’s memory. <b>Attach trace to key</b> takes a snapshot; <b>Download key</b> saves the file. New time after attachment needs another snapshot. Closing or reloading loses changes you have not downloaded.</p>
+        <p class="panel-help">The attached record contains laps, cycle seconds, tour dwell seconds and the attachment time. Tour dwell includes pauses. T∫(π), the visual path value, stays in the display; it is not exported or a City trust score.</p>
+        <p class="panel-help">Imported keys, preset palettes and selected vertices can sync to other open Soulbis rooms on this origin. This panel does not send the trace to a VTA or grant City access. A downloaded portrait may contain the loaded key.</p>
+        <p class="panel-help">Next connection: use the VTA browser extension to sign in, select a City Key and view permitted agent state here. Recording state through that connection is planned; today’s trace stays in this page until you download it.</p>
+        <a class="panel-link" href="/guide#browser-extension">City Key · browser extension · Star →</a>
+      </details>
+      </details>
+      <details class="panel-details"><summary>Loops &amp; vertices</summary>
+      <div class="row etoggles">
+        <label class="etoggle" title="show the 64 sovereignty vertices"><input type="checkbox" id="tLattice" checked><span class="ico">💠</span><span class="lbl2">64 vertices</span></label>
+        <label class="etoggle" title="show the succ cycle (the comet wheel)"><input type="checkbox" id="tSucc" checked><span class="ico">🔄</span><span class="lbl2">succ cycle</span></label>
+        <label class="etoggle" title="⚔️ neg(x) = (64−x) mod 64 — Protect, the reflection: 31 chords; 0 and 32 are its fixed points"><input type="checkbox" id="tNeg"><span class="ico">⚔️</span><span class="lbl2">neg chords</span></label>
+        <label class="etoggle" title="🧙 bnot(x) = 63−x — Project, the antipode: 32 diameters; no fixed point — the perfect mirror"><input type="checkbox" id="tBnot"><span class="ico">🧙</span><span class="lbl2">bnot mirrors</span></label>
+      </div>
+
+      </details>
+      <details class="panel-details"><summary>Ceiling · what-if simulation</summary>
+      <p class="panel-help">Explore assumed rates. This is not a live reading of your key’s security or expiry.</p>
       <div class="sect">Moving Ceiling · R(t) ⏳</div>
       <div class="row etoggles">
         <label class="etoggle" title="V6 · C82 — H(X) is fixed while adversarial capacity grows; the boundary holds while R(t) < 1. Reading the ceiling makes it visible: a shell closes on the boundary as R(t) → 1. Geometry untouched."><input type="checkbox" id="tCeil"><span class="ico">⏳</span><span class="lbl2">read the ceiling</span></label>
       </div>
-      <div class="row"><div class="lbl"><span class="k">reconstructable today · R₀</span><span class="v" id="vR0">0.35</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sR0">reconstructable today · R₀</label><span class="v" id="vR0">0.35</span></div>
         <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
-      <div class="row"><div class="lbl"><span class="k">how fast reach grows · g</span><span class="v" id="vDrift">0.25</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sDrift">how fast reach grows · g</label><span class="v" id="vDrift">0.25</span></div>
         <input type="range" id="sDrift" min="0.02" max="1" step="0.01" value="0.25"></div>
-      <div class="row"><div class="lbl"><span class="k">years from now · t</span><span class="v" id="vT">0.0</span></div>
+      <div class="row"><div class="lbl"><label class="k" for="sT">years from now · t</label><span class="v" id="vT">0.0</span></div>
         <input type="range" id="sT" min="0" max="20" step="0.1" value="0"></div>
       <div class="row"><label class="swatch"><input type="color" id="cCeil" value="#8b4daa"> ⏳ ceiling shell color</label></div>
       <div class="row"><div class="lbl"><span class="k" id="ceilRead">R(t) = 0.35 · t* = 4.2y</span><span class="v" id="ceilState">off</span></div>
         <div id="ceilBar" style="width:100%;height:4px;border-radius:2px;background:rgba(240,238,232,0.08);overflow:hidden;margin-top:4px"><div id="ceilFill" style="height:100%;width:35%;background:#4dd9e8;transition:width .2s,background .2s"></div></div></div>
       <div id="ceilStory" style="display:none;font-size:10px;color:var(--text,#f0eee8);opacity:0.75;line-height:1.6;margin-top:7px"></div>
       <div style="font-size:9px;color:var(--dim);line-height:1.5;margin-top:6px">C82 · ~65% · mechanism evidenced (n=2), rate unparameterized — the sliders are a what-if, not a measurement of rate. R(t) = R₀·e<sup>g·t</sup> · t* = ln(1/R₀)/g. the register wins.</div>
+      </details>
+
     </div>
   </div>
 
-  <button id="launcher2" class="launcher launcher--trace" title="open path · key · ceiling panel">🛤️</button>
+  <button id="launcher2" class="launcher launcher--trace" title="Open key and trace panel" aria-label="Open key and trace panel" aria-controls="trace" aria-expanded="false"><span aria-hidden="true">🛤️</span></button>
 
+  <dialog id="resetDialog" aria-labelledby="resetTitle" aria-describedby="resetHelp">
+    <h2 id="resetTitle">Reset view and trace?</h2>
+    <p id="resetHelp">This restores the shape, palette, layers and ceiling settings to their defaults, and clears the in-page trace. Your key identity, core image and downloaded files stay.</p>
+    <div class="reset-actions"><button type="button" id="cancelReset" autofocus>Keep this view</button><button type="button" id="confirmReset">Reset view &amp; trace</button></div>
+  </dialog>
+  <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
+  <div class="toast" id="toast">snapshot saved</div>
+  <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus · <b style="color:#ffd6c7;font-weight:500">S</b> snap 📸</div>
+  <div class="focusbadge" id="focusbadge">focus mode · tap to exit · F / Esc</div>
+  <details class="view-controls" id="viewControls">
+    <summary aria-label="View controls: Trace, Focus and Portrait" title="View controls"><span aria-hidden="true">🎬</span></summary>
+    <div class="view-options">
+      <div class="view-buttons" aria-label="View controls">
+        <button type="button" id="touchTrace" aria-pressed="true" aria-controls="inspector">Trace</button>
+        <button type="button" id="touchFocus" aria-pressed="false">Focus</button>
+        <button type="button" id="touchSnap" aria-label="Save portrait as PNG; carries the loaded City Key" title="Save a PNG portrait with the loaded key">📸 Portrait</button>
+      </div>
   <div class="inspector" id="inspector">
+    <button type="button" id="hideTraceOverlay" class="overlay-minimise" aria-label="Hide trace; restore with the Trace button" title="Hide trace">−</button>
     <div class="tracer" id="tracer" aria-hidden="true">
       <svg viewBox="0 0 36 36" class="tracer-ring">
         <defs><radialGradient id="orbGrad" cx="42%" cy="40%" r="62%">
@@ -318,10 +427,8 @@
     <div class="ins-foot"><b>🛤️ value lives on the path, not the vertex.</b> paused: coral = 6 dimension-toggles, cyan = antipode (bnot). boundary ∂M: 96/64 = 1.5 = P<sup>1.5</sup>. the boundary is dated, not eternal — it holds while R(t) &lt; 1.</div>
   </div>
 
-  <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
-  <div class="toast" id="toast">snapshot saved</div>
-  <div class="hint">drag to orbit · scroll to zoom · click a node to inspect · <b style="color:#ffd6c7;font-weight:500">F</b> focus · <b style="color:#ffd6c7;font-weight:500">S</b> snap 📸</div>
-  <div class="focusbadge" id="focusbadge">focus mode · S snaps 📸 · tap to exit · F / Esc</div>
+    </div>
+  </details>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -348,6 +455,13 @@
   // V6 · moving-ceiling reading state — declared before tick() first runs (it reads CEIL_CUR every frame)
   const CEIL_BASE={holo:0.6,full:0.30}, CEIL_WHITE=new THREE.Color(0xffffff), CEIL_WARM=new THREE.Color(0xe0a526), CEIL_HOT=new THREE.Color(0xe8523a);
   const CEIL_CUR={on:false,frac:0,breach:false,opHolo:CEIL_BASE.holo,opFull:CEIL_BASE.full};
+  const CEIL_MOTION={phase:0,veil:0};
+  function advanceCeilingMotion(dt,target,scenario){
+    const step=Math.max(0,Math.min(dt,.1));
+    CEIL_MOTION.veil+=(target-CEIL_MOTION.veil)*(1-Math.exp(-step*6));
+    CEIL_MOTION.phase=(CEIL_MOTION.phase+step*(1.2+6*scenario))%(Math.PI*20);
+    return CEIL_MOTION;
+  }
   const CEIL_COL=new THREE.Color(0x8b4daa); // the shell's own hue (user-changeable) — the ceiling is a third thing, neither sword nor mage
   let ceilVeil=null, ceilNet=null, traceValue=0, _lastValStr='';
   const ceilR=()=>state.r0*Math.exp(state.drift*state.tYears);
@@ -481,8 +595,12 @@
     latNegL.visible=on&&state.showNeg; latBnotL.visible=on&&state.showBnot;
     const paused=on&&state.showSucc&&!state.playing;
     latNbr.visible=paused; latAnti.visible=paused; latCell.visible=paused;
-    document.getElementById('inspector').style.display=(on&&state.showSucc&&state.showInfo)?'':'none';
+    syncInfoReadout();
     updateTracing();
+  }
+  function syncInfoReadout(){
+    document.getElementById('inspector').style.display=state.showInfo?'':'none';
+    document.getElementById('touchTrace').setAttribute('aria-pressed',String(state.showInfo));
   }
   function currentVertex(){ return Math.floor(state.markerF)%N; }
   function refreshHighlight(){ if(!latNbr)return; const x=currentVertex();
@@ -507,7 +625,53 @@
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.computeVertexNormals();return g;}
   function tetraEdges(bv,sc){const pos=[];for(const[i,j]of EDG)pos.push(bv[i][0]*sc,bv[i][1]*sc,bv[i][2]*sc,bv[j][0]*sc,bv[j][1]*sc,bv[j][2]*sc);
     const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));return g;}
-  let coreObjs=[],heartMesh;
+  let coreObjs=[],heartMesh,corePortrait=null,coreBitmap=null,coreUnlocked=false,coreEpoch=0,coreVisualKey='',coreVisibility=.6,coreReady=Promise.resolve();
+  const coreCanvas=document.getElementById('corePreview'),coreCtx=coreCanvas.getContext('2d');
+  const coreTexture=new THREE.CanvasTexture(coreCanvas);// Canvas colours match this renderer’s linear output; do not decode them twice.
+  function coreStatus(){
+    const held=!!coreBitmap;
+    document.getElementById('coreUnlock').textContent=coreUnlocked?'Cover core':'Reveal core';
+    document.getElementById('coreUnlock').setAttribute('aria-pressed',String(coreUnlocked));
+    document.getElementById('corePreviewButton').setAttribute('aria-label',coreUnlocked?'Cover the core artefact':'Reveal the core artefact');
+    document.getElementById('coreClear').disabled=!held;
+    document.getElementById('coreStatus').textContent=held?(coreUnlocked?'Your image · visible in this view':'Your image · held behind the heart'):(coreUnlocked?'Open heart · choose an image for your core':'The held heart · reveal to look inside');
+    coreVisualKey='';
+  }
+  // Illustrative coupling: remaining covered area × remaining scenario margin.
+  // This changes the visual veil, never R(t), its threshold or key content.
+  const coreReveal=()=>coreUnlocked?coreVisibility:0;
+  const coreVeilFraction=()=>1-(1-coreReveal())*(1-(CEIL_CUR.on?CEIL_CUR.frac:0));
+  function drawCoreOrb(){
+    const on=CEIL_CUR.on,frac=on?CEIL_CUR.frac:0,breach=on&&CEIL_CUR.breach;
+    const key=[coreUnlocked,coreEpoch,coreVisibility,on,frac.toFixed(4),state.ceilHex].join(':');
+    if(key!==coreVisualKey){
+      coreVisualKey=key;
+      const c=coreCtx;c.clearRect(0,0,512,512);
+      const halo=c.createRadialGradient(256,256,155,256,256,253);
+      halo.addColorStop(0,'rgba(144,161,246,.18)');halo.addColorStop(.5,'rgba(133,104,202,.09)');halo.addColorStop(1,'rgba(133,104,202,0)');
+      c.fillStyle=halo;c.fillRect(0,0,512,512);
+      c.save();c.beginPath();c.arc(256,256,171,0,Math.PI*2);c.clip();
+      // A translucent lens lets the Star show through instead of cutting out a dark disc.
+      const glass=c.createRadialGradient(205,179,10,256,256,225);glass.addColorStop(0,'rgba(174,211,229,.12)');glass.addColorStop(.52,'rgba(135,151,205,.06)');glass.addColorStop(1,'rgba(135,151,205,0)');
+      c.fillStyle=glass;c.fillRect(70,70,372,372);
+      if(coreUnlocked&&coreBitmap){c.save();c.globalAlpha=coreVisibility;const crop=Math.min(coreBitmap.width,coreBitmap.height);c.drawImage(coreBitmap,(coreBitmap.width-crop)/2,(coreBitmap.height-crop)/2,crop,crop,85,85,342,342);c.restore();}
+      else {
+        const light=c.createRadialGradient(256,256,0,256,256,150);light.addColorStop(0,coreUnlocked?'rgba(207,225,255,.62)':'rgba(207,225,255,.26)');light.addColorStop(.3,'rgba(134,130,210,.18)');light.addColorStop(1,'rgba(78,107,184,0)');c.fillStyle=light;c.fillRect(70,70,372,372);
+        const pearl=c.createRadialGradient(237,231,3,256,256,54);pearl.addColorStop(0,'rgba(238,247,255,.92)');pearl.addColorStop(.34,'rgba(148,202,217,.7)');pearl.addColorStop(.73,'rgba(130,118,176,.5)');pearl.addColorStop(1,'rgba(35,41,70,0)');c.fillStyle=pearl;c.beginPath();c.arc(256,256,54,0,Math.PI*2);c.fill();
+        c.lineWidth=1.5;c.strokeStyle='rgba(198,213,236,.27)';c.beginPath();c.ellipse(256,256,70,54,-.45,.2,Math.PI*1.25);c.stroke();
+        c.strokeStyle='rgba(237,162,153,.25)';c.beginPath();c.ellipse(256,256,85,64,-.45,Math.PI*1.2,Math.PI*1.85);c.stroke();
+      }
+      c.save();c.globalAlpha=coreBitmap&&coreUnlocked?1-coreVisibility:1;const sheen=c.createLinearGradient(90,80,350,420);sheen.addColorStop(0,'rgba(224,244,255,.12)');sheen.addColorStop(.38,'rgba(224,244,255,0)');sheen.addColorStop(1,'rgba(159,143,210,.04)');c.fillStyle=sheen;c.fillRect(70,70,372,372);c.restore();c.restore();
+      c.lineWidth=2;c.strokeStyle='rgba(220,231,255,.52)';c.beginPath();c.arc(256,256,173,0,Math.PI*2);c.stroke();
+      c.lineWidth=5;c.strokeStyle='rgba(184,177,228,.18)';c.beginPath();c.arc(256,256,191,0,Math.PI*2);c.stroke();
+      const remaining=1-coreVeilFraction();c.strokeStyle=on?(breach?'#e8523a':state.ceilHex):'rgba(173,192,225,.6)';c.lineCap='round';if(remaining>0){c.beginPath();c.arc(256,256,191,-Math.PI/2,-Math.PI/2+Math.PI*2*remaining);c.stroke();}
+      for(let i=0;i<32;i++){const a=i*Math.PI/16;c.strokeStyle=i%4===0?'rgba(207,218,240,.65)':'rgba(174,188,215,.22)';c.lineWidth=1;c.beginPath();c.moveTo(256+207*Math.cos(a),256+207*Math.sin(a));c.lineTo(256+(i%4===0?216:211)*Math.cos(a),256+(i%4===0?216:211)*Math.sin(a));c.stroke();}
+      coreTexture.needsUpdate=true;
+      document.getElementById('coreHorizon').textContent=on?'Illustrative covered margin '+Math.round((1-coreVeilFraction())*100)+'% · R(t) '+ceilR().toFixed(2):'Chosen reveal '+Math.round(coreReveal()*100)+'% · ceiling off';
+    }
+    if(corePortrait)corePortrait.scale.setScalar(state.core*.68);
+    if(heartMesh)heartMesh.visible=!coreBitmap;
+  }
   function buildCore(){ coreObjs.forEach(o=>{coreGroup.remove(o);if(o.geometry)o.geometry.dispose();});coreObjs=[];
     const sword=new THREE.Color(state.swordHex),mage=new THREE.Color(state.mageHex);
     const tip=len(TET_A[0]),sA=state.core/tip,sB=sA/state.smRatio;
@@ -522,6 +686,8 @@
     });
     heartMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(state.core*0.15,1),new THREE.MeshBasicMaterial({color:0xbfe0ff,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending}));
     heartMesh.renderOrder=13;coreGroup.add(heartMesh);coreObjs.push(heartMesh);
+    if(!corePortrait){corePortrait=new THREE.Sprite(new THREE.SpriteMaterial({map:coreTexture,transparent:true,opacity:1,depthWrite:false,depthTest:false,toneMapped:false,fog:false}));corePortrait.renderOrder=14;coreGroup.add(corePortrait);}
+    coreVisualKey='';drawCoreOrb();
   }
 
   // ===== starfield =====
@@ -561,7 +727,7 @@
 
   const toast=gid('toast'); let toastT;
   function showToast(msg,ms){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),ms||2200); }
-  function snapshot(){ renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
+  async function snapshot(){ const cfg=await readyExportCfg(); drawCoreOrb(); renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
     let url=null;
     try{ url=renderer.domElement.toDataURL('image/png'); }catch(err){ showToast('snapshot blocked in preview — works when deployed'); }
     renderer.setClearColor(0x000000,0); // restore transparent for live render (page backdrop shows through)
@@ -573,7 +739,6 @@
       showToast('snapshot saved · '+name+(carried?' · carries your City Key 🗝️':'')); };
     if(!keyLoaded){ fin(url,false); return; }
     // a loaded key rides inside the snapshot — the picture becomes the artifact
-    const cfg=buildExportCfg();
     kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k;
       try{ fin(URL.createObjectURL(pngEmbedKey(url,cfg)),true); }catch(e){ fin(url,false); } }); }
 
@@ -582,7 +747,7 @@
 
   // cross-page link + City Key (palette + per-vertex descriptions)
   let _bc=null,_bcLast=-1,_bcMute=false, DESC={}, keyName='', FIGURES=null, PKTS=null, DID=null,
-      PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null;
+      PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null, CARRIED={}, LOAD_EPOCH=0, LOAD_READY=Promise.resolve();
   // PKTS / DID — trust-task fields minted at /city (packets Merkle digest · bearer did):
   // round-tripped untouched so a walk never destroys them (content — inside the κ preimage).
   // PRIOR_IN / LOADED_* — the κ-chain: an unchanged re-export carries its prior through
@@ -652,7 +817,16 @@
     const ov=num(f.overlap), ra=num(f.ratio);
     return { eps: ov===null?state.eps:+(0.6*(1-cl(ov,0,1))).toFixed(3), m:state.m, n:state.n,
              core: ov===null?state.core:cl(ov,0.25,0.85), smRatio: ra===null?state.smRatio:cl(ra,1,2.2) }; }
-  function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object')return;
+  function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object'||Array.isArray(cfg))return;
+    clearCore();
+    // Full keys carry opaque extensions; only this surface's reading fields are rebuilt.
+    CARRIED={...cfg};
+    for(const field of ["name","version","palette","descriptions","geometry","lit","identity","trace","figures","packets","did","kappa","prior"]) delete CARRIED[field];
+    coreReady=restoreCore(cfg.coreArtefact);
+    updateReceiptStatus();
+    DESC={};
+    TRACE_PROOF=null; laps=0; traceSeconds=0; tourSeconds=0;
+    { const tl=gid('tracerLaps'); if(tl) tl.textContent='0'; }
     FIGURES=(cfg.figures&&typeof cfg.figures==='object')?cfg.figures:null;
     PKTS=(cfg.packets&&typeof cfg.packets==='object')?cfg.packets:null;
     DID=(typeof cfg.did==='string')?cfg.did:null;
@@ -678,13 +852,15 @@
     if(cfg.trace && typeof cfg.trace==='object'){ TRACE_PROOF=cfg.trace; laps=+cfg.trace.laps||0; traceSeconds=+cfg.trace.seconds||0; tourSeconds=+cfg.trace.tourSeconds||0; const tl=gid('tracerLaps'); if(tl) tl.textContent=laps; }
     buildLattice();
     exitTour(); { const kt=gid('keyTour'); if(kt){ kt.disabled=(LIT.size===0); kt.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } }
-    keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='💾 save trace'; } }
+    keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='Attach trace to key'; } }
     keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
     PRIOR_IN=(typeof cfg.prior==='string')?cfg.prior:null;
     { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
-    LOADED_KAPPA=null; kappaLabel(cfg).then(k=>{ LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
+    LOADED_KAPPA=null;
+    const epoch=++LOAD_EPOCH;
+    LOAD_READY=kappaLabel(cfg).then(k=>{ if(epoch===LOAD_EPOCH) LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
     if(!fromRemote&&_bc){ try{ _bc.postMessage({config:cfg,src:'manifold'}); }catch(e){} } }
-  function buildExportCfg(){ const cfg={ name:keyName||'city key', version:1,
+  function buildExportCfg(){ const cfg={ ...CARRIED, name:keyName||'city key', version:1,
       palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex}, descriptions:{...DESC},
       // the shape rides in the key (field reserved in the 2026-05-27 interop, filled 2026-06-10):
       // r(θ,φ) = R + ε sin(mφ) cos(nθ) · det(Σ) core · ⚔️:🧙 ratio (φ ↔ C1)
@@ -698,7 +874,9 @@
     const prior=(LOADED_CANON!==null && canonicalJSON(cfg)!==LOADED_CANON)?LOADED_KAPPA:PRIOR_IN;
     if(prior) cfg.prior=prior;                  // κ-chain — the key this one evolved from (C87: the key accumulates)
     return cfg; }
-  function exportKey(){ const cfg=buildExportCfg();
+  // Wait for the current import's identity; a newer import invalidates older hash work.
+  async function readyExportCfg(){ let epoch, imageEpoch; do { epoch=LOAD_EPOCH; imageEpoch=coreEpoch; await Promise.all([LOAD_READY,coreReady]); } while(epoch!==LOAD_EPOCH||imageEpoch!==coreEpoch); return buildExportCfg(); }
+  async function exportKey(){ const cfg=await readyExportCfg();
     kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k; // the key's content identity, stamped at export
       const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}),a=document.createElement('a');
       a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }); }
@@ -714,6 +892,27 @@
     if(d.palette){ _bcMute=true; applyPalettePreset(d.palette,d.presetId,true); _bcMute=false; }
     if(typeof d.vertex==='number'){ _bcMute=true; setMarker(d.vertex); setPlaying(false); _bcMute=false; } };
 
+  // Presentation of existing counters only; no trace schema, timing or transport changes.
+  function updateTraceStatus(){
+    const status=gid('traceStatus'), storage=gid('traceStorage'); if(!status||!storage) return;
+    const seconds=Math.round(traceSeconds), tour=Math.round(tourSeconds);
+    const attached=TRACE_PROOF && TRACE_PROOF.laps===laps && TRACE_PROOF.seconds===seconds && TRACE_PROOF.tourSeconds===tour;
+    const mode=!keyLoaded?'Demo view · import a City Key to record.':
+      (tourMode?'Tour dwell (includes pauses)':state.playing&&state.showLattice&&state.showSucc?'Recording cycle':'Cycle paused')+
+      ' · '+laps+(laps===1?' lap':' laps')+' · '+seconds+'s cycle · '+tour+'s tour';
+    const destination=!keyLoaded?'No trace is recorded until a City Key is loaded.':
+      attached?'Current trace attached in this page. Download the key to keep it.':
+      TRACE_PROOF?'New time since the attached trace. Attach again before downloading.':'Trace is in page memory. Attach, then download to keep it.';
+    if(status.textContent!==mode) status.textContent=mode;
+    if(storage.textContent!==destination) storage.textContent=destination;
+    const button=gid('tracerSave');
+    if(button&&keyLoaded){
+      const label=attached?'✓ Trace attached':'Attach trace to key';
+      if(button.textContent!==label) button.textContent=label;
+      button.classList.toggle('on',!!attached);
+    }
+  }
+
   const clock=new THREE.Clock();
   function tick(){ const dt=clock.getDelta(),t=clock.elapsedTime;
     if(focusMode){ focusT+=dt; az+=dt*0.22; pol=Math.PI*0.5+Math.sin(focusT*0.16)*0.5; }
@@ -726,17 +925,19 @@
       // V6 ceiling breach — the white heart reads exposed: fast coral pulse while R(t) ≥ 1 (display only)
       if(CEIL_CUR.on&&CEIL_CUR.breach){ heartMesh.material.color.copy(SWORD_COL); heartMesh.material.opacity=0.55+0.3*Math.sin(t*6); } }
     // V6 ceiling — the boundary breathes while the reading is on: calm far from t*, quick near it
-    if(CEIL_CUR.on&&latHolo&&latFull){ const rate=1.2+6*CEIL_CUR.frac, br=0.85+0.15*Math.sin(t*rate);
+    const ceilingMotion=advanceCeilingMotion(dt,coreVeilFraction(),CEIL_CUR.frac);
+    if(CEIL_CUR.on&&latHolo&&latFull){ const br=0.85+0.15*Math.sin(ceilingMotion.phase);
       latHolo.material.opacity=CEIL_CUR.opHolo*br; latFull.material.opacity=CEIL_CUR.opFull*br;
       if(ceilNet){ ceilNet.rotation.y+=dt*0.05; ceilNet.rotation.x=0.2;
-        const shellBr=1+0.06*Math.sin(t*rate*0.7); const base=CEIL_CUR.breach?0.76:(1.12-0.32*CEIL_CUR.frac);
+        const shellBr=1+0.06*Math.sin(ceilingMotion.phase*0.7); const base=1.12-0.36*ceilingMotion.veil;
         ceilVeil.scale.setScalar(base*shellBr); ceilNet.scale.setScalar(base*shellBr*1.004); } }
+    drawCoreOrb();
     const starOp = gOn ? (0.6+0.35*Math.sin(t*1.6)) : 0.12;  // stars follow the core glow (pulse + on/off)
     coreObjs.forEach(o=>{if(o.isSprite){ o.scale.setScalar((gOn?0.5:0.44)+0.12*Math.sin(t*1.6)); o.material.opacity=starOp; }});
     if(state.playing&&!tourMode&&state.showLattice&&state.showSucc){ const prevMF=state.markerF; state.markerF=(state.markerF+dt*state.speed*N)%N;
       if(keyLoaded){ traceSeconds+=dt;
         if(state.markerF<prevMF){ laps++; const tl=gid('tracerLaps'); if(tl) tl.textContent=laps;
-          const sb=gid('tracerSave'); if(sb&&sb.classList.contains('on')){ sb.classList.remove('on'); sb.textContent='💾 save trace'; } } }
+          const sb=gid('tracerSave'); if(sb&&sb.classList.contains('on')){ sb.classList.remove('on'); sb.textContent='Attach trace to key'; } } }
       const prog=(state.markerF%N)/N;
       const arc=gid('tracerArc'); if(arc) arc.style.strokeDashoffset=(97.39*(1-prog)).toFixed(2);
       const dg=gid('tracerDotG'); if(dg) dg.setAttribute('transform','rotate('+(prog*360).toFixed(1)+' 18 18)');
@@ -753,6 +954,9 @@
     if(latMarker&&latMarker.visible){ const x=Math.floor(state.markerF)%N,x1=(x+1)%N,fr=state.playing?(state.markerF-Math.floor(state.markerF)):0,a=VERTS[x],b=VERTS[x1];
       latMarker.position.set(a[0]+(b[0]-a[0])*fr,a[1]+(b[1]-a[1])*fr,a[2]+(b[2]-a[2])*fr);
       latMarker.scale.setScalar((state.playing?0.16:0.22)+0.04*Math.sin(t*4)); updateInspector(); if(!state.playing)refreshHighlight(); }
+    updateTraceStatus();
+    const touchFocus=gid('touchFocus');
+    if(touchFocus){const label=focusMode?'Exit focus':'Focus';if(touchFocus.textContent!==label)touchFocus.textContent=label;touchFocus.setAttribute('aria-pressed',String(focusMode));}
     renderer.render(scene,camera); requestAnimationFrame(tick); }
   tick();
 
@@ -808,9 +1012,8 @@
           : 'year '+yr+' · the adversary\'s channels reach <b>'+pct+'%</b> of what would reconstruct the First Person. the boundary holds <b>'+left+'y</b> more'+(frac>0.75?' — <b style="color:#e0a526">t* is close, re-key soon.</b>':'.'); } } }
     ensureCeilShell();
     ceilVeil.visible=ceilNet.visible=on;
-    if(on){ const r=breach?0.76:(1.12-0.32*frac); // the ceiling descends: 1.12 → 0.80 at R=1, inside at breach
+    if(on){ // tick owns shell scale; slider changes must not snap it between frames.
       const shellTint=ceilShellTint(frac);
-      ceilVeil.scale.setScalar(r); ceilNet.scale.setScalar(r*1.004);
       ceilVeil.material.color.copy(shellTint); ceilNet.material.color.copy(shellTint);
       ceilVeil.material.opacity=0.03+0.09*frac; ceilNet.material.opacity=0.05+0.13*frac; } }
   bind('sR0','vR0','r0',v=>v.toFixed(2),applyCeiling);
@@ -834,8 +1037,7 @@
   $('tSucc').addEventListener('change',e=>{state.showSucc=e.target.checked;applyLattice();});
   $('tNeg').addEventListener('change',e=>{state.showNeg=e.target.checked;applyLattice();});
   $('tBnot').addEventListener('change',e=>{state.showBnot=e.target.checked;applyLattice();});
-  $('tGlow').addEventListener('change',e=>{state.glow=e.target.checked;});
-  $('tInfo').addEventListener('change',e=>{state.showInfo=e.target.checked;applyLattice();});
+  $('tGlow').addEventListener('change',e=>{state.glow=e.target.checked;saveCore();});
 
   // palette
   function clearPresetActive(){ document.querySelectorAll('#presets button').forEach(b=>b.classList.remove('on')); }
@@ -847,12 +1049,15 @@
   $('cMage').addEventListener('input',e=>{state.mageHex=e.target.value;clearPresetActive();applyAgentColors();});
   document.querySelectorAll('#presets button').forEach(b=>b.addEventListener('click',()=>{ applyPalettePreset(PRESETS[b.dataset.p], b.dataset.p, false); }));
 
-  $('reset').addEventListener('click',()=>{ Object.assign(state,DEFAULTS);
+  const resetDialog=$('resetDialog');
+  $('reset').addEventListener('click',()=>resetDialog.showModal());
+  $('cancelReset').addEventListener('click',()=>resetDialog.close());
+  $('confirmReset').addEventListener('click',()=>{ resetDialog.close(); Object.assign(state,DEFAULTS);
     $('sEps').value=state.eps;$('vEps').textContent=state.eps.toFixed(3);
     $('sM').value=state.m;$('vM').textContent=String(state.m); $('sN').value=state.n;$('vN').textContent=String(state.n);
     $('sCore').value=state.core;$('vCore').textContent=state.core.toFixed(2);
     $('sSpin').value=state.spin;$('vSpin').textContent=state.spin.toFixed(2); $('sSpeed').value=state.speed;$('vSpeed').textContent=state.speed.toFixed(2);
-    $('tLattice').checked=state.showLattice;$('tSucc').checked=state.showSucc;$('tNeg').checked=state.showNeg;$('tBnot').checked=state.showBnot;$('tGlow').checked=state.glow;$('tInfo').checked=state.showInfo;
+    $('tLattice').checked=state.showLattice;$('tSucc').checked=state.showSucc;$('tNeg').checked=state.showNeg;$('tBnot').checked=state.showBnot;$('tGlow').checked=state.glow;
     $('sRatio').value=state.smRatio;$('vRatio').textContent=state.smRatio.toFixed(3);
     $('sCell').value=state.cellOpacity;$('vCell').textContent=state.cellOpacity.toFixed(2);
     $('cCool').value=state.coolHex;$('cWarm').value=state.warmHex;$('cSword').value=state.swordHex;$('cMage').value=state.mageHex;
@@ -861,26 +1066,58 @@
     document.querySelectorAll('#presets button').forEach(x=>x.classList.toggle('on',x.dataset.p==='artificial'));
     $('playPause').textContent='❚❚ Pause'; SWORD_COL.set(state.swordHex);MAGE_COL.set(state.mageHex); setPalette();
     laps=0; traceSeconds=0; tourSeconds=0; _lastTourSec=-1; TRACE_PROOF=null;
-    { const tl=gid('tracerLaps'); if(tl) tl.textContent='0'; const sb=gid('tracerSave'); if(sb){ sb.classList.remove('on'); sb.disabled=!keyLoaded; sb.textContent=keyLoaded?'💾 save trace':'💾 import a City Key first'; } }
+    { const tl=gid('tracerLaps'); if(tl) tl.textContent='0'; const sb=gid('tracerSave'); if(sb){ sb.classList.remove('on'); sb.disabled=!keyLoaded; sb.textContent=keyLoaded?'Attach trace to key':'Import a key to record'; } }
     $('sR0').value=state.r0;$('vR0').textContent=state.r0.toFixed(2);
     $('sDrift').value=state.drift;$('vDrift').textContent=state.drift.toFixed(2);
     $('sT').value=state.tYears;$('vT').textContent=state.tYears.toFixed(1);
     $('tCeil').checked=state.ceilOn; $('cCeil').value=state.ceilHex; CEIL_COL.set(state.ceilHex);
     traceValue=0; _lastValStr=''; { const te=gid('tracerVal'); if(te){ te.textContent='0.0'; te.style.color=''; } }
-    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling(); });
+    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling();saveCore(); });
 
-  $('foldBtn').addEventListener('click',()=>{ $('console').classList.add('folded'); $('launcher').classList.add('show'); });
-  $('launcher').addEventListener('click',()=>{ $('console').classList.remove('folded'); $('launcher').classList.remove('show'); });
-  $('foldBtn2').addEventListener('click',()=>{ $('trace').classList.add('folded'); $('launcher2').classList.add('show'); });
-  $('launcher2').addEventListener('click',()=>{ $('trace').classList.remove('folded'); $('launcher2').classList.remove('show'); });
+  function setPanel(panelId, open){
+    const isTrace=panelId==='trace', panel=$(panelId), launcher=$(isTrace?'launcher2':'launcher'), fold=$(isTrace?'foldBtn2':'foldBtn');
+    panel.classList.toggle('folded',!open); launcher.classList.toggle('show',!open);
+    fold.setAttribute('aria-expanded',String(open)); launcher.setAttribute('aria-expanded',String(open));
+    if(open && window.matchMedia('(max-width:760px)').matches) setPanel(isTrace?'console':'trace',false);
+  }
+  for(const [panelId,foldId,launchId] of [['console','foldBtn','launcher'],['trace','foldBtn2','launcher2']]){
+    $(foldId).addEventListener('click',()=>{setPanel(panelId,false);$(launchId).focus();});
+    $(launchId).addEventListener('click',()=>{setPanel(panelId,true);$(foldId).focus();});
+  }
+  if(window.matchMedia('(max-width:760px)').matches) setPanel('console',false);
+  window.matchMedia('(max-width:760px)').addEventListener('change',e=>{
+    if(e.matches&&!$('console').classList.contains('folded')&&!$('trace').classList.contains('folded')) setPanel('console',false);
+  });
   // City Key import / export
+  function updateReceiptStatus(){
+    const n=Array.isArray(CARRIED.runtimeReceipts)?CARRIED.runtimeReceipts.length:0;
+    document.getElementById('receiptStatus').textContent=n?n+' runtime receipt(s) carried · awaiting service verification':'No runtime receipts attached.';
+  }
+  $('receiptImport').addEventListener('click',()=>$('receiptFile').click());
+  $('receiptFile').addEventListener('change',async e=>{
+    const file=e.target.files&&e.target.files[0];e.target.value='';if(!file)return;
+    const epoch=LOAD_EPOCH;
+    try{
+      if(!keyLoaded)throw new Error('Import your City Key before attaching runtime receipts.');
+      if(file.size>512*1024)throw new Error('Choose a receipt bundle up to 512 KB.');
+      const incoming=JSON.parse(await file.text());
+      if(epoch!==LOAD_EPOCH)return;
+      if(!Array.isArray(incoming)||!incoming.length||incoming.length>32||incoming.some(r=>!((typeof r==='string'&&r.length)||(r&&typeof r==='object'&&!Array.isArray(r)&&Object.keys(r).length))))throw new Error('Use an array of 1–32 original credential strings or objects.');
+      const previous=CARRIED.runtimeReceipts;
+      if(previous!==undefined&&!Array.isArray(previous))throw new Error('This key has an unsupported receipt format; preserve it and use a compatible key.');
+      const merged=[...(previous||[])];
+      for(const receipt of incoming)if(!merged.some(r=>JSON.stringify(r)===JSON.stringify(receipt)))merged.push(receipt);
+      if(merged.length>32||JSON.stringify(merged).length>512*1024)throw new Error('The combined receipt bundle exceeds 32 receipts or 512 KB.');
+      CARRIED.runtimeReceipts=merged;updateReceiptStatus();
+    }catch(err){if(epoch===LOAD_EPOCH)$('receiptStatus').textContent=err.message;}
+  });
   $('impBtn').addEventListener('click',()=>$('impFile').click());
   $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
     readKeyFile(f,cfg=>loadConfig(cfg,false),()=>{ gid('keyName').textContent='⚠ no City Key in this file (key JSON or sigil PNG)'; }); e.target.value=''; });
   $('expBtn').addEventListener('click',exportKey);
   $('tracerSave').addEventListener('click',()=>{ if(!keyLoaded) return; TRACE_PROOF={ laps:laps, seconds:Math.round(traceSeconds), tourSeconds:Math.round(tourSeconds), savedAt:new Date().toISOString() };
-    const b=$('tracerSave'); b.classList.add('on'); b.textContent='✓ trace saved · '+laps+(laps===1?' lap':' laps');
-    toast.textContent='trace saved · '+laps+(laps===1?' lap · ':' laps · ')+Math.round(traceSeconds)+'s succ · tour '+fmtTime(tourSeconds)+' — export the City Key to keep it';
+    const b=$('tracerSave'); b.classList.add('on'); b.textContent='✓ Trace attached';
+    toast.textContent='trace attached in this page · '+laps+(laps===1?' lap · ':' laps · ')+Math.round(traceSeconds)+'s succ · tour '+fmtTime(tourSeconds)+' — download the City Key to keep it';
     toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2800); });
   // nav link to /lattice (clean route on soulbis.com; use 'codex.html' for a flat-folder deploy)
   const LATTICE_URL='/lattice'; { const tl=$('toLattice'); if(tl) tl.setAttribute('href',LATTICE_URL); }
@@ -904,8 +1141,55 @@
   document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement&&focusMode){ focusMode=false; document.body.classList.remove('focus'); if(focusBadge) focusBadge.classList.remove('show'); } });
   document.addEventListener('mousemove',()=>{ if(focusMode) flashBadge(1800); });
   document.addEventListener('touchstart',()=>{ if(focusMode) flashBadge(2600); },{passive:true});
-  const focusBtn=$('focusBtn'); if(focusBtn) focusBtn.addEventListener('click',()=>{ focusMode?exitFocus():enterFocus(); });
   if(focusBadge) focusBadge.addEventListener('click',exitFocus);
+  $('touchTrace').addEventListener('click',()=>{state.showInfo=!state.showInfo;syncInfoReadout();});
+  $('touchFocus').addEventListener('click',()=>{focusMode?exitFocus():enterFocus();});
+  $('touchSnap').addEventListener('click',snapshot);
+  $('coreChoose').addEventListener('click',()=>$('coreFile').click());
+  $('coreFile').addEventListener('change',e=>{coreReady=importCoreImage(e);});
+  async function importCoreImage(e){
+    const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+    if(!['image/png','image/jpeg','image/webp'].includes(f.type)||f.size>4*1024*1024){$('coreStatus').textContent='Choose a PNG, JPEG or WebP up to 4 MB.';return;}
+    const epoch=++coreEpoch;$('coreStatus').textContent='Preparing your core…';
+    try{const decoded=await createImageBitmap(f);if(epoch!==coreEpoch){decoded.close();return;}
+      if(decoded.width>8192||decoded.height>8192){decoded.close();throw new Error('dimensions');}
+      const preview=document.createElement('canvas');preview.width=preview.height=512;const crop=Math.min(decoded.width,decoded.height);
+      preview.getContext('2d').drawImage(decoded,(decoded.width-crop)/2,(decoded.height-crop)/2,crop,crop,0,0,512,512);decoded.close();
+      if(coreBitmap){coreBitmap.width=coreBitmap.height=0;}coreBitmap=preview;coreUnlocked=true;saveCore();coreStatus();drawCoreOrb();
+    }catch(err){if(epoch===coreEpoch){coreStatus();$('coreStatus').textContent='Image could not be read. Use a raster image no larger than 8192 pixels per side.';}}
+  }
+
+  // Additive local format. An Archon asset DID is a separate, verified identity;
+  // never manufacture one by prefixing an image CID. Unknown extensions travel intact.
+  function saveCore(){
+    if(!coreBitmap)return;
+    CARRIED.coreArtefact={...(CARRIED.coreArtefact||{}),version:1,kind:'image',image:coreBitmap.toDataURL('image/png'),visibility:coreVisibility,glow:state.glow};
+  }
+  async function restoreCore(record){
+    if(!record||record.version!==1||record.kind!=='image')return;
+    const epoch=coreEpoch,uri=record.image;
+    if(typeof uri!=='string'||uri.length>2*1024*1024||!/^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(uri))return;
+    try{
+      const bytes=Uint8Array.from(atob(uri.split(',')[1]),c=>c.charCodeAt(0));
+      const decoded=await createImageBitmap(new Blob([bytes],{type:'image/png'}));
+      if(epoch!==coreEpoch){decoded.close();return;}
+      if(decoded.width>512||decoded.height>512){decoded.close();throw new Error('dimensions');}
+      const preview=document.createElement('canvas');preview.width=preview.height=512;
+      preview.getContext('2d').drawImage(decoded,0,0,512,512);decoded.close();coreBitmap=preview;
+      coreVisibility=Number.isFinite(record.visibility)?Math.max(0,Math.min(1,record.visibility)):.6;
+      if(typeof record.glow==='boolean')state.glow=record.glow;
+      document.getElementById('tGlow').checked=state.glow;
+      document.getElementById('coreVisibility').value=coreVisibility*100;
+      document.getElementById('coreVisibilityValue').textContent=Math.round(coreVisibility*100)+'%';
+      coreStatus();drawCoreOrb();
+    }catch(error){if(epoch===coreEpoch)document.getElementById('coreStatus').textContent='The key carries an unreadable core image. Choose an image to replace it.';}
+  }
+  function toggleCore(){coreUnlocked=!coreUnlocked;coreStatus();drawCoreOrb();}
+  $('coreUnlock').addEventListener('click',toggleCore);$('corePreviewButton').addEventListener('click',toggleCore);
+  $('coreVisibility').addEventListener('input',e=>{coreVisibility=Number(e.target.value)/100;$('coreVisibilityValue').textContent=Math.round(coreVisibility*100)+'%';coreUnlocked=coreVisibility>0;saveCore();coreStatus();drawCoreOrb();});
+  function clearCore(){coreEpoch++;if(coreBitmap)coreBitmap.width=coreBitmap.height=0;coreBitmap=null;coreUnlocked=false;coreStatus();drawCoreOrb();}
+  $('coreClear').addEventListener('click',()=>{clearCore();delete CARRIED.coreArtefact;});
+  $('hideTraceOverlay').addEventListener('click',()=>{state.showInfo=false;syncInfoReadout();});
 
   // ===== ✦ City-Key tour — visit ONLY the lit vertices, in key order (≠ succ order, ≠ stratum order).
   // Reuses the main transport: keyTour engages/exits; ▶/❚❚ play-pauses the path; ◀/▶ step key vertices;
@@ -916,23 +1200,14 @@
   function startTourTimer(){ clearTourTimer(); tourTimer=setInterval(()=>{ const a=litArr(); if(!a.length){ exitTour(); return; } tourGoto(tourIdx+1); }, 2200); }
   function engageTour(){ const a=litArr(); if(!a.length)return; tourMode=true;
     state.showLattice=true; state.showSucc=true; state.showNeg=false; state.showBnot=false; state.showInfo=true;
-    $('tLattice').checked=true; $('tSucc').checked=true; $('tNeg').checked=false; $('tBnot').checked=false; $('tInfo').checked=true;
+    $('tLattice').checked=true; $('tSucc').checked=true; $('tNeg').checked=false; $('tBnot').checked=false;
     tourIdx=0; setMarker(a[0]); setPlaying(true); // playing in tourMode → startTourTimer (see setPlaying)
     const b=$('keyTour'); b.classList.add('on'); _lastTourSec=-1; b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; }
   function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }
   $('keyTour').addEventListener('click',()=>{ tourMode?exitTour():engageTour(); });
 
-  // the corner nav (public/sitenav.js) injects /star's two page actions; wire them once it's built.
-  document.addEventListener('sitenav:ready',()=>{
-    const fb=$('focusBtn'); if(fb) fb.addEventListener('click',()=>{ focusMode?exitFocus():enterFocus(); });
-    const sb=$('snapBtn');  if(sb) sb.addEventListener('click',snapshot);
-  });
 })();
 </script>
-<script>window.SITENAV={ actions:[
-  { id:'focusBtn', ico:'🎬', name:'focus', tag:'presentation orbit · F', title:'enter focus mode (presentation orbit) · F' },
-  { id:'snapBtn',  ico:'📸', name:'snapshot', tag:'save PNG · S', title:'save PNG snapshot of the manifold · S' }
-]};</script>
-<script src="/public/sitenav.js" defer></script>
+<script src="/public/sitenav.js?v=20260907-orb" defer></script>
 </body>
 </html>

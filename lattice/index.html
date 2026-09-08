@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The 64 · Vertex Codex · soulbis.com/lattice</title>
+<title>The Lattice · read the Star · Soulbis</title>
 <link rel="icon" type="image/png" href="/public/images/COMBUSTION.png">
 <link rel="apple-touch-icon" href="/public/images/COMBUSTION.png">
 <style>
@@ -172,12 +172,15 @@
   .legend a{ color:var(--sword); }
   @media (max-width:560px){ .legend-grid{ grid-template-columns:1fr; gap:2px 0; } .legend-grid .lk{ margin-top:10px; } }
 </style>
+<link rel="stylesheet" href="/public/rooms.css">
 </head>
 <body>
+  <nav class="rooms-nav" aria-label="Soulbis"><a class="rooms-brand" href="/">Soulbis</a><div class="rooms-links"><a href="/star">Star</a><a href="/lattice" aria-current="page">Lattice</a><a href="/sigil">Sigil</a><a href="/skye">Skye</a><a href="/guide">Guide</a></div></nav>
   <header class="top">
-    <div class="eyebrow"><span>soulbis.com/lattice · the lattice as manifold</span></div>
-    <h1>The 64 · Vertex Codex</h1>
-    <p class="lede">Every point on the sovereignty manifold is one of <b>64 states</b> of the lattice ℒ = ℤ/64ℤ — a 6-bit address across the <b>six sovereignty dimensions</b>. Each carries a <b>stratum</b>, a <b>Swordsman reflection</b> (neg), a <b>Mage antipode</b> (bnot), and a <b>successor</b> (succ = neg∘bnot). Choose an intelligence, or import a <b>City Key 🗝️</b> to colour the gems and write a description onto every node.</p>
+    <div class="eyebrow"><span>The Lattice · read the Star</span></div>
+    <h1>The Lattice</h1>
+    <p class="lede">Read the Star, one state at a time. The <b>64 vertices</b> describe positions in the agentprivacy model. Import your City Key to see its descriptions, attention and recorded activity against that geometry.</p>
+    <p class="room-context">This is the detailed reading of your key’s perspective. A lit vertex records something in the loaded artefact; its meaning and evidence still matter. <a href="/guide#perspective">How the Star represents you →</a></p>
     <div class="keyrow">
       <div class="keychip"><span class="gem" style="color:var(--sword)"></span>⚔️ Swordsman · neg · <i style="opacity:.7">protect</i></div>
       <div class="keychip"><span class="gem" style="color:var(--mage)"></span>🧙 Mage · bnot · <i style="opacity:.7">project</i></div>
@@ -251,19 +254,15 @@
         <span class="lk">🪢 focus mana</span><span class="lv">poured at agentprivacy (VRC allocation) and carried in the City Key as <code>focus</code> (vertex → amount). Here it glows as an inner gold aura — heavier where you've committed more attention. The feedback between the two interfaces.</span>
         <span class="lk">off-axis</span><span class="lv">Φ<sub>v5</sub> = Φ_agent · <b>Φ_data</b> · <b>Φ_inference</b> (multiplicative — any axis → 0 collapses value). Only Φ_agent is drawn; the other two axes are off-screen.</span>
         <span class="lk">κ · content identity</span><span class="lv">exported keys carry <code>kappa = sha256:H(canonical form)</code> — a UOR-ADDR κ-label on the sha256 axis. On import the label is <b>re-derived and checked</b>: identity is content, not location. The key is what it says, wherever it travels.</span>
-        <span class="lk">✍️ inscription</span><span class="lv">a <b>proven</b> blade — focus walked to ✓, or achievement-lit ✦ — accepts your own reading. Writing changes the content; the content drifts the κ; the sigil relights. <b>Authorship is earned by presence.</b></span>
+        <span class="lk">✍️ inscription</span><span class="lv">a <b>proven</b> blade — focus walked to ✓, or achievement-lit ✦ — accepts your own reading. Writing changes the content; the content drifts the κ; the sigil relights. These local activity markers enable inscription here; they do not independently verify learning or City standing.</span>
       </div>
-      <p class="legend-foot">Tags follow the V5.4 spec: <i>[proven] / [canon] / [conjecture]</i>; conjecture authority now lives in the V6 register — when prose and register disagree, the register wins. Full map in <code>MAPPING.md</code>; the model at <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a>.</p>
+      <p class="legend-foot">Tags follow the V5.4 spec: <i>[proven] / [canon] / [conjecture]</i>; conjecture authority now lives in the V6 register — when prose and register disagree, the register wins. Implementation references at <a href="https://agentprivacy.org/work/boundary-tools/">Labs</a>; the model at <a href="https://agentprivacy.ai/model" target="_blank" rel="noopener noreferrer">agentprivacy.ai/model</a>.</p>
     </div>
   </details>
 
   <div class="ceilbadge" id="ceilBadge">⏳ reading the ceiling</div>
 
-  <footer>
-    <b>City Key 🗝️</b> is a portable JSON: <code>{ name, palette:{cool,warm,sword,mage}, descriptions:{ "0":"…", … }, kappa:"sha256:…" }</code> — minted at agentprivacy /city, import it here (the JSON, or a <b>sigil PNG</b> from /sigil — the image carries the key). The <code>kappa</code> κ-label is its content identity, re-derived on every import.
-    <b>Colour:</b> stratum 0 (000000) = full surveillance / transparency; stratum 6 (111111) = full sovereignty / privacy.
-    <b>The wheel:</b> the comet is succ — it visits all 64 and returns to 0. <b>Live link:</b> on one origin, /star's marker lights the matching cell here, and importing a key here reflects its palette + descriptions into /star as the run hits each node.
-  </footer>
+  <footer><p>Import a City Key as JSON or a key-carrying PNG. Descriptions and activity belong to that version of the record. The moving ceiling is a what-if view of the model.</p><p>On this site, an imported key and the Star’s moving marker can sync between open rooms. This local connection does not sign in to a VTA or update City permissions.</p><div class="room-footer-links"><a href="/guide">Read the Star guide →</a><a href="https://mages.city/">Explore Mages City ↗</a><a href="https://agentprivacy.org/work/boundary-tools/">Labs · instrument sources ↗</a></div></footer>
 
 <script>
 (function(){
@@ -435,7 +434,7 @@
         const t=(ta.value||'').trim();
         if(t) DESC[sel]=t; else delete DESC[sel];
         markDesc(); renderPanel(); refreshLiveKappa();
-        send({config:buildExportCfg()}); // the inscription cascades live — /star and /sigil relight
+        readyExportCfg().then(config=>send({config})); // the inscription cascades live — /star and /sigil relight
       }); }
   }
 
@@ -461,7 +460,7 @@
     document.querySelectorAll('#sort button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); order=b.dataset.s; buildGrid(); if(playing)paintComet(head); }));
 
   // ---- City Key : import / export ----
-  let keyName='', FIGS=null, PKTS=null, DID=null, WIT_IN=null, PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null;
+  let keyName='', FIGS=null, PKTS=null, DID=null, WIT_IN=null, PRIOR_IN=null, LOADED_CANON=null, LOADED_KAPPA=null, CARRIED={}, LOAD_EPOCH=0, LOAD_READY=Promise.resolve();
   // FIGS — FIG-2.0 measured figures: /star derives shape from them; round-tripped here untouched.
   // PKTS / DID — trust-task fields minted at /city (packets Merkle digest · bearer did):
   // round-tripped untouched so a walk never destroys them (content — inside the κ preimage).
@@ -477,7 +476,11 @@
       if(identity.drakeOrb) bits.push('🐉 '+esc(identity.drakeOrb));
       if(bits.length) extra=` <span style="color:var(--dim)">· ${bits.join(' · ')}</span>`; }
     el.innerHTML = `key: <b>${esc(keyName)}</b>${extra}`; }
-  function loadConfig(cfg, fromRemote){ if(!cfg||typeof cfg!=='object')return;
+  function loadConfig(cfg, fromRemote){ if(!cfg||typeof cfg!=='object'||Array.isArray(cfg))return;
+    // Full keys carry opaque extensions; only this surface's reading fields are rebuilt.
+    CARRIED={...cfg};
+    for(const field of ["name","version","palette","descriptions","geometry","lit","identity","trace","figures","packets","did","kappa","prior","focus","witness"]) delete CARRIED[field];
+    DESC={};
     if(cfg.palette){ ['cool','warm','sword','mage'].forEach(k=>{ if(typeof cfg.palette[k]==='string') pal[k]=cfg.palette[k]; }); applyPalette(); }
     if(cfg.descriptions && typeof cfg.descriptions==='object'){ DESC={}; for(const k in cfg.descriptions){ const n=+k; if(n>=0&&n<N) DESC[n]=String(cfg.descriptions[k]); } }
     LIT = new Set(Array.isArray(cfg.lit) ? cfg.lit.filter(n=>Number.isInteger(n)&&n>=0&&n<N) : []);
@@ -492,12 +495,14 @@
     if(cfg.witness && cfg.witness.spent && typeof cfg.witness.spent==='object'){ for(const k in cfg.witness.spent){ const v=+k, amt=+cfg.witness.spent[k]; if(FOCUS[v]&&amt>0) VISITED[v]=Math.min(amt,FOCUS[v]); } }
     PRIOR_IN = (typeof cfg.prior==='string') ? cfg.prior : null;
     { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
-    LOADED_KAPPA=null; kappaLabel(cfg).then(k=>{ LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
+    LOADED_KAPPA=null;
+    const epoch=++LOAD_EPOCH;
+    LOAD_READY=kappaLabel(cfg).then(k=>{ if(epoch===LOAD_EPOCH) LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
     markDesc(); markFocus(); updateFocusBar();
     setKeyName(cfg.name||'imported key', cfg.identity); renderPanel(); verifyKappa(cfg);
     KEYCFG=cfg; LIVEK=null; refreshLiveKappa();
     if(!fromRemote) send({config:cfg}); }
-  function buildExportCfg(){ const cfg={ name:keyName||'city key', version:1, palette:{...pal}, descriptions:{...DESC} };
+  function buildExportCfg(){ const cfg={ ...CARRIED, name:keyName||'city key', version:1, palette:{...pal}, descriptions:{...DESC} };
     if(LIT.size) cfg.lit=[...LIT].sort((a,b)=>a-b);
     if(IDENT) cfg.identity=IDENT;
     if(TRACEC) cfg.trace=TRACEC;
@@ -519,12 +524,14 @@
       if(!s){ s=document.createElement('span'); s.className='kg'; c.appendChild(s); }
       s.textContent=v.toString(16); s.style.opacity=(0.25+0.75*v/15).toFixed(2); } }
   function refreshLiveKappa(){ if(!KEYCFG) return; clearTimeout(_kT);
-    _kT=setTimeout(()=>{ kappaLabel(buildExportCfg()).then(k=>{ if(!k) return; LIVEK=k; paintKGlyphs();
+    _kT=setTimeout(()=>{ readyExportCfg().then(cfg=>kappaLabel(cfg)).then(k=>{ if(!k) return; LIVEK=k; paintKGlyphs();
       const el=document.getElementById('kdrift'); if(!el) return;
       const stamped=KEYCFG.kappa;
       if(typeof stamped==='string') el.innerHTML = stamped===k ? '' : 'κ drifting → <b>'+esc(k.slice(7,15))+'…</b> · export to mint';
       else el.innerHTML='κ → <b>'+esc(k.slice(7,15))+'…</b> · unminted'; }); },350); }
-  function exportKey(){ const cfg=buildExportCfg();
+  // Wait for the current import's identity; a newer import invalidates older hash work.
+  async function readyExportCfg(){ let epoch; do { epoch=LOAD_EPOCH; await LOAD_READY; } while(epoch!==LOAD_EPOCH); return buildExportCfg(); }
+  async function exportKey(){ const cfg=await readyExportCfg();
     kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k; // the key's content identity, stamped at export
       const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}), a=document.createElement('a');
       a.href=URL.createObjectURL(blob); a.download='city-key.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }); }
@@ -535,14 +542,14 @@
   // ⚡ charge pass — the redacted carrier: only the PROOF travels. {version, redacted, of, trace, witness, κ}
   // `of` names the full key it was struck from (its would-be export κ); /city charges trace+witness
   // without ever seeing inscriptions, palette, focus amounts or identity. Portability minus disclosure.
-  function exportChargePass(){
-    const w=buildWitness();
-    if(!TRACEC&&!w){ const el=document.getElementById('kdrift');
+  async function exportChargePass(){
+    const full=await readyExportCfg();
+    const w=full.witness;
+    if(!full.trace&&!w){ const el=document.getElementById('kdrift');
       if(el){ el.textContent='nothing to charge yet — walk the manifold or prove focus first'; setTimeout(()=>{ el.textContent=''; },3000); } return; }
-    const full=buildExportCfg();
     kappaLabel(full).then(fk=>{ const cfg={ version:1, redacted:true };
       if(fk) cfg.of=fk;
-      if(TRACEC) cfg.trace=TRACEC;
+      if(full.trace) cfg.trace=full.trace;
       if(w) cfg.witness=w;
       kappaLabel(cfg).then(k=>{ if(k) cfg.kappa=k;
         const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}), a=document.createElement('a');
@@ -631,6 +638,6 @@
   buildGrid(); selectVertex(0); applyPalette(); applyCeiling();
 })();
 </script>
-<script src="/public/sitenav.js" defer></script>
+
 </body>
 </html>
