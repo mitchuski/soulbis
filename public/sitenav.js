@@ -20,6 +20,7 @@
     { p: "/",        ico: "⌂",  name: "home",     tag: "where the key lives" },
     { p: "/star",    ico: "⚔️", name: "/star",    tag: "explore your perspective" },
     { p: "/lattice", ico: "🧙", name: "/lattice", tag: "read the 64 states" },
+    { p: "/signatures", ico: "◈", name: "/signatures", tag: "measure a signature collection" },
     { p: "/sigil",   ico: "🪬", name: "/sigil",   tag: "recognise the record" },
     { p: "/skye",    ico: "🌌", name: "/skye",    tag: "compare relationships" },
     { p: "/guide",   ico: "🗡️", name: "/guide",   tag: "key · identity · perspective" }
@@ -28,6 +29,7 @@
   var TITLES = {
     "/":        { eyebrow: "soulbis · the swordsman", title: "Soulbis",                  meta: "(⚔️ ⊥ ⿻ ⊥ 🧙) 😊" },
     "/star":    { eyebrow: "your agent perspective", title: "The Star", meta: "City Key · geometric representation", note: "Explore a loaded record. VTA identity and the permitted City view are being connected." },
+    "/signatures": { eyebrow: "the measure of the key", title: "Signatures", meta: "compare · inspect · fold", note: "Signature-size samples. Folding arranges bytes; it does not compress or verify them." },
     "/lattice": { eyebrow: "the lattice as manifold",  title: "The 64 · Vertex Codex",   meta: "V(π,t) on ∂M · 96 → 64" },
     "/sigil":   { eyebrow: "the κ derivation",         title: "The Sigil",               meta: "κ = sha256: H(key)" },
     "/skye":    { eyebrow: "the night of many keys",   title: "Skye",                    meta: "lineage · common ground" },
@@ -119,7 +121,8 @@
   }
   ROOMS.forEach(function (r) {
     var cur = r.p === here ? " is-current" : "";
-    html += "<a class='snav-link" + cur + "' href='" + r.p + "'" + (cur ? " aria-current='page'" : "") + ">" +
+    var target = CFG.localPreview && ["/star", "/signatures"].indexOf(r.p) === -1 ? "https://soulbis.com" + r.p : r.p;
+    html += "<a class='snav-link" + cur + "' href='" + target + "'" + (cur ? " aria-current='page'" : "") + ">" +
               "<span class='ico'>" + r.ico + "</span>" +
               "<span class='snav-words'><b>" + esc(r.name) + "</b><i>" + esc(r.tag) + "</i></span></a>";
   });
