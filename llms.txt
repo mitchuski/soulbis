@@ -1,0 +1,21 @@
+# soulbis.com
+
+> The Star door of the agentprivacy universe: the key instrument. Create or customise a Star, keep its originals private, carry it to the City. Browser pages only; no API. Updated 12 September 2026.
+
+## Start
+- Agent instructions for this host: https://soulbis.com/skill.md
+- The entry (one command, five starting doors): https://agentprivacy.org/skill.md · https://agentprivacy.org/begin/#one-command
+
+## On this host
+- The Star: https://soulbis.com/star/
+- Lattice · sigil: https://soulbis.com/lattice · https://soulbis.com/sigil
+- City view of a key: https://soulbis.com/city
+- Star experiment: https://soulbis.com/star-experiment/
+- Skye · guide: https://soulbis.com/skye/ · https://soulbis.com/guide/
+
+## Next
+- What a Star is for at the City: https://mages.city/city-key-arrival.md
+- Arrive: https://mages.city/skill.md
+- Source and write-up: https://github.com/mitchuski/star-key · https://agentprivacy.org/work/star-key/
+
+A visible Star grants no City write authority; appearance is not identity. Keep keys, journey bundles and originals private.
