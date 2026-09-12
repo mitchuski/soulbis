@@ -4,7 +4,7 @@
  let scheme=Object.hasOwn(M.profiles,q.get('scheme'))?q.get('scheme'):'ML-DSA-44',part='total',role='Unassigned';
  let selected=0,phase=0,orbitPaused=window.matchMedia('(prefers-reduced-motion: reduce)').matches,orbitRadius=0;
  const records=[{scheme,role}],orbitColors=[0x82b9dc,0xe5bd87,0xa6d2aa,0xc3ace0,0xe3a5b2,0xaacac5];
- let folded=false,foldProgress=0,routeDistance=0,routePaused=window.matchMedia('(prefers-reduced-motion: reduce)').matches,route,routeMarker;
+ let folded=false,foldProgress=0,routeDistance=0,routePaused=window.matchMedia('(prefers-reduced-motion: reduce)').matches,route,routeMarker,routeOutline,routeTail=[];
  const routeGroup=new T.Group();h.coreGroup.parent.add(routeGroup);routeGroup.rotation.x=.32;
  const group=new T.Group(),packed=new T.Group();h.coreGroup.parent.add(group,packed);
  group.rotation.x=.32;packed.rotation.x=.32;
@@ -19,7 +19,7 @@
  <div id="sfCollection"><div id="sfTotals" class="sf-note" aria-live="polite"></div><label class="sf-label">Byte budget<select id="sfBudget"><option value="8192">8 KiB · 8,192 bytes</option><option value="24576" selected>24 KiB · 24,576 bytes</option><option value="49152">48 KiB · 49,152 bytes</option></select></label><progress id="sfMeter" max="24576" value="0" aria-label="Sample budget used"></progress><p id="sfFoldNote" class="sf-note">Sample budget · 24,576 B</p><div class="sf-actions"><button id="sfFold">Fold into Star</button><button id="sfMotion">Pause motion</button></div></div>
  <label class="sf-label">Folded geometry<select id="sfFoldGeometry"><option value="blocks">Blocks</option><option value="spheres">Overlapping spheres</option><option value="perturbed">Perturbed spheres</option></select></label>
  <label class="sf-label">Solidity <output id="sfOpacityValue">90%</output><input id="sfOpacity" type="range" min="25" max="100" value="90"></label>
- <div id="sfRouteControls" hidden><label class="sf-label"><input type="checkbox" id="sfRouteVisible" checked> Signature circuit</label><p id="sfRouteMetrics" class="sf-note"></p><p id="sfRouteStatus" class="sf-note" aria-live="off"></p></div>
+ <div id="sfRouteControls" hidden><label class="sf-label"><input type="checkbox" id="sfRouteVisible" checked> Signature circuit</label><label class="sf-label">Trace style<select id="sfTraceStyle"><option value="tail">Fading tail</option><option value="plain">Orb only</option></select></label><p id="sfRouteMetrics" class="sf-note"></p><p id="sfRouteStatus" class="sf-note" aria-live="off"></p></div>
  <details id="sfInspection" ${lab?'open':''}><summary>Inspect signature</summary><div id="sfMeasurement"><strong id="sfBytes"></strong><div id="sfCaption"></div><div id="sfBar" role="img" aria-label="Signature composition"></div><div id="sfParts"></div><details><summary>Encoding details</summary><p id="sfDetail" class="sf-note"></p><a id="sfSource" target="_blank" rel="noreferrer">Specification ↗</a></details></div></details>
  <details><summary>Experiments</summary><label class="sf-label">Expanded geometry<select id="sfGeometry"><option value="bounded">Tetrahedron</option><option value="reshape">Perturbed sphere</option></select></label></details>
  <details><summary>Appearance</summary><label class="sf-label">Star glow <output id="sfGlowValue">15%</output><input id="sfGlow" type="range" min="0" max="100" value="15"></label><label class="sf-label"><input id="sfBackground" type="checkbox" ${lab?'':'checked'}> Background motion</label>${lab?'<label class="sf-label"><input type="checkbox" id="sfLattice"> Lattice reference</label>':''}</details>
@@ -35,15 +35,31 @@
  @media(max-width:760px){.console{top:65px;width:min(340px,calc(100vw - 24px));max-height:48vh}.console .body{max-height:calc(48vh - 65px)}}
  `;document.head.append(style);
  const $=id=>document.getElementById(id),partColors=[0xafc3e6,0x5e99bb,0xdfbf8a];$('sfScheme').value=scheme;
+ const tracePalette=document.createElement('div');tracePalette.className='palette';$('sfTraceStyle').closest('label').after(tracePalette);
+ tracePalette.insertAdjacentHTML('beforeend','<label class="swatch"><input type="color" id="sfOrbColor" value="#ffedc3"> orb</label><label class="swatch"><input type="color" id="sfTailColor" value="#e7cb8b"> tail</label>');
+ function updateTraceColors(){if(routeOutline)routeOutline.material.color.set($('sfTailColor').value);if(routeMarker)routeMarker.material.color.set($('sfOrbColor').value);routeTail.forEach(bead=>bead.material.color.set($('sfTailColor').value));}
+ $('sfOrbColor').addEventListener('input',updateTraceColors);$('sfTailColor').addEventListener('input',updateTraceColors);
+ $('confirmReset').addEventListener('click',()=>{$('sfOrbColor').value='#ffedc3';$('sfTailColor').value='#e7cb8b';updateTraceColors();});
+
  function bytes(){const p=M.profiles[scheme];return part==='total'?p.total:p.parts[+part][1];}
- function clear(){for(const g of [group,packed,routeGroup]){g.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});g.clear();}signatureBodies=[];routeMarker=null;}
+ function clear(){for(const g of [group,packed,routeGroup]){g.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});g.clear();}signatureBodies=[];routeMarker=null;routeOutline=null;routeTail=[];}
  function outline(geometry,parent,color=0xa9c8db){const edge=new T.LineSegments(new T.EdgesGeometry(geometry),new T.LineBasicMaterial({color,transparent:true,opacity:.28,depthWrite:false}));edge.userData.baseOpacity=.28;parent.add(edge);return edge;}
  function buildRoute(){
  route=rounded?rounded.route:M.edgeRoute(layout);$('sfRouteMetrics').textContent=`Path ${route.length.toFixed(2)} scene units · Lap ${(route.length/.3).toFixed(1)} s`; 
- const raw=route.segments.flatMap(s=>[...s.a,...s.b]);
- const edges=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(raw,3)),new T.LineBasicMaterial({color:0x91c3c8,transparent:true,opacity:.55,depthTest:false,depthWrite:false}));edges.userData.baseOpacity=.55;edges.renderOrder=30;routeGroup.add(edges);
- route.segments.filter(s=>s.record===selected&&!s.connector).forEach(s=>{const curve=new T.LineCurve3(new T.Vector3(...s.a),new T.Vector3(...s.b));const line=new T.Mesh(new T.TubeGeometry(curve,1,.003,5,false),new T.MeshBasicMaterial({color:0xe7cb8b,transparent:true,opacity:.9,depthTest:false,depthWrite:false}));line.userData.baseOpacity=.9;line.renderOrder=31;routeGroup.add(line);});
- routeMarker=new T.Mesh(new T.SphereGeometry(.015,12,8),new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:1,depthTest:false,depthWrite:false}));routeMarker.userData.baseOpacity=1;routeMarker.renderOrder=32;routeGroup.add(routeMarker);
+ // Pause exposes the same measured route, including links between signatures.
+ const pathPoints=route.segments.flatMap(segment=>[...segment.a,...segment.b]);
+ routeOutline=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(pathPoints,3)),new T.LineBasicMaterial({color:$('sfTailColor').value,transparent:true,opacity:.5,depthTest:false,depthWrite:false}));
+ routeOutline.userData.baseOpacity=.5;routeOutline.renderOrder=30;routeOutline.visible=routePaused;routeGroup.add(routeOutline);
+ // The trail shows the last 0.9 seconds of traversal, not the entire boundary.
+ if($('sfTraceStyle').value==='tail'){
+  for(let i=1;i<=32;i++){
+   const age=i/32;
+   const bead=new T.Mesh(new T.SphereGeometry(.012*(1-.8*age),8,6),new T.MeshBasicMaterial({color:$('sfTailColor').value,transparent:true,opacity:.75*(1-age)**2,depthTest:false,depthWrite:false}));
+   bead.userData.baseOpacity=.75*(1-age)**2;bead.userData.lag=.27*age;
+   bead.renderOrder=31;routeTail.push(bead);routeGroup.add(bead);
+  }
+ }
+ routeMarker=new T.Mesh(new T.SphereGeometry(.015,12,8),new T.MeshBasicMaterial({color:$('sfOrbColor').value,transparent:true,opacity:1,depthTest:false,depthWrite:false}));routeMarker.userData.baseOpacity=1;routeMarker.renderOrder=32;routeGroup.add(routeMarker);
  }
  function buildPacked(){
  rounded=null;
@@ -109,15 +125,16 @@
  $('sfRemove').onclick=()=>{if(records.length<2)return;records.splice(selected,1);selected=Math.min(selected,records.length-1);activate();};
  $('sfFoldGeometry').onchange=draw;$('sfBudget').onchange=draw;
  $('sfShow').onchange=()=>{scheme=$('sfShow').checked?records[selected].scheme:'none';$('sfScheme').value=records[selected].scheme;draw();};
- $('sfRouteVisible').onchange=position;
+ $('sfRouteVisible').onchange=position;$('sfTraceStyle').onchange=draw;
  $('sfFold').onclick=()=>{folded=!folded;draw();};
- $('sfMotion').onclick=()=>{orbitPaused=!orbitPaused;routePaused=orbitPaused;$('sfMotion').textContent=orbitPaused?'Play motion':'Pause motion';};
+ $('sfMotion').onclick=()=>{orbitPaused=!orbitPaused;routePaused=orbitPaused;$('sfMotion').textContent=orbitPaused?'Play motion':'Pause motion';position();};
  $('sfBackground').onchange=()=>{window.starScenePaused=!$('sfBackground').checked;};
  function position(){
  group.children.forEach(mesh=>{const i=mesh.userData.record;if(i===undefined)return;const angle=phase+i*2*Math.PI/records.length;mesh.position.set(orbitRadius*Math.cos(angle)*(1-foldProgress),0,orbitRadius*Math.sin(angle)*(1-foldProgress));});
  routeGroup.visible=scheme!=='none'&&foldProgress>.001&&$('sfRouteVisible').checked;
+ if(routeOutline)routeOutline.visible=routePaused;
  h.fadeLattice(scheme==='none'?1:1-.82*foldProgress);
- if(routeMarker&&route){const sample=M.routePoint(route,routeDistance);routeMarker.position.set(...sample.point);const text=`Signature ${sample.record+1} / ${records.length}`;if($('sfRouteStatus').textContent!==text)$('sfRouteStatus').textContent=text;}
+ if(routeMarker&&route){const sample=M.routePoint(route,routeDistance);routeMarker.position.set(...sample.point);routeTail.forEach(bead=>{bead.visible=routeDistance>=bead.userData.lag;bead.position.set(...M.routePoint(route,Math.max(0,routeDistance-bead.userData.lag)).point);});const text=`Signature ${sample.record+1} / ${records.length}`;if($('sfRouteStatus').textContent!==text)$('sfRouteStatus').textContent=text;}
  group.visible=scheme!=='none'&&foldProgress<.999;packed.visible=scheme!=='none'&&foldProgress>.001;
  for(const [g,opacity] of [[group,1-foldProgress],[packed,foldProgress],[routeGroup,foldProgress]])g.traverse(o=>{if(o.material)o.material.opacity=o.userData.baseOpacity*opacity;});
  }
