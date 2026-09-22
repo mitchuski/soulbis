@@ -1,0 +1,33 @@
+{
+  "name": "practice · charged",
+  "version": 1,
+  "palette": {
+    "cool": "#141a3d",
+    "warm": "#f0eee8",
+    "sword": "#e8523a",
+    "mage": "#4dd9e8"
+  },
+  "lit": [
+    38,
+    63
+  ],
+  "lattice": {
+    "9": 3,
+    "25": 1,
+    "44": 2,
+    "63": 5
+  },
+  "focus": {
+    "12": 2
+  },
+  "geometry": {
+    "eps": 0.45,
+    "m": 7,
+    "n": 4,
+    "core": 0.7,
+    "smRatio": 1.618
+  },
+  "descriptions": {
+    "44": "a charged vertex from spellweb"
+  }
+}

@@ -378,6 +378,14 @@
         <div id="ceilBar" style="width:100%;height:4px;border-radius:2px;background:rgba(240,238,232,0.08);overflow:hidden;margin-top:4px"><div id="ceilFill" style="height:100%;width:35%;background:#4dd9e8;transition:width .2s,background .2s"></div></div></div>
       <div id="ceilStory" style="display:none;font-size:10px;color:var(--text,#f0eee8);opacity:0.75;line-height:1.6;margin-top:7px"></div>
       <div style="font-size:9px;color:var(--dim);line-height:1.5;margin-top:6px">C82 · ~65% · mechanism evidenced (n=2), rate unparameterized — the sliders are a what-if, not a measurement of rate. R(t) = R₀·e<sup>g·t</sup> · t* = ln(1/R₀)/g. the register wins.</div>
+      <div class="sect">Ambiguity · background observations 🔎</div>
+      <div class="row etoggles">
+        <label class="etoggle" title="V7 research intake · OPH — dim every lattice vertex an observer could already rule out from the coordinates it has seen. Exact counts under a uniform prior on the 64 states; not a rate, not a measurement of people, not a change to the key."><input type="checkbox" id="tFiber"><span class="ico">🔎</span><span class="lbl2">dim outside the fiber</span></label>
+      </div>
+      <div class="row"><div class="lbl"><label class="k" for="sFiber">coordinates observed · k</label><span class="v" id="vFiber">0</span></div>
+        <input type="range" id="sFiber" min="0" max="6" step="1" value="0"></div>
+      <div class="row"><div class="lbl"><span class="k" id="fiberRead">64 of 64 states compatible · open: x0…x5</span><span class="v" id="fiberState">off</span></div></div>
+      <div style="font-size:9px;color:var(--dim);line-height:1.5;margin-top:6px">V7 research intake · OPH (C9 · C82 · C97, no promotion) — the reference is the vertex under the marker; each observed coordinate halves the compatible set, 2<sup>6−k</sup>. Set-valued ambiguity is not privacy: the count describes the lattice under a uniform prior, not the informed deficit and not a rate. The reconstruction sliders above stay independent of this reading.</div>
       </details>
 
     </div>
@@ -448,7 +456,7 @@
     artificial:{cool:'#141a3d',warm:'#f0eee8',sword:'#e8523a',mage:'#4dd9e8'},
     alien:{cool:'#7a1fff',warm:'#00e6a0',sword:'#c9b3ff',mage:'#7dffd0'}
   };
-  const DEFAULTS={ eps:0.35,m:5,n:6,core:0.60,spin:0.30,mode:'both',edgeMode:'holo',
+  const DEFAULTS={fiberOn:false,fiberK:0, eps:0.35,m:5,n:6,core:0.60,spin:0.30,mode:'both',edgeMode:'holo',
     showLattice:true,showSucc:true,showNeg:false,showBnot:false,showInfo:true,glow:true,smRatio:1.0,cellOpacity:0.20, playing:true,speed:0.12,markerF:0,
     ceilOn:false,r0:0.35,drift:0.25,tYears:0,ceilHex:'#8b4daa',
     coolHex:'#141a3d',warmHex:'#f0eee8',swordHex:'#e8523a',mageHex:'#4dd9e8' };
@@ -470,6 +478,7 @@
   const ceilShellTint=frac=>CEIL_COL.clone().lerp(CEIL_HOT,frac*frac); // shell heats in its own color, coral only near the end
   // City Key payload (v1 additive fields): achievement-lit vertices + bearer identity.
   let LIT=new Set(), IDENT=null;
+  let CHARGED=new Map(); // ⚡ per-vertex charges carried by the key — spellweb's `lattice` weights and /city's poured `focus` — a reading layer beside `lit`, never a score (2026-09-21)
   let focusMode=false, focusT=0; // [f] fullscreen presentation orbit
   let tourTimer=null, tourIdx=0, tourMode=false; // ✦ City-Key vertex tour (key order); reuses the main play/pause transport
   let laps=0, traceSeconds=0, tourSeconds=0, _lastTourSec=-1, TRACE_PROOF=null, keyLoaded=false; // tracing proof (City Key) — accrues only once a City Key is imported; succ runtime + tour-walk timer
@@ -561,14 +570,22 @@
   // 🧙 bnot(x) = 63−x (Project · antipode): 32 diameters, no fixed point
   const E_NEG=[]; for(let x=1;x<32;x++)E_NEG.push([x,N-x]);
   const E_BNOT=[]; for(let x=0;x<32;x++)E_BNOT.push([x,63-x]);
-  let latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL;
+  let latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL,latCharged;
   function buildLattice(){
-    [latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL].forEach(o=>{if(o){latticeGroup.remove(o);if(o.geometry)o.geometry.dispose();}});
+    [latPoints,latFull,latHolo,latSucc,latMarker,latNbr,latAnti,latCell,latNegL,latBnotL,latCharged].forEach(o=>{if(o){latticeGroup.remove(o);if(o.geometry)o.geometry.dispose();}});
     const vp=new Float32Array(N*3),vc=new Float32Array(N*3);
     for(let x=0;x<N;x++){vp[x*3]=VERTS[x][0];vp[x*3+1]=VERTS[x][1];vp[x*3+2]=VERTS[x][2];const c=LIT.has(x)?SWORD_COL:gradient(popcount(x)/BITS);vc[x*3]=c.r;vc[x*3+1]=c.g;vc[x*3+2]=c.b;}
     const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.BufferAttribute(vp,3)); pg.setAttribute('color',new THREE.BufferAttribute(vc,3));
     latPoints=new THREE.Points(pg,new THREE.PointsMaterial({size:0.06,vertexColors:true,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true}));
     latPoints.renderOrder=4;
+    // ⚡ the charged layer — what the key carries from spellweb (lattice weights) and /city (poured focus), drawn as a
+    // Mage-coloured halo whose intensity follows the weight. `lit` keeps the Swordsman's achievement colour on the
+    // point itself; the two readings never merge. Carried in, carried out (CARRIED keeps the fields) — nothing derived.
+    latCharged=null;
+    if(CHARGED.size){ const cn=CHARGED.size, qp=new Float32Array(cn*3), qc=new Float32Array(cn*3); let i=0; const maxW=Math.max(1,...CHARGED.values());
+      for(const [x,w] of CHARGED){ qp[i*3]=VERTS[x][0]; qp[i*3+1]=VERTS[x][1]; qp[i*3+2]=VERTS[x][2]; const fz=0.45+0.55*Math.min(1,w/maxW); qc[i*3]=MAGE_COL.r*fz; qc[i*3+1]=MAGE_COL.g*fz; qc[i*3+2]=MAGE_COL.b*fz; i++; }
+      const qg=new THREE.BufferGeometry(); qg.setAttribute('position',new THREE.BufferAttribute(qp,3)); qg.setAttribute('color',new THREE.BufferAttribute(qc,3));
+      latCharged=new THREE.Points(qg,new THREE.PointsMaterial({size:0.13,vertexColors:true,transparent:true,opacity:0.85,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true})); latCharged.renderOrder=4; }
     latFull=new THREE.LineSegments(edgeGeom(E_FULL),new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.30,blending:THREE.AdditiveBlending,depthWrite:false})); latFull.renderOrder=3;
     latHolo=new THREE.LineSegments(edgeGeom(E_HOLO),new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false})); latHolo.renderOrder=3;
     const cp=[];for(let x=0;x<=N;x++){const v=VERTS[x%N];cp.push(v[0],v[1],v[2]);}
@@ -585,11 +602,11 @@
       const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(ep,3)); return g; };
     latNegL=new THREE.LineSegments(monoGeom(E_NEG),new THREE.LineBasicMaterial({color:SWORD_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latNegL.renderOrder=5;
     latBnotL=new THREE.LineSegments(monoGeom(E_BNOT),new THREE.LineBasicMaterial({color:MAGE_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latBnotL.renderOrder=5;
-    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latNegL,latBnotL,latPoints,latMarker);
-    applyLattice(); refreshHighlight();
+    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latNegL,latBnotL,latPoints,latMarker); if(latCharged) latticeGroup.add(latCharged);
+    applyLattice(); refreshHighlight(); applyFiber();
   }
   function applyLattice(){ if(!latPoints)return; const on=state.showLattice;
-    latPoints.visible=on;
+    latPoints.visible=on; if(latCharged) latCharged.visible=on;
     latFull.visible=on&&state.edgeMode==='full';
     latHolo.visible=on&&state.edgeMode==='holo';
     latSucc.visible=on&&state.showSucc; latMarker.visible=on&&state.showSucc;
@@ -722,7 +739,7 @@
   const ins={x:gid('iX'),bits:gid('iBits'),st:gid('iStratum'),neg:gid('iNeg'),bnot:gid('iBnot'),succ:gid('iSucc')};
   function gid(id){return document.getElementById(id);}
   let _lastX=-1;
-  function updateInspector(){ const x=currentVertex(); if(x===_lastX)return; _lastX=x; const s=popcount(x); broadcastVertex(x);
+  function updateInspector(){ const x=currentVertex(); if(x===_lastX)return; _lastX=x; const s=popcount(x); broadcastVertex(x); applyFiber();
     ins.x.textContent=x; ins.bits.textContent=b6(x); ins.st.textContent=`${s} · ${STRATA[s]} state${STRATA[s]>1?'s':''}`;
     ins.neg.textContent=`${neg(x)} · ${b6(neg(x))}`; ins.bnot.textContent=`${bnot(x)} · ${b6(bnot(x))}`; ins.succ.textContent=`${succ(x)} · ${b6(succ(x))}`; updateDesc(); }
 
@@ -755,8 +772,10 @@
   // (byte-identical, same κ); evolved content chains `prior` to the loaded ancestor's κ (C87).
   try{ _bc=new BroadcastChannel('agentprivacy-succ'); }catch(e){ _bc=null; }
   function broadcastVertex(x){ if(_bc&&!_bcMute&&x!==_bcLast){ _bcLast=x; try{ _bc.postMessage({vertex:x,src:'manifold'}); }catch(e){} } }
-  function updateDesc(){ const el=gid('insDesc'); if(!el)return; const d=DESC[currentVertex()];
-    if(d){ el.textContent=d; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
+  function updateDesc(){ const el=gid('insDesc'); if(!el)return; const x=currentVertex(); const d=DESC[x]; const w=CHARGED.get(x);
+    const charged=w?('⚡ charged ×'+(Number.isInteger(w)?w:w.toFixed(2))+' — carried by the key from spellweb / poured focus; a reading, not lit'):'';
+    const text=[charged,d||''].filter(Boolean).join(' · ');
+    if(text){ el.textContent=text; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
   // ---- κ-label (UOR-ADDR · sha256 axis) — identity is content, not location.
   // canonical form: the key's JSON with keys sorted recursively, no whitespace, the kappa field excluded.
   // re-derived and checked on import (holospaces Law L5: verification is re-derivation).
@@ -849,12 +868,16 @@
       buildManifold(); buildCore(); }
     if(cfg.descriptions&&typeof cfg.descriptions==='object'){ DESC={}; for(const k in cfg.descriptions){ const n=+k; if(n>=0&&n<N) DESC[n]=String(cfg.descriptions[k]); } }
     LIT = new Set(Array.isArray(cfg.lit)?cfg.lit.filter(n=>Number.isInteger(n)&&n>=0&&n<N):[]);
+    CHARGED=new Map(); { const src={}; const obj=o=>o&&typeof o==='object'&&!Array.isArray(o);
+      if(obj(cfg.lattice)) for(const k in cfg.lattice) src[k]=+cfg.lattice[k]||0;
+      if(obj(cfg.focus)) for(const k in cfg.focus) src[k]=(src[k]||0)+(+cfg.focus[k]||0);
+      for(const k in src){ const v=+k, w=src[k]; if(Number.isInteger(v)&&v>=0&&v<N&&w>0) CHARGED.set(v,w); } }
     IDENT = (cfg.identity&&typeof cfg.identity==='object')?cfg.identity:null;
     if(cfg.trace && typeof cfg.trace==='object'){ TRACE_PROOF=cfg.trace; laps=+cfg.trace.laps||0; traceSeconds=+cfg.trace.seconds||0; tourSeconds=+cfg.trace.tourSeconds||0; const tl=gid('tracerLaps'); if(tl) tl.textContent=laps; }
     buildLattice();
     exitTour(); { const kt=gid('keyTour'); if(kt){ kt.disabled=(LIT.size===0); kt.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } }
     keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='Attach trace to key'; } }
-    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
+    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+(CHARGED.size?' <span style="color:#4dd9e8" title="vertices charged on spellweb (lattice weights) or poured at /city (focus), carried by the key — drawn as the Mage-coloured halo; a reading, not lit">· ⚡ '+CHARGED.size+' charged</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
     PRIOR_IN=(typeof cfg.prior==='string')?cfg.prior:null;
     { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
     LOADED_KAPPA=null;
@@ -1025,6 +1048,28 @@
   $('cCeil').addEventListener('input',e=>{state.ceilHex=e.target.value;CEIL_COL.set(state.ceilHex);applyCeiling();});
   applyCeiling();
 
+  // ===== V7 research intake · OPH — the fiber reading (illustrative; counts only, nothing enters the key) =====
+  // An observer that has seen k coordinates of the marker's vertex can rule out every vertex that
+  // differs on them; the 2^(6-k) that remain are the FIBER. Points and edges outside it are dimmed
+  // by scaling their vertex colours; the base colours are kept on each object's userData so a
+  // rebuilt lattice (palette change) starts clean. The C82 shell is a separate reading of the same
+  // boundary and is left untouched.
+  function fiberScale(obj,pairs,x,mask,on){ if(!obj) return; const ec=obj.geometry.getAttribute('color'); if(!ec) return;
+    let base=obj.userData.fiberBase; if(!base||base.length!==ec.array.length){ base=Float32Array.from(ec.array); obj.userData.fiberBase=base; }
+    if(pairs){ for(let i=0;i<pairs.length;i++){ const a=pairs[i][0],b=pairs[i][1]; const inF=!on||(((a^x)&mask)===0&&((b^x)&mask)===0); const f=inF?1:0.1;
+        for(let j=0;j<2;j++){ const idx=i*2+j; ec.setXYZ(idx,base[idx*3]*f,base[idx*3+1]*f,base[idx*3+2]*f); } } }
+    else { for(let y=0;y<N;y++){ const inF=!on||((y^x)&mask)===0; const f=inF?1:0.12; ec.setXYZ(y,base[y*3]*f,base[y*3+1]*f,base[y*3+2]*f); } }
+    ec.needsUpdate=true; }
+  function applyFiber(){ const on=!!state.fiberOn, k=Math.max(0,Math.min(BITS,Math.round(state.fiberK||0))), x=currentVertex(), mask=(1<<k)-1, n=1<<(BITS-k);
+    const read=gid('fiberRead'), st=gid('fiberState'); // gid, not $: buildLattice() runs at init, before the $ helper is declared (TDZ) — 2026-09-21
+    if(read) read.textContent=n+' of 64 states compatible · open: '+(k>=BITS?'none':(k===BITS-1?'x5':'x'+k+'…x5'));
+    if(st){ st.textContent=on?(n===1?'determined':'holds · '+n):'off'; st.style.color=(on&&n===1)?'#e8523a':''; }
+    if(!latPoints) return;
+    fiberScale(latPoints,null,x,mask,on); fiberScale(latFull,E_FULL,x,mask,on); fiberScale(latHolo,E_HOLO,x,mask,on); }
+  bind('sFiber','vFiber','fiberK',v=>String(Math.round(v)),applyFiber);
+  $('tFiber').addEventListener('change',e=>{state.fiberOn=e.target.checked;applyFiber();});
+  applyFiber();
+
   $('playPause').addEventListener('click',()=>setPlaying(!state.playing));
   $('stepBack').addEventListener('click',()=>stepBy(-1)); $('stepFwd').addEventListener('click',()=>stepBy(1));
   $('snap').addEventListener('click',snapshot);
@@ -1074,7 +1119,8 @@
     $('sT').value=state.tYears;$('vT').textContent=state.tYears.toFixed(1);
     $('tCeil').checked=state.ceilOn; $('cCeil').value=state.ceilHex; CEIL_COL.set(state.ceilHex);
     traceValue=0; _lastValStr=''; { const te=gid('tracerVal'); if(te){ te.textContent='0.0'; te.style.color=''; } }
-    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling();saveCore(); });
+    $('tFiber').checked=!!state.fiberOn; $('sFiber').value=state.fiberK||0; $('vFiber').textContent=String(state.fiberK||0);
+    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling();applyFiber();saveCore(); });
 
   function setPanel(panelId, open){
     const isTrace=panelId==='trace', panel=$(panelId), launcher=$(isTrace?'launcher2':'launcher'), fold=$(isTrace?'foldBtn2':'foldBtn');

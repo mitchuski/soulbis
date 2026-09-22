@@ -4,15 +4,15 @@ description: The Star door of the agentprivacy universe — the key instrument. 
 license: CC-BY-SA-4.0
 metadata:
   origin: soulbis.com
-  entry: https://agentprivacy.org/skill.md
+  entry: https://agentprivacy.ai/skill.md
   discovery: https://agentprivacy.org/begin/#one-command
-  updated: 2026-09-12
+  updated: 2026-09-21
 ---
 
 # soulbis.com — the Star door
 
 The one command and its five starting doors live at
-https://agentprivacy.org/skill.md and https://agentprivacy.org/begin/#one-command .
+https://agentprivacy.ai/skill.md (the agent door) and https://agentprivacy.org/begin/#one-command (the human door) .
 "Start at: the Star" means **this host**, and specifically https://soulbis.com/star/ .
 
 ## What is here
@@ -22,6 +22,8 @@ https://agentprivacy.org/skill.md and https://agentprivacy.org/begin/#one-comman
 - The City view of a key (κ interop): https://soulbis.com/city
 - The star experiment (the fiber stepper; a local build may run ahead of this page): https://soulbis.com/star-experiment/
 - Skye, and the guide: https://soulbis.com/skye/ · https://soulbis.com/guide/
+- What the Star holds (the Hold: signed relationships beside the key; the key carries only root and count; not yet drawn in a room): https://soulbis.com/guide/#hold
+- The Star runtime (`star relate · hold show/verify/project · present`, agentprivacy-mcp) and its conformance pack: https://github.com/mitchuski/agentprivacy-mcp/tree/main/fixtures/star-hold-conformance
 
 Everything here is a browser page. There is no API on this host; the
 machine-readable form of a Star is the export the page produces, which stays
@@ -29,7 +31,7 @@ with its holder.
 
 ## Read in this order
 
-1. https://agentprivacy.org/skill.md — the entry, if you have not read it.
+1. https://agentprivacy.ai/skill.md — the agent door, if you have not read it.
 2. https://mages.city/city-key-arrival.md — what a Star is *for* when it reaches the City.
 3. https://soulbis.com/star/ — make or bring one; keep the original packet private.
 
