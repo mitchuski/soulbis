@@ -1,6 +1,7 @@
 (() => {
  'use strict';
  const h=window.starMeasureHost,T=THREE,M=SignatureMath,q=new URLSearchParams(location.search),lab=location.pathname.startsWith('/signatures')&&q.get('view')!=='manifold';
+ if(!h||h.held){ console.warn('signature-focus: star host '+(h?'held':'absent')+' — circuits not drawn'); return; }
  let scheme=Object.hasOwn(M.profiles,q.get('scheme'))?q.get('scheme'):'ML-DSA-44',part='total',role='Unassigned';
  let selected=0,phase=0,orbitPaused=window.matchMedia('(prefers-reduced-motion: reduce)').matches,orbitRadius=0;
  const records=[{scheme,role}],orbitColors=[0x82b9dc,0xe5bd87,0xa6d2aa,0xc3ace0,0xe3a5b2,0xaacac5];

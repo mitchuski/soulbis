@@ -230,10 +230,38 @@
   .reset-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
   .reset-actions button{flex:1;min-height:44px;padding:10px;border:1px solid #8292b8;border-radius:8px;background:transparent;color:#f0eee8;cursor:pointer;font:12px 'Spline Sans Mono',monospace}
   #confirmReset{color:#f0b4a7;border-color:#a96a60}
+  /* ===== held state — the star renders where a browser can hold a WebGL context; elsewhere the key's reading is printed in its place ===== */
+  .held{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4; width:min(600px,calc(100vw - 32px)); max-height:calc(100vh - 48px); overflow:auto;
+    padding:22px 24px 18px; background:var(--glass); border:1px solid var(--line); border-radius:14px; backdrop-filter:blur(14px) saturate(1.1);
+    box-shadow:0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05); }
+  .held[hidden]{ display:none; }
+  .held-eyebrow{ font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; }
+  .held h2{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:30px; line-height:1; margin-bottom:12px;
+    background:linear-gradient(100deg,#9fc0ff 0%,#e8edff 42%,#ffb9a6 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .held-why,.held-foot{ font-size:11.5px; line-height:1.65; color:#aeb8ee; }
+  .held-foot{ margin-top:14px; color:var(--dim); } .held-foot a{ color:#ffd6c7; }
+  .held-reading{ margin-top:14px; border-top:1px solid var(--line); padding-top:10px; font-size:11.5px; line-height:1.6; }
+  .held-reading .hr{ display:grid; grid-template-columns:88px 1fr; gap:10px; padding:5px 0; border-bottom:1px solid rgba(120,140,220,0.08); }
+  .held-reading .hr:last-child{ border-bottom:0; }
+  .held-reading .k{ color:var(--dim); letter-spacing:0.08em; text-transform:uppercase; font-size:9.5px; padding-top:3px; }
+  .held-reading .v{ color:var(--ink); font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+  .held-reading .v i{ color:#ffd6c7; font-style:normal; } .held-reading .v s{ color:var(--dim); text-decoration:none; }
+  .held-reading .v .lit{ display:inline-block; margin:1px 6px 1px 0; padding:1px 6px; border:1px solid var(--line); border-radius:6px; }
+  html[data-star=held] .hint{ display:none; } html[data-star=held] #scene{ cursor:default; }
+  @media (max-width:760px){ .held{ top:auto; bottom:72px; transform:translateX(-50%); max-height:58vh; padding:16px 16px 14px; } .held h2{ font-size:24px; } }
 </style>
 </head>
 <body>
   <canvas id="scene"></canvas>
+  <!-- held state: shown only when no WebGL context can be made (or lost mid-session, or ?webgl=off to rehearse).
+       The star is not drawn here; the key's lattice reading is printed in its place. Nothing detects the visitor. -->
+  <section id="held" class="held" hidden role="region" aria-labelledby="heldTitle">
+    <p class="held-eyebrow">✦ star · held</p>
+    <h2 id="heldTitle">The star is held</h2>
+    <p class="held-why" id="heldWhy">This browser offered no graphics context, so the star is not drawn here. It renders where a person’s browser can hold it. What the key carries stays readable.</p>
+    <div class="held-reading" id="heldReading" aria-live="polite"></div>
+    <p class="held-foot" id="heldFoot">Import a City Key to read what it carries · <a href="/guide/#perspective">Read the Star →</a></p>
+  </section>
 
   <!-- the title + navigation now live in the collapsible corner nav (public/sitenav.js);
        /star's two page actions (focus orbit, snapshot) fold into it as buttons, wired below. -->
@@ -321,7 +349,7 @@
       <div class="keyname" id="keyName">no key loaded</div>
       <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
 
-      <p class="panel-help">Import a City Key JSON or a key-carrying PNG. This record is the starting point for your agent’s perspective. <a href="/guide/#perspective">Read the Star →</a></p>
+      <p class="panel-help">Import a City Key JSON or a key-carrying PNG. This record is the starting point for your agent’s perspective. Where a browser cannot hold the star, the page prints this key’s lattice reading in its place. <a href="/guide/#perspective">Read the Star →</a></p>
       </details>
       <details class="panel-details"><summary>Carried receipts</summary>
         <p class="panel-help">Attach original runtime receipts for verification by the City service.</p>
@@ -492,9 +520,21 @@
     return bits.length?(' <span style="color:var(--dim)">· '+bits.join(' · ')+'</span>'):''; }
 
   // ===== renderer / scene / camera =====
+  // Held state — the star renders where a browser can hold a WebGL context. Where it cannot (remote and
+  // headless browsers, GPU-less VMs; ?webgl=off rehearses it), the page does not die: a no-op renderer stands
+  // in, every key-side control still wires up, and the key's lattice reading is printed in the star's place.
+  // Nothing here detects the visitor — only the context. Context loss mid-session holds the same way and
+  // releases when the browser restores it.
   const canvas=document.getElementById('scene');
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+  const HELD={on:false,lost:false,reason:'',cfg:null};
+  function makeRenderer(){
+    if(new URLSearchParams(location.search).get('webgl')==='off'){ HELD.on=true; HELD.reason='forced'; return null; }
+    try{ return new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true}); }
+    catch(err){ HELD.on=true; HELD.reason='nocontext'; console.warn('star held: no WebGL context — '+((err&&err.message)||err)); return null; } }
+  const renderer=makeRenderer()||{held:true,domElement:canvas,setPixelRatio(){},setClearColor(){},setSize(){},render(){},dispose(){}};
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); renderer.setClearColor(0x000000,0);
+  canvas.addEventListener('webglcontextlost',e=>{ e.preventDefault(); if(!HELD.on&&!HELD.lost){ HELD.lost=true; showHeld('lost'); } });
+  canvas.addEventListener('webglcontextrestored',()=>{ if(HELD.lost){ HELD.lost=false; hideHeld(); } });
   const scene=new THREE.Scene(); scene.fog=new THREE.FogExp2(0x05060d,0.10);
   const camera=new THREE.PerspectiveCamera(45,1,0.1,100); let camDist=window.innerWidth<760?6.8:4.6;
   const world=new THREE.Group(),coreGroup=new THREE.Group(),latticeGroup=new THREE.Group();
@@ -741,11 +781,11 @@
   let _lastX=-1;
   function updateInspector(){ const x=currentVertex(); if(x===_lastX)return; _lastX=x; const s=popcount(x); broadcastVertex(x); applyFiber();
     ins.x.textContent=x; ins.bits.textContent=b6(x); ins.st.textContent=`${s} · ${STRATA[s]} state${STRATA[s]>1?'s':''}`;
-    ins.neg.textContent=`${neg(x)} · ${b6(neg(x))}`; ins.bnot.textContent=`${bnot(x)} · ${b6(bnot(x))}`; ins.succ.textContent=`${succ(x)} · ${b6(succ(x))}`; updateDesc(); }
+    ins.neg.textContent=`${neg(x)} · ${b6(neg(x))}`; ins.bnot.textContent=`${bnot(x)} · ${b6(bnot(x))}`; ins.succ.textContent=`${succ(x)} · ${b6(succ(x))}`; updateDesc(); if(HELD.on||HELD.lost) renderHeldVertex(); }
 
   const toast=gid('toast'); let toastT;
   function showToast(msg,ms){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),ms||2200); }
-  async function snapshot(){ const cfg=await readyExportCfg(); drawCoreOrb(); renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
+  async function snapshot(){ if(HELD.on||HELD.lost){ showToast('star held · no portrait in this browser · download the City Key instead'); return; } const cfg=await readyExportCfg(); drawCoreOrb(); renderer.setClearColor(0x060812,1); renderer.render(scene,camera); // bake the dark backdrop so the export matches the screen (no jarring white)
     let url=null;
     try{ url=renderer.domElement.toDataURL('image/png'); }catch(err){ showToast('snapshot blocked in preview — works when deployed'); }
     renderer.setClearColor(0x000000,0); // restore transparent for live render (page backdrop shows through)
@@ -883,6 +923,7 @@
     LOADED_KAPPA=null;
     const epoch=++LOAD_EPOCH;
     LOAD_READY=kappaLabel(cfg).then(k=>{ if(epoch===LOAD_EPOCH) LOADED_KAPPA=k||((typeof cfg.kappa==='string')?cfg.kappa:null); });
+    renderHeldReading(cfg);
     if(!fromRemote&&_bc){ try{ _bc.postMessage({config:cfg,src:'manifold'}); }catch(e){} } }
   function buildExportCfg(){ const cfg={ ...CARRIED, name:keyName||'city key', version:1,
       palette:{cool:state.coolHex,warm:state.warmHex,sword:state.swordHex,mage:state.mageHex}, descriptions:{...DESC},
@@ -916,13 +957,59 @@
     if(d.palette){ _bcMute=true; applyPalettePreset(d.palette,d.presetId,true); _bcMute=false; }
     if(typeof d.vertex==='number'){ _bcMute=true; setMarker(d.vertex); setPlaying(false); _bcMute=false; } };
 
+  // ===== held state — showHeld / hideHeld / renderHeldReading =====
+  // The reading is the key's content said plainly: what the star would draw. Lit and charged vertices,
+  // descriptions, measured figures, shape, palette, the trace carried, the κ-chain. Display only — nothing
+  // here enters the key, and nothing is recorded while the star is held.
+  function heldRow(k,v){ return '<div class="hr"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; }
+  function heldVertexHtml(){ const x=currentVertex(), st=popcount(x);
+    return 'vertex <i>'+x+'</i> · '+b6(x)+' · stratum '+st+' ('+STRATA[st]+' state'+(STRATA[st]>1?'s':'')+') · ⚔️ neg '+neg(x)+' · 🧙 bnot '+bnot(x)+' · 😊 succ '+succ(x)+(DESC[x]?' · '+esc(DESC[x]):''); }
+  function renderHeldVertex(){ const el=gid('heldVertex'); if(el) el.innerHTML=heldVertexHtml(); }
+  function renderHeldReading(cfg){ if(cfg!==undefined) HELD.cfg=cfg; if(!(HELD.on||HELD.lost)) return;
+    const box=gid('heldReading'); if(!box) return; const rows=[];
+    const num=v=>typeof v==='number'&&Number.isFinite(v);
+    if(keyLoaded){
+      rows.push(heldRow('key','<i>'+esc(keyName)+'</i>'+identityHtml(IDENT)+'<span id="heldKappa"></span>'));
+      if(FIGURES){ const bits=[]; for(const k of Object.keys(FIGURES)){ const v=FIGURES[k]; if(num(v)) bits.push(esc(k)+' '+(Number.isInteger(v)?v:v.toFixed(3))); else if(typeof v==='string'&&v.length<48) bits.push(esc(k)+' '+esc(v)); }
+        rows.push(heldRow('figures',(bits.join(' · ')||'measured block carried')+' <s>· 📐 measured — the shape derives from these</s>')); }
+    } else rows.push(heldRow('key','<s>no key loaded · demo reading</s>'));
+    rows.push(heldRow('shape','r(θ,φ) = R + ε·sin(mφ)·cos(nθ) · ε <i>'+state.eps.toFixed(3)+'</i> · m '+state.m+' · n '+state.n+' · core det(Σ) '+state.core.toFixed(2)+' · ⚔️:🧙 '+(Math.abs(state.smRatio-PHI)<0.02?'φ · ':'')+state.smRatio.toFixed(3)));
+    rows.push(heldRow('palette','cool '+esc(state.coolHex)+' · warm '+esc(state.warmHex)+' · ⚔️ '+esc(state.swordHex)+' · 🧙 '+esc(state.mageHex)));
+    rows.push(heldRow('lattice','{0,1}⁶ · '+N+' vertices · strata '+STRATA.join('·')+' · boundary ∂M '+E_HOLO.length+' edges of '+E_FULL.length+' · '+E_HOLO.length+'/'+N+' = P<sup>1.5</sup>'+(state.ceilOn?' · ceiling on · R₀ '+state.r0.toFixed(2)+' · drift '+state.drift.toFixed(2)+' · t '+state.tYears.toFixed(1)+'y':' · ceiling off')));
+    rows.push('<div class="hr"><span class="k">marker</span><span class="v" id="heldVertex">'+heldVertexHtml()+'</span></div>');
+    if(keyLoaded){
+      const lit=[...LIT].sort((a,b)=>a-b);
+      rows.push(heldRow('lit · '+lit.length, lit.length?lit.map(x=>'<span class="lit"><i>'+x+'</i> '+b6(x)+' s'+popcount(x)+(DESC[x]?' · '+esc(DESC[x]):'')+'</span>').join(''):'<s>no lit vertices in this key</s>'));
+      const ch=[...CHARGED.entries()].sort((a,b)=>a[0]-b[0]);
+      if(ch.length) rows.push(heldRow('charged · '+ch.length, ch.map(([x,w])=>'<span class="lit">⚡ <i>'+x+'</i> ×'+(Number.isInteger(w)?w:w.toFixed(2))+'</span>').join('')+' <s>a reading carried by the key, not lit</s>'));
+      const rest=Object.keys(DESC).map(Number).filter(x=>!LIT.has(x)).sort((a,b)=>a-b);
+      if(rest.length) rows.push(heldRow('described · '+rest.length, rest.map(x=>'<i>'+x+'</i> '+esc(DESC[x])).join(' · ')));
+      rows.push(heldRow('trace', TRACE_PROOF?('carried · '+laps+(laps===1?' lap':' laps')+' · '+Math.round(traceSeconds)+'s cycle · '+Math.round(tourSeconds)+'s tour'+(TRACE_PROOF.savedAt?' · attached '+esc(TRACE_PROOF.savedAt):'')+' <s>· the cycle does not run while the star is held</s>'):'<s>none carried · the cycle does not run while the star is held</s>'));
+      const chain=[]; if(DID) chain.push('did '+esc(DID)); if(PKTS) chain.push('packets '+esc(JSON.stringify(PKTS)).slice(0,96)); if(PRIOR_IN) chain.push('prior '+esc(PRIOR_IN));
+      if(chain.length) rows.push(heldRow('chain',chain.join(' · ')));
+      const carried=Object.keys(CARRIED); if(carried.length) rows.push(heldRow('carried',carried.map(esc).join(' · ')+' <s>· carried through untouched · lattice and focus weights are read as charges above</s>'));
+    }
+    box.innerHTML=rows.join('');
+    if(keyLoaded&&HELD.cfg){ const c=HELD.cfg; kappaLabel(c).then(k=>{ const el=gid('heldKappa'); if(!el||!k) return;
+      el.innerHTML=(typeof c.kappa==='string')?(k===c.kappa?' <span style="color:#7fffd4" title="'+esc(k)+'">· κ verified</span>':' <span style="color:#e8523a" title="expected '+esc(k)+'">· ⚠ κ mismatch</span>'):' <s>· κ '+esc(k.slice(0,23))+'…</s>'; }); }
+    const foot=gid('heldFoot'); if(foot) foot.innerHTML=keyLoaded?'The key downloads here as it stands; a portrait PNG needs the drawn star. <a href="/guide/#perspective">Read the Star →</a>':'Import a City Key to read what it carries · <a href="/guide/#perspective">Read the Star →</a>';
+    updateTraceStatus(); }
+  function showHeld(reason){ const el=gid('held'), why=gid('heldWhy'); if(!el) return;
+    document.documentElement.dataset.star='held'; el.hidden=false;
+    if(why) why.textContent= reason==='lost' ? 'The graphics context was lost mid-session. The star returns when the browser restores it; what the key carries stays readable meanwhile.'
+      : reason==='forced' ? 'Held by request (?webgl=off) to rehearse what a browser without a graphics context sees. The star is not drawn; what the key carries stays readable.'
+      : 'This browser offered no graphics context, so the star is not drawn here. It renders where a person’s browser can hold it. What the key carries stays readable.';
+    renderHeldReading(); }
+  function hideHeld(){ const el=gid('held'); if(el) el.hidden=true; delete document.documentElement.dataset.star; updateTraceStatus(); }
+
   // Presentation of existing counters only; no trace schema, timing or transport changes.
   function updateTraceStatus(){
     const status=gid('traceStatus'), storage=gid('traceStorage'); if(!status||!storage) return;
     const seconds=Math.round(traceSeconds), tour=Math.round(tourSeconds);
     const attached=TRACE_PROOF && TRACE_PROOF.laps===laps && TRACE_PROOF.seconds===seconds && TRACE_PROOF.tourSeconds===tour;
+    const held=HELD.on||HELD.lost;
     const mode=!keyLoaded?'Demo view · import a City Key to record.':
-      (tourMode?'Tour dwell (includes pauses)':state.playing&&state.showLattice&&state.showSucc?'Recording cycle':'Cycle paused')+
+      (held?'Star held · cycle not running here':tourMode?'Tour dwell (includes pauses)':state.playing&&state.showLattice&&state.showSucc?'Recording cycle':'Cycle paused')+
       ' · '+laps+(laps===1?' lap':' laps')+' · '+seconds+'s cycle · '+tour+'s tour';
     const destination=!keyLoaded?'No trace is recorded until a City Key is loaded.':
       attached?'Current trace attached in this page. Download the key to keep it.':
@@ -931,14 +1018,15 @@
     if(storage.textContent!==destination) storage.textContent=destination;
     const button=gid('tracerSave');
     if(button&&keyLoaded){
-      const label=attached?'✓ Trace attached':'Attach trace to key';
+      const label=held?'Star held · trace carried, not recorded':attached?'✓ Trace attached':'Attach trace to key';
+      if(button.disabled!==held) button.disabled=held;
       if(button.textContent!==label) button.textContent=label;
       button.classList.toggle('on',!!attached);
     }
   }
 
   const clock=new THREE.Clock();
-  function tick(){ const realDt=clock.getDelta(),dt=window.starScenePaused?0:realDt,t=clock.elapsedTime;
+  function tick(){ const realDt=clock.getDelta(),dt=(window.starScenePaused||HELD.lost)?0:realDt,t=clock.elapsedTime;
     if(focusMode){ focusT+=dt; az+=dt*0.22; pol=Math.PI*0.5+Math.sin(focusT*0.16)*0.5; }
     else if(!dragging){az+=state.spin*0.35*dt;azV*=0.92;polV*=0.92;az+=azV;pol+=polV;pol=Math.max(0.25,Math.min(Math.PI-0.25,pol));}
     camera.position.set(camDist*Math.sin(pol)*Math.sin(az),camDist*Math.cos(pol),camDist*Math.sin(pol)*Math.cos(az)); camera.lookAt(0,0,0);
@@ -983,7 +1071,7 @@
     const touchFocus=gid('touchFocus');
     if(touchFocus){const label=focusMode?'Exit focus':'Focus';if(touchFocus.textContent!==label)touchFocus.textContent=label;touchFocus.setAttribute('aria-pressed',String(focusMode));}
     if(window.starMeasure) window.starMeasure.update(dt,realDt); renderer.render(scene,camera); requestAnimationFrame(tick); }
-  tick();
+  if(HELD.on){ /* held: no frame loop — the cycle does not run, nothing is traced; the reading is printed instead */ } else tick();
 
   // ===== UI =====
   const $=id=>document.getElementById(id);
@@ -1120,7 +1208,7 @@
     $('tCeil').checked=state.ceilOn; $('cCeil').value=state.ceilHex; CEIL_COL.set(state.ceilHex);
     traceValue=0; _lastValStr=''; { const te=gid('tracerVal'); if(te){ te.textContent='0.0'; te.style.color=''; } }
     $('tFiber').checked=!!state.fiberOn; $('sFiber').value=state.fiberK||0; $('vFiber').textContent=String(state.fiberK||0);
-    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling();applyFiber();saveCore(); });
+    buildManifold();buildLattice();buildCore();updateInspector();applyCeiling();applyFiber();saveCore(); renderHeldReading(HELD.cfg); });
 
   function setPanel(panelId, open){
     const isTrace=panelId==='trace', panel=$(panelId), launcher=$(isTrace?'launcher2':'launcher'), fold=$(isTrace?'foldBtn2':'foldBtn');
@@ -1177,7 +1265,7 @@
   // ===== [f] focus mode — fullscreen presentation orbit (chrome fades; the sculpture keeps turning) =====
   const focusBadge=$('focusbadge');
   function flashBadge(ms){ if(!focusBadge)return; focusBadge.classList.add('show'); clearTimeout(focusBadge._t); focusBadge._t=setTimeout(()=>focusBadge.classList.remove('show'),ms); }
-  function enterFocus(){ if(focusMode)return; focusMode=true; focusT=0; document.body.classList.add('focus');
+  function enterFocus(){ if(focusMode)return; if(HELD.on||HELD.lost){ showToast('star held · nothing to focus on in this browser'); return; } focusMode=true; focusT=0; document.body.classList.add('focus');
     const el=document.documentElement; if(el.requestFullscreen){ el.requestFullscreen().catch(()=>{}); } flashBadge(2600); }
   function exitFocus(){ if(!focusMode)return; focusMode=false; document.body.classList.remove('focus');
     if(document.fullscreenElement&&document.exitFullscreen){ document.exitFullscreen().catch(()=>{}); }
@@ -1254,9 +1342,10 @@
   function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }
   $('keyTour').addEventListener('click',()=>{ tourMode?exitTour():engageTour(); });
 
+if(HELD.on) showHeld(HELD.reason);
 const signatureLatticeMaterials=new Map();
 function fadeSignatureLattice(factor){latticeGroup.traverse(o=>{if(!o.material)return;for(const mat of (Array.isArray(o.material)?o.material:[o.material])){let item=signatureLatticeMaterials.get(mat);if(!item){item={base:mat.opacity,last:mat.opacity};signatureLatticeMaterials.set(mat,item);}if(Math.abs(mat.opacity-item.last)>1e-8)item.base=mat.opacity;mat.opacity=item.base*factor;item.last=mat.opacity;}});}
-window.starMeasureHost={fadeLattice:fadeSignatureLattice,camera,canvas:renderer.domElement,latticeGroup,coreGroup,vertices:VERTS,reference(on,lattice){latticeGroup.visible=lattice;coreObjs.forEach(o=>{if(o.isLineSegments){o.visible=true;o.material.opacity=.16;}else{o.visible=false;}});if(corePortrait)corePortrait.visible=false;},shape:()=>({epsilon:state.eps,m:state.m,n:state.n}),replaceCore(on,quiet=false){if(on){coreObjs.forEach(o=>{o.visible=false;});if(corePortrait)corePortrait.visible=false;}else if(!quiet){coreObjs.forEach(o=>{o.visible=true;});if(corePortrait)corePortrait.visible=true;}},marker:()=>state.markerF,ceiling:()=>({on:state.ceilOn,r:ceilR(),years:state.tYears,tstar:ceilTstar()}),quiet(on){if(on){surfMesh.visible=false;wireMesh.visible=false;}else{applyMode();}}};
+window.starMeasureHost={held:HELD.on,fadeLattice:fadeSignatureLattice,camera,canvas:renderer.domElement,latticeGroup,coreGroup,vertices:VERTS,reference(on,lattice){latticeGroup.visible=lattice;coreObjs.forEach(o=>{if(o.isLineSegments){o.visible=true;o.material.opacity=.16;}else{o.visible=false;}});if(corePortrait)corePortrait.visible=false;},shape:()=>({epsilon:state.eps,m:state.m,n:state.n}),replaceCore(on,quiet=false){if(on){coreObjs.forEach(o=>{o.visible=false;});if(corePortrait)corePortrait.visible=false;}else if(!quiet){coreObjs.forEach(o=>{o.visible=true;});if(corePortrait)corePortrait.visible=true;}},marker:()=>state.markerF,ceiling:()=>({on:state.ceilOn,r:ceilR(),years:state.tYears,tstar:ceilTstar()}),quiet(on){if(on){surfMesh.visible=false;wireMesh.visible=false;}else{applyMode();}}};
 })();
 </script>
 <script src="/star/signature-math.js?v=star-restored-1"></script>
