@@ -133,6 +133,7 @@
     <h1>The Sigil</h1>
     <p class="lede">Give a version of your City Key a recognisable face. <b>Derive its fingerprint</b>, see that fingerprint as a constellation, then compare it with another record. The portrait carries the key as well as its appearance.</p>
     <p class="room-context">The fingerprint, κ, identifies the key’s contents. The VTA connection establishes who controls the agent identity. <a href="/guide#browser-extension">How the key and sign-in fit together →</a></p>
+    <p class="room-context">✍ To check any two hashes or seals against each other, and find where a hash sits in the City's chains, use the City's seal reader at <a class="sigil-city" href="https://sigil.mages.city/" style="color:#7fffd4">sigil.mages.city →</a> The same check runs on this page in ④ below, filled from your keys. Seals are written with <a href="https://github.com/johnservil/sigil" style="color:#7fffd4">Sigil</a> (github.com/johnservil/sigil), an open encoding by John Servil.</p>
   </header>
 
   <div class="wrap">
@@ -170,7 +171,7 @@
       </div>
       <div class="ceilctl">
         <div class="sect" style="margin-bottom:10px">Moving Ceiling · R(t) ⏳</div>
-        <label class="ceiltoggle" title="V6 · C82 — the sigil is a reading stamped at a date; adversarial reach grows while the content stands still. The reading holds while R(t) < 1. Reading the ceiling draws a closing ring over the constellation — display only: κ derivation, canonical form, and glyph mapping untouched."><input type="checkbox" id="tCeil"><span>⏳ read the ceiling — the reading has a shelf life</span></label>
+        <label class="ceiltoggle" title="V6 · C82 — the sigil is a reading stamped at a date; adversarial reach grows while the content stands still. The reading holds while R(t) < 1. Strict R(t) < 1 is declared, not derived (ruling 7 Oct 2026): the capacity deficit it assumes is a premise a deployment declares and attests; this reading is a what-if, not a measurement. Reading the ceiling draws a closing ring over the constellation — display only: κ derivation, canonical form, and glyph mapping untouched."><input type="checkbox" id="tCeil"><span>⏳ read the ceiling — the reading has a shelf life</span></label>
         <div class="crow"><div class="lbl"><span class="k">reconstructable today · R₀</span><span class="v" id="vR0">0.35</span></div>
           <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
         <div class="crow"><div class="lbl"><span class="k">how fast reach grows · g</span><span class="v" id="vDrift">0.25</span></div>
@@ -209,6 +210,12 @@
       <div class="cg"><div class="cgname">B · <b id="cgnB"></b></div><div class="kshort" id="kshortB"></div><div class="grid8" id="gridB"></div></div>
     </div>
     <div class="difflist" id="difflist"></div>
+  </div>
+
+  <div class="compare card" id="sealsCard">
+    <div class="sect">④ Seals · check two hashes against each other</div>
+    <p class="explain">A κ is 32 bytes; a <b>seal</b> writes the same 32 bytes as one word of 26 characters with a check, so one changed character, or two swapped, no longer reads. Put a hash or a seal on each side: this page writes the other form, checks it, and lays the two side by side, the characters and bits they share and where both land on the 64 vertices. Fill a side from either City Key above, or paste any hash from the Mages City. The same check runs at <a class="sigil-city" href="https://sigil.mages.city/" style="color:#7fffd4">sigil.mages.city</a>, where it also says where a hash sits in the City's chains.</p>
+    <div id="sealCheck"></div>
   </div>
 
   <details class="legend">
@@ -342,6 +349,7 @@
 
   // ---- state: slot A (the sigil) + slot B (comparison)
   let A=null, A_KAPPA=null, B=null, B_KAPPA=null, sel=-1, ping=-1, pingT=0;
+  window.sigilKappas=()=>({a:A_KAPPA,b:B_KAPPA}); // read by the seal check (④) to fill a side from a loaded key
 
   // ---- V6 · moving-ceiling reading state (C82, illustrative) — declared BEFORE drawRing ever
   // runs (the draw path reads CEIL every frame while the reading is on; TDZ-safe by construction).
@@ -681,5 +689,16 @@
 })();
 </script>
 
+<link rel="stylesheet" href="/star/sigil/fonts.css">
+<script src="/star/sigil/sigilcode.js"></script>
+<script src="/star/sigil/sealcheck.js"></script>
+<script>
+(function(){ const el=document.getElementById('sealCheck'); if(!el||!window.SealCheck) return;
+  const k=w=>()=>{ const x=(window.sigilKappas&&window.sigilKappas())||{}; return x[w]||''; };
+  // on a local review the City's reader is the staged copy (mages_city deploy/sigil.mages.city, served on :8892)
+  if(/^(localhost|127[.]0[.]0[.]1)$/.test(location.hostname)) document.querySelectorAll('a.sigil-city').forEach(a=>a.href='http://127.0.0.1:8892/');
+  SealCheck.mount(el,{ home:'<a class="sigil-city" href="'+(/^(localhost|127[.]0[.]0[.]1)$/.test(location.hostname)?'http://127.0.0.1:8892/':'https://sigil.mages.city/')+'" style="color:#7fffd4">open this on sigil.mages.city ↗</a>', labels:{a:'one · key A or any hash', b:'two · key B or any hash'},
+    extra:{ a:[{label:"key A's κ", fill:k('a'), empty:'import a key first'}], b:[{label:"key B's κ", fill:k('b'), empty:'import a second key first'},{label:"key A's κ", fill:k('a'), empty:'import a key first'}] } }); })();
+</script>
 </body>
 </html>

@@ -250,6 +250,13 @@
   html[data-star=held] .hint{ display:none; } html[data-star=held] #scene{ cursor:default; }
   @media (max-width:760px){ .held{ top:auto; bottom:72px; transform:translateX(-50%); max-height:58vh; padding:16px 16px 14px; } .held h2{ font-size:24px; } }
 </style>
+<link rel="stylesheet" href="sigil/fonts.css">
+<script src="sigil/sigilcode.js"></script>
+<style>
+  .ins-desc .face{ display:block; margin-top:6px; color:#4dd9e8; }
+  .ins-desc .sg, #heldVertex .sg, #heldReading .sg{ font-family:"Spline Sans Mono","Noto Sans Ethiopic","Noto Sans Canadian Aboriginal","Segoe UI Historic",system-ui,sans-serif; letter-spacing:.06em; color:#f0eee8; overflow-wrap:anywhere; }
+  .ins-desc .face s{ text-decoration:none; color:#8a96b8; }
+</style>
 </head>
 <body>
   <canvas id="scene"></canvas>
@@ -344,12 +351,21 @@
       <div class="row keybar">
         <button id="impBtn" class="keybtn">Import key</button>
         <button id="expBtn" class="keybtn">Download City Key</button>
-        <input type="file" id="impFile" accept="application/json,.json,image/png,.png" hidden>
+        <input type="file" id="impFile" accept="application/json,.json,image/png,.png" multiple hidden>
       </div>
       <div class="keyname" id="keyName">no key loaded</div>
       <button id="keyTour" class="keybtn keybtn--full" disabled title="Visit only the vertices lit by this key — observe the achievement">✦ Walk the key vertices</button>
 
       <p class="panel-help">Import a City Key JSON or a key-carrying PNG. This record is the starting point for your agent’s perspective. Where a browser cannot hold the star, the page prints this key’s lattice reading in its place. <a href="/guide/#perspective">Read the Star →</a></p>
+      </details>
+      <details class="panel-details" id="facesPanel" open><summary>Faces of the evidence</summary>
+      <p class="panel-help">A <b>face</b> is a choice of public work roots, one per vertex, composed on the star of the chains at <a href="https://mages.city/star.html" style="color:#4dd9e8">mages.city</a>. Folding one into your City Key appends a workflow hash chain to your trajectory: the key's κ moves, <i>prior</i> names the key before, and the key keeps only a count and one root. The faces themselves, with the path you composed them along, travel beside the key in <b>chain-faces.json</b>. Bring it here and the page re-derives it before it shows which root you chose at each vertex.</p>
+      <div class="row keybar">
+        <button id="facesBtn" class="keybtn" type="button">Bring chain-faces.json</button>
+        <input type="file" id="facesFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="keyname" id="faceStatus">no faces read yet</div>
+      <button id="faceTour" class="keybtn keybtn--full" disabled title="Walk the path the face was composed along">⛓ Walk the face's path</button>
       </details>
       <details class="panel-details"><summary>Carried receipts</summary>
         <p class="panel-help">Attach original runtime receipts for verification by the City service.</p>
@@ -393,7 +409,7 @@
       <p class="panel-help">Assumed reconstruction rates; independent of signature size and byte budget.</p>
       <div class="sect">Moving Ceiling · R(t) ⏳</div>
       <div class="row etoggles">
-        <label class="etoggle" title="V6 · C82 — H(X) is fixed while adversarial capacity grows; the boundary holds while R(t) < 1. Reading the ceiling makes it visible: a shell closes on the boundary as R(t) → 1. Geometry untouched."><input type="checkbox" id="tCeil"><span class="ico">⏳</span><span class="lbl2">read the ceiling</span></label>
+        <label class="etoggle" title="V6 · C82 — H(X) is fixed while adversarial capacity grows; the boundary holds while R(t) < 1. Reading the ceiling makes it visible: a shell closes on the boundary as R(t) → 1. Geometry untouched. Strict R(t) < 1 is declared, not derived (ruling 7 Oct 2026): the capacity deficit it assumes is a premise a deployment declares and attests; this reading is a what-if, not a measurement."><input type="checkbox" id="tCeil"><span class="ico">⏳</span><span class="lbl2">read the ceiling</span></label>
       </div>
       <div class="row"><div class="lbl"><label class="k" for="sR0">reconstructable today · R₀</label><span class="v" id="vR0">0.35</span></div>
         <input type="range" id="sR0" min="0.05" max="0.99" step="0.01" value="0.35"></div>
@@ -642,11 +658,11 @@
       const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(ep,3)); return g; };
     latNegL=new THREE.LineSegments(monoGeom(E_NEG),new THREE.LineBasicMaterial({color:SWORD_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latNegL.renderOrder=5;
     latBnotL=new THREE.LineSegments(monoGeom(E_BNOT),new THREE.LineBasicMaterial({color:MAGE_COL.getHex(),transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false})); latBnotL.renderOrder=5;
-    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latNegL,latBnotL,latPoints,latMarker); if(latCharged) latticeGroup.add(latCharged);
+    latticeGroup.add(latFull,latHolo,latSucc,latCell,latNbr,latAnti,latNegL,latBnotL,latPoints,latMarker); if(latCharged) latticeGroup.add(latCharged); try{ buildFaceTrace(); }catch(e){}
     applyLattice(); refreshHighlight(); applyFiber();
   }
   function applyLattice(){ if(!latPoints)return; const on=state.showLattice;
-    latPoints.visible=on; if(latCharged) latCharged.visible=on;
+    latPoints.visible=on; if(latCharged) latCharged.visible=on; if(latFaceTrace) latFaceTrace.visible=on;
     latFull.visible=on&&state.edgeMode==='full';
     latHolo.visible=on&&state.edgeMode==='holo';
     latSucc.visible=on&&state.showSucc; latMarker.visible=on&&state.showSucc;
@@ -814,8 +830,59 @@
   function broadcastVertex(x){ if(_bc&&!_bcMute&&x!==_bcLast){ _bcLast=x; try{ _bc.postMessage({vertex:x,src:'manifold'}); }catch(e){} } }
   function updateDesc(){ const el=gid('insDesc'); if(!el)return; const x=currentVertex(); const d=DESC[x]; const w=CHARGED.get(x);
     const charged=w?('⚡ charged ×'+(Number.isInteger(w)?w:w.toFixed(2))+' — carried by the key from spellweb / poured focus; a reading, not lit'):'';
-    const text=[charged,d||''].filter(Boolean).join(' · ');
-    if(text){ el.textContent=text; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
+    const parts=[charged,d||''].filter(Boolean).map(esc);
+    let faceHtml='';
+    if(CHAIN_FACES&&CHAIN_FACES.ok&&CHAIN_FACES.at.has(x)) faceHtml=CHAIN_FACES.at.get(x).map(it=>'<span class="face">⛓ chosen: '+esc(it.chain||'a chain')+' · '+esc(it.kind||'root')+(it.label?' · '+esc(it.label):'')+'<br><span class="sg" title="'+esc(it.k)+' (sha-256) · double-click to select the seal">'+esc(sealOf(it.k))+'</span></span>').join('');
+    else if(w&&CARRIED.chains&&CARRIED.chains.count) faceHtml='<span class="face"><s>⛓ this key carries faces of the evidence · bring its chain-faces.json with the key to see the chosen root here</s></span>';
+    else if(CHAIN_FACES&&!CHAIN_FACES.ok&&w) faceHtml='<span class="face" style="color:var(--sword)">⚠ chain-faces.json does not re-derive the faces this key names · not shown</span>';
+    if(parts.length||faceHtml){ el.innerHTML=parts.join(' · ')+faceHtml; el.classList.add('show'); } else { el.textContent=''; el.classList.remove('show'); } }
+  var CHAIN_FACES=null; // var, not let: the vertex readings run before this line at boot
+  // ---- faces of the evidence (agentprivacy lib/chain-face.ts) — the sidecar chain-faces.json names which public
+  // chain root sits at each vertex the key's faces charged. Re-derived here: each face's root over "<vertex>|<κ>"
+  // (sorted pairwise sha256(a|b), odd node promoted — the key's packets rule), every κ at the vertex its first six
+  // bits name, and the key's chains.root over the faces' roots. Shown only if it all lands.
+  function faceStatus(){ const el=gid('faceStatus'), bt=gid('faceTour'); if(!el) return; const F=CHAIN_FACES;
+    if(!F){ el.innerHTML=(CARRIED.chains&&CARRIED.chains.count)?'this key carries <b>'+CARRIED.chains.count+'</b> '+(CARRIED.chains.count===1?'face':'faces')+' · bring chain-faces.json to read them':'no faces in this key yet · compose one on mages.city/star.html and fold it in'; if(bt) bt.disabled=true; return; }
+    if(!F.ok){ el.innerHTML='<span style="color:var(--sword)">⚠ chain-faces.json does not re-derive the faces this key names</span>'; if(bt) bt.disabled=true; return; }
+    const lines=F.traces.length?F.traces.map((t,i)=>'<span style="color:'+(t.mode==='random'?'#e5a49c':'#f3d27a')+'">'+(F.traces.length>1?'face '+(i+1)+' · ':'')+(t.mode==='random'?'drawn at random':'composed by hand')+'</span> · '+t.order.join(' → ')).join('<br>'):'these faces carry no path (composed before paths were sealed)';
+    el.innerHTML='<span style="color:#7fffd4">'+F.count+' '+(F.count===1?'face':'faces')+' re-derived</span> · '+F.at.size+' vertices chosen<br>'+lines; if(bt) bt.disabled=!F.path.length; }
+  // the face's path in the star: a gold thread for a hand-composed face, a coral dashed one for a random face,
+  // and a bead that walks it, vertex by vertex, in the order the face was composed
+  var latFaceTrace=null, faceBead=null; // var: the lattice build may run before this line
+  function buildFaceTrace(){ if(typeof latticeGroup==='undefined'||!latticeGroup) return;
+    [latFaceTrace,faceBead].forEach(o=>{ if(o){ latticeGroup.remove(o); if(o.traverse) o.traverse(c=>{ if(c.geometry) c.geometry.dispose(); }); } }); latFaceTrace=null; faceBead=null;
+    const F=CHAIN_FACES; if(!F||!F.ok||!F.traces.length||!window.THREE||!VERTS) return;
+    latFaceTrace=new THREE.Group(); latFaceTrace.renderOrder=8;
+    for(const t of F.traces){ if(!t.order.length) continue; const pts=[]; t.order.forEach(v=>{ const q=VERTS[v]; pts.push(q[0],q[1],q[2]); });
+      const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+      const random=t.mode==='random', mat=random?new THREE.LineDashedMaterial({color:0xe5a49c,dashSize:0.07,gapSize:0.05,transparent:true,opacity:0.95,depthWrite:false}):new THREE.LineBasicMaterial({color:0xf3d27a,transparent:true,opacity:0.95,blending:THREE.AdditiveBlending,depthWrite:false});
+      const line=new THREE.Line(g,mat); if(random) line.computeLineDistances(); line.renderOrder=8; latFaceTrace.add(line); if(t.order.length>1){ const path=new THREE.CurvePath(); for(let i=0;i+1<t.order.length;i++){ const A=VERTS[t.order[i]],B=VERTS[t.order[i+1]]; path.add(new THREE.LineCurve3(new THREE.Vector3(A[0],A[1],A[2]),new THREE.Vector3(B[0],B[1],B[2]))); } const tube=new THREE.Mesh(new THREE.TubeGeometry(path,Math.max(8,(t.order.length-1)*12),0.009,6,false),new THREE.MeshBasicMaterial({color:random?0xff9a8a:0xffc83d,transparent:true,opacity:random?0.75:0.95,depthWrite:false,depthTest:false})); tube.renderOrder=8; latFaceTrace.add(tube); }
+      const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+      const beads=new THREE.Points(pg,new THREE.PointsMaterial({size:0.15,color:random?0xe5a49c:0xf3d27a,transparent:true,opacity:0.9,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true})); beads.renderOrder=8; latFaceTrace.add(beads); }
+    faceBead=new THREE.Sprite(glowSprite('rgba(243,210,122,0.95)',0.3)); faceBead.scale.setScalar(0.3); faceBead.renderOrder=10;
+    latticeGroup.add(latFaceTrace,faceBead); latFaceTrace.visible=faceBead.visible=!!state.showLattice; }
+  function stepFaceBead(t){ if(!faceBead) return; const F=CHAIN_FACES; if(!F||!F.path||F.path.length<2){ faceBead.visible=false; return; }
+    const P=F.path, u=(t/0.9)%(P.length-1), i=Math.floor(u), f=u-i, a=VERTS[P[i]], b=VERTS[P[i+1]];
+    faceBead.position.set(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f); faceBead.visible=!!state.showLattice; }
+  function sealOf(k){ try{ const hx=String(k).split(':').pop(); if(!window.SigilCode||!/^[0-9a-f]{64}$/.test(hx)) return String(k);
+    const b=new Uint8Array(32); for(let i=0;i<32;i++) b[i]=parseInt(hx.substr(2*i,2),16); return SigilCode.encode(b); }catch(e){ return String(k); } }
+  async function sha256Text(t){ const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)); return 'sha256:'+[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
+  async function packetsRootOf(items){ let lv=items.filter(v=>typeof v==='string'&&v.length).sort(); if(!lv.length) return null;
+    while(lv.length>1){ const nx=[]; for(let i=0;i<lv.length;i+=2) nx.push(i+1<lv.length?await sha256Text(lv[i]+'|'+lv[i+1]):lv[i]); lv=nx; } return lv[0]; }
+  async function loadFaces(side){ const list=Array.isArray(side)?side:(side&&side.faces)||[]; const at=new Map(), traces=[]; let ok=!!(CARRIED.chains&&CARRIED.chains.root)&&list.length===CARRIED.chains.count;
+    try{ for(const f of list){ const items=[]; for(const [v,it] of Object.entries(f.states||{})){ const n=Number(v), hx=String(it&&it.k||'').split(':').pop();
+          if(!/^[0-9a-f]{64}$/.test(hx)||(parseInt(hx.slice(0,2),16)>>2)!==n){ ok=false; continue; }
+          items.push(n+'|'+it.k); if(!at.has(n)) at.set(n,[]); at.get(n).push({k:it.k,chain:it.chain,kind:it.kind,label:it.label}); }
+        const nv=items.length;
+        // the trace (chain-face.ts): the order the vertices were chosen in, sealed as one more item; it must visit each vertex once
+        if(f.trace){ const vs=items.map(x=>Number(x.split('|')[0])).sort((a,b)=>a-b), os=(f.trace.order||[]).map(Number);
+          const ss=[...os].sort((a,b)=>a-b); if(!['composed','random'].includes(f.trace.mode)||vs.length!==ss.length||vs.some((v,i)=>v!==ss[i])) ok=false;
+          else { items.push('trace|'+f.trace.mode+'|'+os.join('>')); traces.push({mode:f.trace.mode,order:os}); } }
+        if(await packetsRootOf(items)!==f.root||nv!==f.count) ok=false; }
+      if(ok&&await packetsRootOf(list.map(f=>f.root))!==CARRIED.chains.root) ok=false; }catch(e){ ok=false; }
+    CHAIN_FACES={ok,at,count:list.length,traces,path:traces.flatMap(t=>t.order)}; _lastX=-1; updateDesc(); buildFaceTrace(); faceStatus();
+    { const kn=gid('keyName'); if(kn) kn.insertAdjacentHTML('beforeend', ok?' <span style="color:#7fffd4" title="chain-faces.json re-derives the chains root in the key; the chosen roots show in the vertex inspector">· faces re-derived</span>':' <span style="color:var(--sword)" title="chain-faces.json does not fold to the chains root in this key">· ⚠ faces mismatch</span>'); }
+    try{ renderHeldReading(); renderHeldVertex(); }catch(e){} }
   // ---- κ-label (UOR-ADDR · sha256 axis) — identity is content, not location.
   // canonical form: the key's JSON with keys sorted recursively, no whitespace, the kappa field excluded.
   // re-derived and checked on import (holospaces Law L5: verification is re-derivation).
@@ -880,7 +947,7 @@
   function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object'||Array.isArray(cfg))return;
     clearCore();
     // Full keys carry opaque extensions; only this surface's reading fields are rebuilt.
-    CARRIED={...cfg};
+    CARRIED={...cfg}; CHAIN_FACES=null; try{ buildFaceTrace(); faceStatus(); }catch(e){}
     for(const field of ["name","version","palette","descriptions","geometry","lit","identity","trace","figures","packets","did","kappa","prior"]) delete CARRIED[field];
     coreReady=restoreCore(cfg.coreArtefact);
     updateReceiptStatus();
@@ -917,7 +984,7 @@
     buildLattice();
     exitTour(); { const kt=gid('keyTour'); if(kt){ kt.disabled=(LIT.size===0); kt.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } }
     keyLoaded=true; { const sb=gid('tracerSave'); if(sb){ sb.disabled=false; if(!sb.classList.contains('on')) sb.textContent='Attach trace to key'; } }
-    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+(CHARGED.size?' <span style="color:#4dd9e8" title="vertices charged on spellweb (lattice weights) or poured at /city (focus), carried by the key — drawn as the Mage-coloured halo; a reading, not lit">· ⚡ '+CHARGED.size+' charged</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
+    keyName=cfg.name||'imported key'; gid('keyName').innerHTML='key: <b>'+esc(keyName)+'</b>'+(FIGURES?' <span style="color:#7fffd4" title="geometry derived from measured figures (FIG-2.0) — sliders are what-if; export re-derives">· 📐 measured</span>':'')+(CHARGED.size?' <span style="color:#4dd9e8" title="vertices charged on spellweb (lattice weights) or poured at /city (focus), carried by the key — drawn as the Mage-coloured halo; a reading, not lit">· ⚡ '+CHARGED.size+' charged</span>':'')+(CARRIED.chains&&CARRIED.chains.count?' <span style="color:#4dd9e8" title="faces of the evidence folded into this key at mages.city/star.html: '+CARRIED.chains.count+' · root '+esc(String(CARRIED.chains.root||''))+' · each face appended a workflow hash chain; the faces travel in chain-faces.json beside the key">· ⛓ '+CARRIED.chains.count+(CARRIED.chains.count===1?' face':' faces')+'</span>':'')+identityHtml(IDENT); _lastX=-1; updateDesc(); verifyKappa(cfg);
     PRIOR_IN=(typeof cfg.prior==='string')?cfg.prior:null;
     { const c={...cfg}; delete c.kappa; delete c.prior; LOADED_CANON=canonicalJSON(c); }
     LOADED_KAPPA=null;
@@ -963,7 +1030,7 @@
   // here enters the key, and nothing is recorded while the star is held.
   function heldRow(k,v){ return '<div class="hr"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; }
   function heldVertexHtml(){ const x=currentVertex(), st=popcount(x);
-    return 'vertex <i>'+x+'</i> · '+b6(x)+' · stratum '+st+' ('+STRATA[st]+' state'+(STRATA[st]>1?'s':'')+') · ⚔️ neg '+neg(x)+' · 🧙 bnot '+bnot(x)+' · 😊 succ '+succ(x)+(DESC[x]?' · '+esc(DESC[x]):''); }
+    return 'vertex <i>'+x+'</i> · '+b6(x)+' · stratum '+st+' ('+STRATA[st]+' state'+(STRATA[st]>1?'s':'')+') · ⚔️ neg '+neg(x)+' · 🧙 bnot '+bnot(x)+' · 😊 succ '+succ(x)+(DESC[x]?' · '+esc(DESC[x]):'')+(CHAIN_FACES&&CHAIN_FACES.ok&&CHAIN_FACES.at.has(x)?CHAIN_FACES.at.get(x).map(it=>' · ⛓ chosen: '+esc(it.chain||'a chain')+' '+esc(it.kind||'root')+' <span class="sg" title="'+esc(it.k)+'">'+esc(sealOf(it.k))+'</span>').join(''):''); }
   function renderHeldVertex(){ const el=gid('heldVertex'); if(el) el.innerHTML=heldVertexHtml(); }
   function renderHeldReading(cfg){ if(cfg!==undefined) HELD.cfg=cfg; if(!(HELD.on||HELD.lost)) return;
     const box=gid('heldReading'); if(!box) return; const rows=[];
@@ -987,6 +1054,7 @@
       rows.push(heldRow('trace', TRACE_PROOF?('carried · '+laps+(laps===1?' lap':' laps')+' · '+Math.round(traceSeconds)+'s cycle · '+Math.round(tourSeconds)+'s tour'+(TRACE_PROOF.savedAt?' · attached '+esc(TRACE_PROOF.savedAt):'')+' <s>· the cycle does not run while the star is held</s>'):'<s>none carried · the cycle does not run while the star is held</s>'));
       const chain=[]; if(DID) chain.push('did '+esc(DID)); if(PKTS) chain.push('packets '+esc(JSON.stringify(PKTS)).slice(0,96)); if(PRIOR_IN) chain.push('prior '+esc(PRIOR_IN));
       if(chain.length) rows.push(heldRow('chain',chain.join(' · ')));
+      if(CARRIED.chains&&CARRIED.chains.count) rows.push(heldRow('faces · '+CARRIED.chains.count,'root '+esc(String(CARRIED.chains.root||''))+' <s>· faces of the evidence composed at mages.city/star.html; their roots sit at the vertices they name and are read as focus charges above; the faces travel in chain-faces.json beside the key</s>'+(CHAIN_FACES?(CHAIN_FACES.ok?' · re-derived from chain-faces.json: '+[...CHAIN_FACES.at.keys()].sort((a,b)=>a-b).map(v=>'<i>'+v+'</i> '+esc(CHAIN_FACES.at.get(v)[0].chain||'')).join(' · '):' · <b style="color:#e8523a">chain-faces.json does not re-derive</b>'):' · bring chain-faces.json with the key to name the chosen roots')));
       const carried=Object.keys(CARRIED); if(carried.length) rows.push(heldRow('carried',carried.map(esc).join(' · ')+' <s>· carried through untouched · lattice and focus weights are read as charges above</s>'));
     }
     box.innerHTML=rows.join('');
@@ -1030,7 +1098,7 @@
     if(focusMode){ focusT+=dt; az+=dt*0.22; pol=Math.PI*0.5+Math.sin(focusT*0.16)*0.5; }
     else if(!dragging){az+=state.spin*0.35*dt;azV*=0.92;polV*=0.92;az+=azV;pol+=polV;pol=Math.max(0.25,Math.min(Math.PI-0.25,pol));}
     camera.position.set(camDist*Math.sin(pol)*Math.sin(az),camDist*Math.cos(pol),camDist*Math.sin(pol)*Math.cos(az)); camera.lookAt(0,0,0);
-    coreGroup.rotation.y+=dt*0.55; coreGroup.rotation.x=0.32; latticeGroup.rotation.y-=dt*0.12;
+    coreGroup.rotation.y+=dt*0.55; coreGroup.rotation.x=0.32; latticeGroup.rotation.y-=dt*0.12; stepFaceBead(t);
     const mix=0.5+0.5*Math.sin(coreGroup.rotation.y*0.9), gOn=state.glow, glowStrength=window.starGlowStrength ?? .25;
     coreLight.color.copy(SWORD_COL).lerp(MAGE_COL,mix); coreLight.intensity=gOn?1.2*(0.85+0.2*Math.sin(t*1.6)):0.1;
     if(heartMesh){heartMesh.material.color.copy(SWORD_COL).lerp(MAGE_COL,mix); heartMesh.material.opacity=gOn?(0.42+0.12*Math.sin(t*1.6)):0.05;
@@ -1249,7 +1317,13 @@
   });
   $('impBtn').addEventListener('click',()=>$('impFile').click());
   $('impFile').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f)return;
-    readKeyFile(f,cfg=>loadConfig(cfg,false),()=>{ gid('keyName').textContent='⚠ no City Key in this file (key JSON or sigil PNG)'; }); e.target.value=''; });
+    const files=[...e.target.files]; e.target.value='';
+    const read=file=>new Promise(res=>readKeyFile(file,cfg=>res(cfg),()=>res(null)));
+    Promise.all(files.map(read)).then(async all=>{ const isSide=c=>c&&c.schema==='agentprivacy.chain-faces/1';
+      const key=all.find(c=>c&&!isSide(c)), side=all.find(isSide);
+      if(key){ loadConfig(key,false); try{ await LOAD_READY; }catch(e){} }
+      if(side){ if(CARRIED.chains) loadFaces(side); else gid('keyName').insertAdjacentHTML('beforeend',' <span style="color:var(--sword)">· ⚠ chain-faces.json given, but this key carries no faces</span>'); }
+      if(!key&&!side) gid('keyName').textContent='⚠ no City Key in this file (key JSON or sigil PNG)'; }); });
   $('expBtn').addEventListener('click',exportKey);
   $('tracerSave').addEventListener('click',()=>{ if(!keyLoaded) return; TRACE_PROOF={ laps:laps, seconds:Math.round(traceSeconds), tourSeconds:Math.round(tourSeconds), savedAt:new Date().toISOString() };
     const b=$('tracerSave'); b.classList.add('on'); b.textContent='✓ Trace attached';
@@ -1330,7 +1404,8 @@
   // ===== ✦ City-Key tour — visit ONLY the lit vertices, in key order (≠ succ order, ≠ stratum order).
   // Reuses the main transport: keyTour engages/exits; ▶/❚❚ play-pauses the path; ◀/▶ step key vertices;
   // when PAUSED, the lattice surface glow (latCell + neighbours/antipode) shows on the held vertex. =====
-  function litArr(){ return [...LIT].sort((a,b)=>a-b); }
+  var TOUR_SRC="key";
+  function litArr(){ if(TOUR_SRC==='face'&&CHAIN_FACES&&CHAIN_FACES.ok&&CHAIN_FACES.path&&CHAIN_FACES.path.length) return CHAIN_FACES.path; return [...LIT].sort((a,b)=>a-b); }
   function clearTourTimer(){ if(tourTimer){ clearInterval(tourTimer); tourTimer=null; } }
   function tourGoto(i){ const a=litArr(); if(!a.length)return; tourIdx=((i%a.length)+a.length)%a.length; setMarker(a[tourIdx]); }
   function startTourTimer(){ clearTourTimer(); tourTimer=setInterval(()=>{ const a=litArr(); if(!a.length){ exitTour(); return; } tourGoto(tourIdx+1); }, 2200); }
@@ -1339,8 +1414,15 @@
     $('tLattice').checked=true; $('tSucc').checked=true; $('tNeg').checked=false; $('tBnot').checked=false;
     tourIdx=0; setMarker(a[0]); setPlaying(true); // playing in tourMode → startTourTimer (see setPlaying)
     const b=$('keyTour'); b.classList.add('on'); _lastTourSec=-1; b.textContent='✦ key tour · '+fmtTime(tourSeconds)+' (exit)'; }
-  function exitTour(){ tourMode=false; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent='✦ Walk the key vertices'; } updateTracing(); }
-  $('keyTour').addEventListener('click',()=>{ tourMode?exitTour():engageTour(); });
+  function exitTour(){ tourMode=false; TOUR_SRC='key'; clearTourTimer(); const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } const fb=$('faceTour'); if(fb){ fb.classList.remove('on'); fb.textContent="⛓ Walk the face's path"; } updateTracing(); }
+  $('keyTour').addEventListener('click',()=>{ if(tourMode){ exitTour(); return; } TOUR_SRC='key'; engageTour(); });
+  $('faceTour').addEventListener('click',()=>{ if(tourMode){ exitTour(); return; } if(!(CHAIN_FACES&&CHAIN_FACES.ok&&CHAIN_FACES.path.length)) return; TOUR_SRC='face'; engageTour();
+    const b=$('keyTour'); if(b){ b.classList.remove('on'); b.textContent=LIT.size?'✦ Walk the key vertices':'✦ no lit vertices in this City Key'; } const fb=$('faceTour'); fb.classList.add('on'); fb.textContent='⛓ walking the face · '+CHAIN_FACES.path.length+' vertices (exit)'; });
+  $('facesBtn').addEventListener('click',()=>$('facesFile').click());
+  $('facesFile').addEventListener('change',e=>{ const f=e.target.files[0]; e.target.value=''; if(!f) return; const st=gid('faceStatus');
+    readKeyFile(f,c=>{ if(!c||c.schema!=='agentprivacy.chain-faces/1'){ st.innerHTML='<span style="color:var(--sword)">⚠ not a chain-faces.json (schema agentprivacy.chain-faces/1)</span>'; return; }
+      if(!keyLoaded||!CARRIED.chains){ st.innerHTML='<span style="color:var(--sword)">⚠ import the City Key these faces were folded into first</span>'; return; } loadFaces(c); },
+      ()=>{ st.innerHTML='<span style="color:var(--sword)">⚠ could not read that file</span>'; }); });
 
 if(HELD.on) showHeld(HELD.reason);
 const signatureLatticeMaterials=new Map();

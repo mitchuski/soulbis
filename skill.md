@@ -23,6 +23,7 @@ https://agentprivacy.ai/skill.md (the agent door) and https://agentprivacy.org/b
 - The star experiment (the fiber stepper; a local build may run ahead of this page): https://soulbis.com/star-experiment/
 - Skye, and the guide: https://soulbis.com/skye/ · https://soulbis.com/guide/
 - What the Star holds (the Hold: signed relationships beside the key; the key carries only root and count; not yet drawn in a room): https://soulbis.com/guide/#hold
+- The moving ceiling R(t) read on /star, /lattice and /sigil is a what-if instrument (V6 · C82). The strict R(t) < 1 it assumes is declared, not derived (ruling of 7 October 2026): the capacity deficit is a premise a deployment declares and attests, never a theorem these pages prove.
 - The Star runtime (`star relate · hold show/verify/project · present`, agentprivacy-mcp) and its conformance pack: https://github.com/mitchuski/agentprivacy-mcp/tree/main/fixtures/star-hold-conformance
 
 Everything here is a browser page. There is no API on this host; the
