@@ -4,7 +4,8 @@
 // Each side takes a hash (64 hex, with or without sha256:/blake3:) or a seal; the comparison says what the two
 // share — characters in place, leading bits, the bits that differ, and where both sit on the City's 64 states
 // (first six bits, Protection 32 … Value 1, lib/lattice-vertex.ts). Runs in the browser; sends nothing.
-// usage: SealCheck.mount(el, { index: "seals.json" | null, local: bool, labels: {a, b}, extra: {a: [{label, fill}]}, home: html })
+// usage: SealCheck.mount(el, { index: "seals.json" | null, local: bool, labels: {a, b}, extra: {a: [{label, fill}]}, home: html,
+//          registry: "guide-registry.json" (needs sigil/kappa.js loaded), guideLocal: base url of a local guide snapshot })
 (function () {
   "use strict";
   const S = globalThis.SigilCode;
@@ -31,7 +32,7 @@
 .sc .sc-bits{font:11px/1.5 ui-monospace,monospace;color:var(--sc-muted);word-break:break-all;margin-top:6px}.sc .sc-bits b{color:#f3d27a;font-weight:400}
 .sc .sc-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px}.sc .sc-grid div{aspect-ratio:1;border:1px solid #1c2538;border-radius:2px;background:#0a1020;position:relative}
 .sc .sc-grid div.a{background:var(--sc-a)}.sc .sc-grid div.b{background:var(--sc-b)}.sc .sc-grid div.ab{background:#fff}.sc .sc-grid div.nb{border-color:#f3d27a}
-.sc .sc-found{border-top:1px solid var(--sc-line);padding:8px 0 0;margin-top:8px;font-size:13px}.sc .sc-found .kind{font:10.5px monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--sc-a);margin-right:6px}
+.sc .sc-chain{font-size:12.5px;margin-top:4px;line-height:1.7}.sc .sc-found{border-top:1px solid var(--sc-line);padding:8px 0 0;margin-top:8px;font-size:13px}.sc .sc-found .kind{font:10.5px monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--sc-a);margin-right:6px}
 .sc .hx{display:inline-block;vertical-align:middle;margin-right:8px}`;
 
   const hexOf = (b) => [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
@@ -81,8 +82,42 @@
       if (!INDEX) return '<div class="sc-found quiet">reading the City’s index…</div>';
       const hits = INDEX.index["sha256:" + hex] || INDEX.index[hex] || [];
       if (!hits.length) return '<div class="sc-found quiet">not on record in the City’s chains at the last build. It may be a leaf inside an entry: open that chain and fold the entry.</div>';
-      const g = new Map(); hits.forEach((h) => { const k = h.kind + "|" + (h.label || "") + "|" + (h.entry || ""); if (!g.has(k)) g.set(k, { ...h, chains: [] }); g.get(k).chains.push({ chain: h.chain, href: opt.local ? h.local : h.url }); });
-      return [...g.values()].map((x) => `<div class="sc-found"><span class="kind">${esc(x.kind)}</span>${x.chains.map((c) => `<b>${esc(c.chain)}</b> <a href="${esc(c.href)}">open →</a>`).join(" · ")}${x.label ? " · " + esc(x.label) : ""}${x.entry ? " · under " + esc(x.entry) : ""}</div>`).join("");
+      const g = new Map(); hits.forEach((h) => { const k = h.kind + "|" + (h.label || "") + "|" + (h.entry || ""); if (!g.has(k)) g.set(k, { ...h, chains: [] }); { const c = { chain: h.chain, href: opt.local ? h.local : h.url }, L = g.get(k).chains, at = L.findIndex(x => x.chain === c.chain);
+        // one door per chain: a family drawn on several hash sites opens on its own (sha256.mages.city for SHA-256)
+        const own = u => String(u).includes("//" + String(c.chain).toLowerCase().replace(/[^a-z0-9]/g, "") + ".");
+        if (at < 0) L.push(c); else if (own(h.url) && !own(L[at].href)) L[at] = c; } });
+      return [...g.values()].map((x) => `<div class="sc-found"><span class="kind">${esc(x.kind)}</span>${x.chains.map((c) => `<b>${esc(c.chain)}</b> <a href="${esc(c.href)}">open →</a>`).join(" · ")}${x.scroll ? ` · <a href="${esc(x.scroll)}">in the guide's scroll →</a>` : ""}${x.snapshot ? ` · snapshot ${esc(x.snapshot)}` : ""}${x.label ? " · " + esc(x.label) : ""}${x.entry ? " · under " + esc(x.entry) : ""}${x.site ? `<div class="sc-chain" data-chain="${esc(hex)}" data-site="${esc(x.site)}" data-slug="${esc(x.slug || "")}" data-json="${esc(x.json || "")}" data-kind="${esc(x.kind)}">re-deriving through the guide's registry…</div>` : ""}</div>`).join("");
+    }
+    // ---- the guide's κ-registry, re-derived here: every step is recomputed in this browser, nothing is taken on trust
+    let REG = null;
+    const regLoad = () => REG || (REG = opt.registry && globalThis.Kappa ? fetch(opt.registry, { cache: "no-store" }).then(r => r.json()) : Promise.reject(new Error("no registry")));
+    async function chain(el) {
+      const K = globalThis.Kappa, hex = el.dataset.chain, site = el.dataset.site, slug = el.dataset.slug, kind = el.dataset.kind, step = [];
+      const mark = (ok, t) => step.push(`<span class="${ok === true ? "ok" : ok === false ? "bad" : "quiet"}">${ok === true ? "✓" : ok === false ? "✗" : "·"} ${t}</span>`);
+      const draw = () => { el.innerHTML = step.join(' <span class="quiet">→</span> '); };
+      try {
+        const R = await regLoad(), k = "sha256:" + hex;
+        if (kind === "guide page" || kind === "sealed gate") {
+          if (kind === "guide page" && el.dataset.json) {
+            let url = el.dataset.json; if (opt.local && opt.guideLocal) url = url.replace("https://guide.agentprivacy.ai/", opt.guideLocal);
+            try { const page = await (await fetch(url, { cache: "no-store" })).json(), now = await K.kappaOf(K.guideContent(page));
+              mark(now === k, now === k ? "the published page is this hash" : `the page has changed since this snapshot (now ${now.slice(7, 19)}…)`); }
+            catch (e) { mark(null, "the page could not be fetched here, so its content was not re-checked"); }
+          }
+          const S = R.site_roots[site], mine = R.entries.filter(e => e.site === site);
+          const leaf = mine.some(e => e.slug === slug && e.k === k);
+          const root = await K.packets(mine.map(e => e.slug + "|" + e.k));
+          mark(leaf && root === S.root, `one of ${S.count} in its site, which folds to its root`);
+        } else if (kind === "guide site root") {
+          const mine = R.entries.filter(e => e.site === site), root = await K.packets(mine.map(e => e.slug + "|" + e.k));
+          mark(root === k && R.site_roots[site] && R.site_roots[site].root === k, `the root of ${mine.length} pages, re-derived`);
+        }
+        const fed = await K.packets(Object.entries(R.site_roots).sort((a, b) => a[0] < b[0] ? -1 : 1).map(([i, s]) => i + "|" + s.root));
+        mark(fed === R.federation_root && (kind !== "guide federation root" || fed === k), `${Object.keys(R.site_roots).length} sites fold to the federation root`);
+        const head = { schema: R.schema, snapshot: R.snapshot, federation_root: R.federation_root, prior: R.prior, sites: R.sites, pages: R.pages };
+        const rr = await K.kappaOf(head); mark(rr === R.root && (kind !== "guide registry root" || rr === k), `the registry root of ${R.snapshot} re-derives`);
+      } catch (e) { mark(null, "the guide's registry is not loaded on this page"); }
+      draw();
     }
     function read(id) {
       const r = parse(field(id).value), sl = q(`[data-seal="${id}"]`), hx = q(`[data-hex="${id}"]`), pl = q(`[data-place="${id}"]`), v = q(`[data-v="${id}"]`), fd = q(`[data-found="${id}"]`);
@@ -94,7 +129,7 @@
         hx.textContent = (r.alg || "sha256") + ":" + r.hex;
         pl.innerHTML = `sits at <b>V${vx}</b> · house <b>${word(vx >> 3)}</b> · place <b>${word(vx & 7)}</b> · ${on6(vx).join(", ") || "none of the six"}`;
         v.innerHTML = r.from === "hash" ? '<span class="ok">✓ written as its seal; it reads back to the same 32 bytes</span>' : '<span class="ok">✓ the seal reads; the check holds</span>';
-        fd.innerHTML = found(r.hex); }
+        fd.innerHTML = found(r.hex); fd.querySelectorAll(".sc-chain").forEach(el => chain(el)); }
       cmp(); if (opt.onChange) try { opt.onChange(id, r); } catch (e) {}
     }
     function cmp() {
