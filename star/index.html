@@ -944,7 +944,8 @@
     const ov=num(f.overlap), ra=num(f.ratio);
     return { eps: ov===null?state.eps:+(0.6*(1-cl(ov,0,1))).toFixed(3), m:state.m, n:state.n,
              core: ov===null?state.core:cl(ov,0.25,0.85), smRatio: ra===null?state.smRatio:cl(ra,1,2.2) }; }
-  function loadConfig(cfg,fromRemote){ if(!cfg||typeof cfg!=='object'||Array.isArray(cfg))return;
+  function loadConfig(cfg,fromRemote){ if(cfg&&cfg.kind==='agentprivacy.journey-bundle/1'&&cfg.key)cfg=cfg.key; // 2026-11-17: a carried journey bundle → its City Key
+    if(!cfg||typeof cfg!=='object'||Array.isArray(cfg))return;
     clearCore();
     // Full keys carry opaque extensions; only this surface's reading fields are rebuilt.
     CARRIED={...cfg}; CHAIN_FACES=null; try{ buildFaceTrace(); faceStatus(); }catch(e){}
@@ -1433,5 +1434,5 @@ window.starMeasureHost={held:HELD.on,fadeLattice:fadeSignatureLattice,camera,can
 <script src="/star/signature-math.js?v=star-restored-1"></script>
 <script src="/star/signature-focus.js?v=trace-controls-1"></script>
 <script>window.SITENAV={};</script>
-<script src="/public/sitenav.js?v=20260911-signatures"></script></body>
+<script src="/public/sitenav.js?v=20261117-orb"></script></body>
 </html>
