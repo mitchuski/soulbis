@@ -1,5 +1,6 @@
 /* Editorial layer shared by the reading rooms; instrument canvases keep their own styles. */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500&display=swap');
+.rooms-top{height:56px}
 .rooms-nav{max-width:1180px;margin:0 auto 40px;padding:0 0 22px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid #30384d;font-family:'DM Sans',sans-serif}
 .rooms-nav a{color:#f0eee8;text-decoration:none}.rooms-brand{font:400 30px 'Cormorant Garamond',Georgia,serif}.rooms-links{display:flex;flex-wrap:wrap;gap:12px 24px;font-size:15px}.rooms-links a[aria-current]{color:#f1a293}
 .rooms-nav a:hover,.room-context a:hover,footer a:hover{color:#4dd9e8}

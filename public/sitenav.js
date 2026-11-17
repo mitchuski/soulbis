@@ -1,5 +1,5 @@
 /* sitenav.js — the collapsible corner nav for the Swordsman's Key rooms.
-   One component, lives top-left on every experience page (/star /lattice /sigil /skye /guide).
+   One component, lives top-left on every room (/star /signatures /lattice /sigil /skye /guide); the word bar is retired (2026-11-17).
    Collapsed: just the corner orb. Click or tap to open the rooms and page actions;
    click again or press Escape to minimise.
 
@@ -19,8 +19,8 @@
   var ROOMS = [
     { p: "/",        ico: "⌂",  name: "home",     tag: "where the key lives" },
     { p: "/star",    ico: "⚔️", name: "/star",    tag: "explore your perspective" },
-    { p: "/lattice", ico: "🧙", name: "/lattice", tag: "read the 64 states" },
     { p: "/signatures", ico: "◈", name: "/signatures", tag: "measure a signature collection" },
+    { p: "/lattice", ico: "🧙", name: "/lattice", tag: "read the 64 states" },
     { p: "/sigil",   ico: "🪬", name: "/sigil",   tag: "recognise the record" },
     { p: "/skye",    ico: "🌌", name: "/skye",    tag: "compare relationships" },
     { p: "/guide",   ico: "🗡️", name: "/guide",   tag: "key · identity · perspective" }

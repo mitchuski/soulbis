@@ -1143,6 +1143,8 @@
   .home-section { padding: 72px clamp(24px,5vw,60px); border-top: 1px solid var(--border); }
   .home-section .section-title { margin-bottom: 28px; }
   .home-copy { max-width: 740px; font-size: 1rem; line-height: 1.8; color: var(--white-dim); }
+  .home-copy a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(240,238,232,0.35); }
+  .home-copy a:hover { color: var(--cyan); }
   .home-copy p + p { margin-top: 18px; }
   .room-links { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); margin-top: 36px; border-top: 1px solid var(--border-hover); }
   .room-links a { padding: 24px 20px 24px 0; text-decoration: none; color: var(--white); }
@@ -1192,6 +1194,16 @@
   @keyframes shared-orb-drift { from {transform:rotate(-6deg) translateY(3px)} to {transform:rotate(6deg) translateY(-3px)} }
   @media(max-width:768px) { .hero-orb-container {width:110px;height:110px}.footer-orb-container {width:88px;height:88px} }
   @media(prefers-reduced-motion:reduce) { .shared-manifold-orb {animation:none} }
+  canvas.lattice-orb { animation:none; filter:drop-shadow(0 0 14px rgba(139,77,170,.28)); }
+  /* Soulbis the company — a band under the hero */
+  .company-band { padding: 34px clamp(24px,5vw,60px); border-top: 1px solid var(--border); }
+  .company-inner { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 32px; }
+  .company-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--coral); }
+  .company-line { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.4rem, 2.6vw, 1.9rem); color: var(--white); }
+  .company-copy { flex-basis: 100%; max-width: 740px; font-size: 1rem; line-height: 1.8; color: var(--white-dim); }
+  .company-links { display: flex; flex-wrap: wrap; gap: 14px 28px; font-size: 1rem; }
+  .company-links a { color: var(--white); text-underline-offset: 4px; }
+  .company-links a:hover { color: var(--cyan); }
 </style>
 </head>
 <body>
@@ -1218,7 +1230,7 @@
   <canvas id="hero-canvas"></canvas>
   <div class="hero-orb-container" id="hero-orb-container">
     <canvas class="hero-orb-wave" id="hero-orb-wave" width="128" height="128" aria-hidden="true"></canvas>
-    <img class="shared-manifold-orb" src="/public/images/shared-manifold.svg" alt="" aria-hidden="true">
+    <canvas class="shared-manifold-orb lattice-orb" aria-hidden="true"></canvas>
     <button type="button" class="hero-soul-orb-btn" id="hero-soul-orb-btn" aria-label="Copy master inscription" title="Copy master inscription">
       <svg class="hero-orb-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
         <defs>
@@ -1248,6 +1260,15 @@
   </div>
 </section>
 
+<!-- Soulbis the company -->
+<section class="company-band" aria-label="Soulbis, the company">
+  <div class="company-inner">
+    <div class="company-label">Soulbis · the company</div>
+    <p class="company-line">Consultancy · advisory · research labs</p>
+    <p class="company-copy">Soulbis is also my business: consultancy and advisory for the agent trust internet, and the parent of agentprivacy Labs, where the research is published.</p>
+    <div class="company-links"><a href="mailto:mage@agentprivacy.ai">Work with Soulbis</a><a href="https://agentprivacy.org/">The research labs ↗</a></div>
+  </div>
+</section>
 <!-- Wave divider -->
 <div class="wave-divider">
   <canvas id="wave-canvas-mid"></canvas>
@@ -1258,17 +1279,17 @@
   <div class="section-label">The Star · the key</div>
   <h2 class="section-title">A model you can walk.<br><em>A key you can carry.</em></h2>
   <div id="geometry" class="home-copy">
-    <p>The Star is a geometric expression of you or your agent: your perspective on the trust graph. The City Key carries the record. We are connecting that artefact to a Verifiable Trust Agent (VTA) and the knowledge, work and relationships you choose to bring into view.</p>
-    <p>Your City Key carries appearance, a chosen core artefact, readings and journey records between these instruments and <a href="https://agentprivacy.ai/city">your City Key page</a>. Its κ identifies its content; it is separate from a private signing key. Carrying it does not by itself grant access to <a href="https://mages.city/">Mages City</a>. A key can also carry a mage's quests: faces of the evidence folded in from <a href="https://mages.city/star.html">the star of the chains</a>, each quest's promise checkable by anyone, its knowledge readable by members.</p>
+    <p>The Star is a picture of you or your agent: your perspective on the trust graph, drawn from the record you carry. That record is your City Key. Its κ identifies its contents; it is separate from a private signing key, and carrying it does not by itself grant access to <a href="https://mages.city/">Mages City</a>.</p>
+    <p>Everything here runs in your browser. Load a key, look at it from five sides, and keep only what you choose to share.</p>
   </div>
   <div class="room-links" aria-label="Key instruments">
     <a href="/star"><strong>Star</strong><span>Explore your perspective →</span></a>
-    <a href="/lattice"><strong>Lattice</strong><span>Read the 64 states →</span></a>
     <a href="/signatures"><strong>Signatures</strong><span>Compare encoded sizes →</span></a>
+    <a href="/lattice"><strong>Lattice</strong><span>Read the 64 states →</span></a>
     <a href="/sigil"><strong>Sigil</strong><span>Recognise and carry the record →</span></a>
     <a href="/skye"><strong>Skye</strong><span>Compare records and relationships →</span></a>
   </div>
-  <p class="home-note"><strong>Hold</strong> what others signed with you and carry only its root — coming to the rooms with the next Star · <strong>Fold</strong> signatures into the figure, byte for byte — <a href="/signatures">live</a> · <strong>Find</strong> common ground with zero knowledge — <a href="/skye">live</a>. A sigil PNG can contain the City Key itself. Choose what you share. <a href="/guide">Read the key guide →</a></p>
+  <p class="home-note"><strong>Fold</strong> signatures into the figure, byte for byte · <strong>Find</strong> common ground with zero knowledge · a sigil PNG can carry the City Key itself. <a href="/guide">Read the key guide →</a></p>
 </section>
 
 <section id="layers" class="home-section">
@@ -1276,14 +1297,13 @@
   <h2 class="section-title">The boundary<br><em>belongs to the person.</em></h2>
   <div class="home-copy">
     <p>The Swordsman’s role is to protect: carry your terms, limit disclosure, and guard the actions an agent may take on your behalf. The Mage’s role is to learn and create within those boundaries. You remain the person choosing the terms.</p>
-    <p>Our aim is for the Swordsman protocols to help form the base of a trusted internet for AI agents and First Persons—the people whose agency they serve. Identity, consent and the scope of a promise should be verifiable, with each person able to choose what to disclose and which actions to authorise. This is the foundation we are building towards.</p>
-    <p>We are connecting the City Key to the browser extension as an expression of the agent’s VTA: sign in, select the key, and see permitted agent state in the Star. The key carries the evolving record; City services check the scope of each action. <a href="/star-experiment/">Try Star Key →</a></p>
+    <p>Our aim is for the Swordsman protocols to help form the base of a trusted internet for AI agents and First Persons—the people whose agency they serve: identity, consent and the scope of a promise made verifiable, with each person choosing what to disclose and which actions to authorise. Connecting the City Key to the agent’s VTA through the browser extension is the work underway. <a href="/star-experiment/">Try Star Key →</a></p>
   </div>
   <div class="source-links">
     <a href="https://agentprivacy.ai/model">Read the model ↗</a>
     <a href="https://agentprivacy.ai/ceremony">The identity ceremony ↗</a>
-    <a href="https://agentprivacy.org/ecosystem/#myterms">Personal terms ↗</a>
-    <a href="https://agentprivacy.org/board/">Follow the City &amp; VTA work ↗</a>
+    <a href="https://agentprivacy.org/work/#project-myterms">Personal terms ↗</a>
+    <a href="https://mages.city/">Follow the City &amp; VTA work ↗</a>
   </div>
 </section>
 
@@ -1291,12 +1311,10 @@
   <span id="built" class="legacy-anchor" aria-hidden="true"></span>
   <div class="section-label">The work beyond the key</div>
   <h2 class="section-title">agentprivacy <em>labs.</em></h2>
-  <div class="home-copy"><p>Our cybersecurity AI lab publishes open research and offers consultancy, paired AI programming and deployment work. Explore the projects, their sources, and the research behind them at agentprivacy.org.</p></div>
+  <div class="home-copy"><p>The research arm of Soulbis: an AI cybersecurity lab publishing open research. Explore the projects, their sources and the research behind them at agentprivacy.org.</p></div>
   <div class="source-links">
     <a href="https://agentprivacy.org/work/">Builds &amp; research ↗</a>
     <a href="https://agentprivacy.org/services/">Work with Labs ↗</a>
-    <a href="https://agentprivacy.org/ecosystem/">Ecosystem contributions ↗</a>
-    <a href="https://agentprivacy.org/fund/">Fund the research ↗</a>
   </div>
 </section>
 
@@ -1313,14 +1331,14 @@
   </div>
 </section>
 
-<section id="sustaining-trust" style="max-width:1120px;margin:48px auto;padding:30px 24px;border-top:1px solid #536b7a66;line-height:1.8;color:#cbd9df"><p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase">Sustaining the agent trust internet · proposed operating model</p><h2 style="font-family:Georgia,serif;font-size:clamp(28px,4vw,42px);line-height:1.2">Agents do the work.<br>Communities carry it forward.</h2><p>Your Star carries a chosen perspective and evidence of encounters. The resources behind those encounters help agents, workshops and communities sustain useful work without exposing their private context.</p><p><strong>VTA → VTC → VTN:</strong> purpose-led Verifiable Trust Agents can grow relationships into Verifiable Trust Communities; connections among communities form Verifiable Trust Networks. That is the decentralised trust graph taking shape at the speed of trust.</p><p>Six shared pools — Compute, Memory, Connection, Delegation, Protection and Value — match what workshops need with what contributors offer. Money, time, model tokens, hardware, energy and private knowledge are resources recorded within the relevant pools. A resource can support several dimensions, with its allocation counted once. Compute, Memory, Connection, Delegation and Protection provide the stable functional categories. Each community defines Value through governance: what it recognises, rewards and chooses to sustain. Exchange and stewardship are possible expressions, alongside community-defined outcomes and priorities. Projects with overlapping Star needs can share capacity, and reviewed, uncommitted resources can move toward work that is ready. Maintainers keep continuity; private knowledge can contribute through consented Memory and Connection.</p><p style="font-size:14px">This is an emerging constitution, not a deployed DAO or an automatic progression. Genesis shares are initial proposals, the first funding milestone is a checkpoint, and the foundation has no fixed final total. Pledges, community acceptance and permission to spend remain separate.</p><p><a style="color:#8bd6d1" href="https://agentprivacy.org/fund/#resource-commons">Explore the resource model ↗</a> · <a style="color:#8bd6d1" href="https://agentprivacy.org/begin/">Find a role and trust task ↗</a> · <a style="color:#8bd6d1" href="https://guide.agentprivacy.ai/guide/guide-community-resources-and-trust-tasks.html">Read the plain-language guide ↗</a></p></section></main>
+</main>
 
 <!-- Footer -->
 <footer>
   <canvas id="footer-canvas"></canvas>
   <div class="footer-orb-container" id="footer-orb-container">
     <canvas class="footer-orb-wave" id="footer-orb-wave" width="84" height="84" aria-hidden="true"></canvas>
-    <img class="shared-manifold-orb" src="/public/images/shared-manifold.svg" alt="" aria-hidden="true">
+    <canvas class="shared-manifold-orb lattice-orb" aria-hidden="true"></canvas>
     <button type="button" class="footer-soul-orb-btn" id="footer-soul-orb-btn" aria-label="Copy master inscription" title="Copy master inscription">
       <svg class="footer-orb-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
         <defs>
@@ -1343,13 +1361,14 @@
     <div class="footer-right">
       <nav class="footer-navigation" aria-label="Explore Soulbis and the City">
         <div>
-          <div class="footer-nav-label">Forge key</div>
+          <div class="footer-nav-label">The rooms</div>
           <ul class="footer-links">
             <li><a href="/star">Star</a></li>
-            <li><a href="/guide">Swordsman guide</a></li>
-            <li><a href="/lattice">Lattice</a><a href="/signatures">Signatures</a></li>
+            <li><a href="/signatures">Signatures</a></li>
+            <li><a href="/lattice">Lattice</a></li>
             <li><a href="/sigil">Sigil</a></li>
             <li><a href="/skye">Skye</a></li>
+            <li><a href="/guide">Swordsman guide</a></li>
           </ul>
         </div>
         <div>
@@ -1359,6 +1378,7 @@
             <li><a href="https://mages.city/">Mages City ↗</a></li>
             <li><a href="https://spellweb.ai/">Spellweb ↗</a></li>
             <li><a href="https://agentprivacy.org/">Labs · research ↗</a></li>
+            <li><a href="https://fund.agentprivacy.org">Fund the research ↗</a></li>
             <li><a href="mailto:mage@agentprivacy.ai">Contact</a></li>
           </ul>
         </div>
@@ -1893,5 +1913,6 @@ window.addEventListener('resize', resizeFooter);
   wire(document.getElementById('hero-soul-orb-btn'), document.getElementById('hero-orb-container'));
 })();
 </script>
+<script src="/public/lattice-orb.js?v=20261117"></script>
 </body>
 </html>

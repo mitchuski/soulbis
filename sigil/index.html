@@ -127,7 +127,7 @@
 <link rel="stylesheet" href="/public/rooms.css">
 </head>
 <body>
-  <nav class="rooms-nav" aria-label="Soulbis"><a class="rooms-brand" href="/">Soulbis</a><div class="rooms-links"><a href="/star">Star</a><a href="/lattice">Lattice</a><a href="/signatures">Signatures</a><a href="/sigil" aria-current="page">Sigil</a><a href="/skye">Skye</a><a href="/guide">Guide</a></div></nav>
+  <div class="rooms-top" aria-hidden="true"></div>
   <header class="top">
     <div class="eyebrow"><span>The Sigil · recognise the record</span></div>
     <h1>The Sigil</h1>
@@ -700,5 +700,7 @@
   SealCheck.mount(el,{ home:'<a class="sigil-city" href="'+(/^(localhost|127[.]0[.]0[.]1)$/.test(location.hostname)?'http://127.0.0.1:8892/':'https://sigil.mages.city/')+'" style="color:#7fffd4">open this on sigil.mages.city ↗</a>', labels:{a:'one · key A or any hash', b:'two · key B or any hash'},
     extra:{ a:[{label:"key A's κ", fill:k('a'), empty:'import a key first'}], b:[{label:"key B's κ", fill:k('b'), empty:'import a second key first'},{label:"key A's κ", fill:k('a'), empty:'import a key first'}] } }); })();
 </script>
+<script>window.SITENAV={};</script>
+<script src="/public/sitenav.js?v=20261117-orb"></script>
 </body>
 </html>
